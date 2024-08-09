@@ -1,0 +1,3 @@
+class AppDimension {
+  static const double kSpacing = 20;
+}
