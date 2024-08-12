@@ -4,6 +4,7 @@ import 'package:hrms/constants/colors.dart';
 import 'package:hrms/views/attendance_page.dart';
 import 'package:hrms/views/company_page.dart';
 import 'package:hrms/views/damaged_page.dart';
+import 'package:hrms/views/dashboard.dart';
 import 'package:hrms/views/department_page.dart';
 import 'package:hrms/views/employee_type_page.dart';
 import 'package:hrms/views/location_qr_page.dart';
@@ -44,10 +45,11 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       getPages: [
-        GetPage(name: '/', page: () => AttendancePage()),
+        GetPage(name: '/', page: () => DashboardPage()),
         GetPage(name: '/employee-types', page: () => EmployeeTypePage()),
         GetPage(name: '/employee', page: () => EmployeePage()),
         GetPage(name: '/departments', page: () => DepartmentPage()),
+        GetPage(name: '/company', page: () => CompanyPage()),
         GetPage(name: '/company', page: () => CompanyPage()),
         GetPage(name: '/damaged', page: () => const DamagedPage()),
         GetPage(name: '/parcel', page: () => ParcelPage()),

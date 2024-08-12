@@ -25,37 +25,39 @@ class DepartmentPage extends StatelessWidget {
           double screenWidth = constraints.maxWidth;
           double width = screenWidth < 1280 ? double.infinity : 1280;
 
-          return Obx(() => SizedBox(
-                width: width,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: width,
-                      child: PageTitleWidget(
-                        title: "Departman Oluşturma",
-                        rightWidgets: BaseButton(
-                          label: "Yeni",
-                          icon: const Icon(
-                            Icons.add,
-                            color: AppColor.secondaryText,
-                          ),
-                          onPressed: () {
-                            controller.openEditPopup(
-                                "Yeni Departman Oluşturma", null);
-                          },
+          return Obx(
+            () => SizedBox(
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: width,
+                    child: PageTitleWidget(
+                      title: "Departman Oluşturma",
+                      rightWidgets: BaseButton(
+                        label: "Yeni",
+                        icon: const Icon(
+                          Icons.add,
+                          color: AppColor.secondaryText,
                         ),
+                        onPressed: () {
+                          controller.openEditPopup(
+                              "Yeni Departman Oluşturma", null);
+                        },
                       ),
                     ),
-                    SizedBox(width: width, child: titleCardWidget()),
-                    Expanded(
-                      child: controller.departments.isEmpty
-                          ? const Center(child: CircularProgressIndicator())
-                          : SizedBox(width: width, child: itemsCardWidget()),
-                    ),
-                  ],
-                ),
-              ));
+                  ),
+                  SizedBox(width: width, child: titleCardWidget()),
+                  Expanded(
+                    child: controller.departments.isEmpty
+                        ? const Center(child: CircularProgressIndicator())
+                        : SizedBox(width: width, child: itemsCardWidget()),
+                  ),
+                ],
+              ),
+            ),
+          );
         },
       ),
     );
