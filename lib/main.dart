@@ -50,7 +50,6 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/employee', page: () => EmployeePage()),
         GetPage(name: '/departments', page: () => DepartmentPage()),
         GetPage(name: '/company', page: () => CompanyPage()),
-        GetPage(name: '/company', page: () => CompanyPage()),
         GetPage(name: '/damaged', page: () => const DamagedPage()),
         GetPage(name: '/parcel', page: () => ParcelPage()),
         GetPage(name: '/map', page: () => MapPage()),
