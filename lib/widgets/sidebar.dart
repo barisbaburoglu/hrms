@@ -150,20 +150,12 @@ class LeftSidebarX extends StatelessWidget {
         //     sidebarController.navigateTo('/map', 6); // Navigate to the map page
         //   },
         // ),
-        // SidebarXItem(
-        //   icon: Icons.location_pin,
-        //   label: 'Location-QR',
-        //   onTap: () {
-        //     sidebarController.navigateTo(
-        //         '/location-qr', 7); // Navigate to the home page
-        //   },
-        // ),
         SidebarXItem(
           icon: Icons.work,
           label: 'Şirket Bilgileri',
           onTap: () {
             sidebarController.navigateTo(
-                '/company', 8); // Navigate to the home page
+                '/company', 1); // Navigate to the home page
           },
         ),
         SidebarXItem(
@@ -171,7 +163,7 @@ class LeftSidebarX extends StatelessWidget {
           label: 'Çalışan Türleri',
           onTap: () {
             sidebarController.navigateTo(
-                '/employee-types', 9); // Navigate to the home page
+                '/employee-types', 2); // Navigate to the home page
           },
         ),
         SidebarXItem(
@@ -179,15 +171,24 @@ class LeftSidebarX extends StatelessWidget {
           label: 'Bölümler',
           onTap: () {
             sidebarController.navigateTo(
-                '/departments', 10); // Navigate to the home page
+                '/departments', 3); // Navigate to the home page
           },
         ),
+
         SidebarXItem(
           icon: Icons.people,
           label: 'Çalışanlar',
           onTap: () {
             sidebarController.navigateTo(
-                '/employee', 10); // Navigate to the home page
+                '/employee', 4); // Navigate to the home page
+          },
+        ),
+        SidebarXItem(
+          icon: Icons.location_pin,
+          label: 'Lokasyon ve QR',
+          onTap: () {
+            sidebarController.navigateTo(
+                '/qrcode-list', 5); // Navigate to the home page
           },
         ),
       ],

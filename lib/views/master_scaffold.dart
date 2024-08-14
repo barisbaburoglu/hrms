@@ -16,7 +16,7 @@ class MasterScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.background,
+      backgroundColor: AppColor.canvasColor,
       appBar: const TopAppBar(),
       drawer: LeftSidebarX(controller: sidebarController),
       body: body,

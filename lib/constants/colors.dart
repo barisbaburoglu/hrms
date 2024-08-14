@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AppColor {
-  static const Color background = Color(0xfff1f5f9);
   static const Color appBarColor = Colors.white;
+  static const Color canvasColor = Color(0xfff8f9fa);
 
   static const Color cardBackgroundColor = Colors.white;
   static const Color cardShadowColor = Colors.black;
@@ -16,13 +16,62 @@ class AppColor {
   static const Color darkGreen = Color(0xff196F3D);
   static const Color primaryText = Colors.black;
   static const Color secondaryText = Colors.white;
-  static const Color canvasColor = Color(0xfff8f9fa);
   static const Color scaffoldBackgroundColor = Color(0xFF464667);
   static const Color accentCanvasColor = Color(0xFF3E3E61);
   static const Color actionColor = Color(0xFF5F5FA7);
   static const Color mapPolylineColor = Color(0xffD68910);
 
   static const Color primaryAppColor = primaryCyan;
+
+  static const List<Color> gradientDefault = [
+    Colors.transparent,
+    Colors.transparent,
+  ];
+
+  static const List<Color> colorEsepPurple = const [
+    Color(0xffda2b1b),
+    Color(0xff4a12a3),
+  ];
+
+  static const List<Color> colorGreenDarkGreen = const [
+    Color(0xffc3ff53),
+    Color(0xff12a323),
+  ];
+
+  static const List<Color> colorOrangeDarkOrange = const [
+    Color(0xffdacb1b),
+    Color(0xff8e3802),
+  ];
+
+  static const List<Color> gradientOrange = const [
+    Color(0xffff5673),
+    Color(0xffff8c48),
+  ];
+
+  static const List<Color> gradientBlue = const [
+    Color(0xff2dcef8),
+    Color(0xff3b40fe),
+  ];
+
+  static const List<Color> gradientGreen = const [
+    Color(0xff009dc5),
+    Color(0xff21e590),
+  ];
+
+  static const List<Color> gradientPurple = const [
+    Color(0xff832bf6),
+    Color(0xffff4665),
+  ];
+
+  static const List<Color> gradientGrey = const [
+    Color(0xff828a95),
+    Color(0xff3b424c),
+  ];
+
+  static const List<Color> gradientWhite = const [
+    Colors.white,
+    canvasColor,
+  ];
 
   static MaterialColor createMaterialColor(Color color) {
     List strengths = <double>[.05];

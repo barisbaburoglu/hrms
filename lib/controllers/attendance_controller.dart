@@ -5,6 +5,8 @@ class AttendanceController extends GetxController {
   var currentTime = ''.obs;
   var currentDate = ''.obs;
 
+  RxInt touchedIndex = RxInt(0);
+
   final DateFormat timeFormat = DateFormat('hh:mm a', 'tr');
   final DateFormat dateFormat = DateFormat('dd MMMM yyyy', 'tr');
 

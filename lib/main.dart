@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hrms/constants/colors.dart';
@@ -10,6 +11,7 @@ import 'package:hrms/views/employee_type_page.dart';
 import 'package:hrms/views/location_qr_page.dart';
 import 'package:hrms/views/map_page.dart';
 import 'package:hrms/views/parcel_page.dart';
+import 'package:hrms/views/qrCode_list_page.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -45,7 +47,8 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       getPages: [
-        GetPage(name: '/', page: () => DashboardPage()),
+        GetPage(
+            name: '/', page: () => kIsWeb ? DashboardPage() : AttendancePage()),
         GetPage(name: '/employee-types', page: () => EmployeeTypePage()),
         GetPage(name: '/employee', page: () => EmployeePage()),
         GetPage(name: '/departments', page: () => DepartmentPage()),
@@ -53,6 +56,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/damaged', page: () => const DamagedPage()),
         GetPage(name: '/parcel', page: () => ParcelPage()),
         GetPage(name: '/map', page: () => MapPage()),
+        GetPage(name: '/qrcode-list', page: () => QRCodeListPage()),
         GetPage(name: '/location-qr', page: () => LocationQRPage()),
         GetPage(name: '/attendance', page: () => AttendancePage()),
       ],

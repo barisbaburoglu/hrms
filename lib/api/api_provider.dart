@@ -1,5 +1,6 @@
 import 'package:hrms/api/services/department_service.dart';
 import 'package:hrms/api/services/employee_type_service.dart';
+import 'package:hrms/api/services/qr_code_setting_service.dart';
 
 import 'services/api_service.dart';
 import 'services/company_service.dart';
@@ -19,6 +20,8 @@ class ApiProvider {
 
   late DepartmentService _departmentService;
 
+  late QRCodeSettingService _qrCodeSettingService;
+
   ApiProvider._internal() {
     _apiService =
         ApiService('https://devinsofthrmsystemdashapi.azurewebsites.net/api');
@@ -30,6 +33,8 @@ class ApiProvider {
     _employeeService = EmployeeService(_apiService);
 
     _departmentService = DepartmentService(_apiService);
+
+    _qrCodeSettingService = QRCodeSettingService(_apiService);
   }
 
   CompanyService get companyService => _companyService;
@@ -39,4 +44,6 @@ class ApiProvider {
   EmployeeService get employeeService => _employeeService;
 
   DepartmentService get departmentService => _departmentService;
+
+  QRCodeSettingService get qrCodeSettingService => _qrCodeSettingService;
 }

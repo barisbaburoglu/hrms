@@ -3,39 +3,109 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:hrms/widgets/page_title.dart';
-import 'package:sidebarx/sidebarx.dart';
+import 'package:hrms/controllers/location_qr_controller.dart';
+import 'package:hrms/widgets/base_button.dart';
+import 'package:hrms/widgets/base_input.dart';
+import 'package:hrms/widgets/qr_code_colorful.dart';
+
+import '../api/models/qr_code_setting_model.dart';
 import '../constants/colors.dart';
 import '../constants/dimensions.dart';
-import '../controllers/location_qr_controller.dart';
-import '../widgets/base_button.dart';
-import '../widgets/base_input.dart';
-import '../widgets/qr_code_colorful.dart';
-import '../widgets/qr_code_display.dart';
-import 'master_scaffold.dart';
 
-class LocationQRPage extends StatelessWidget {
-  final LocationQRController controller = Get.put(LocationQRController());
-  final SidebarXController sidebarController =
-      SidebarXController(selectedIndex: 5, extended: true);
+class EditFormQRCodeSetting extends StatelessWidget {
+  final String title;
+  final QRCodeSetting? qrCodeSetting;
+  final LocationQRController controller = Get.find<LocationQRController>();
 
-  LocationQRPage({super.key});
+  EditFormQRCodeSetting({
+    super.key,
+    required this.title,
+    this.qrCodeSetting,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return MasterScaffold(
-      sidebarController: sidebarController,
-      body: Column(
-        children: [
-          const SizedBox(
-            width: double.infinity,
-            child: PageTitleWidget(title: "Konum ve QR Oluşturma"),
+    if (qrCodeSetting != null) {
+      controller.setEmployeeFields(qrCodeSetting!);
+    } else {
+      controller.clearEmployeeFields();
+    }
+
+    return Stack(
+      children: [
+        Card(
+          color: AppColor.cardBackgroundColor,
+          shadowColor: AppColor.cardShadowColor,
+          margin: const EdgeInsets.all(AppDimension.kSpacing),
+          child: Padding(
+            padding: const EdgeInsets.all(AppDimension.kSpacing),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        BaseButton(
+                          width: 200,
+                          label: "Kaydet ve QR Oluştur",
+                          onPressed: () {
+                            controller.loader.value = true;
+                            controller.generateQRCode();
+                            controller.saveQRCodeSetting(
+                                qrCodeSetting: qrCodeSetting);
+                          },
+                          icon: const Icon(
+                            Icons.qr_code,
+                            color: AppColor.secondaryText,
+                          ),
+                        ),
+                        SizedBox(
+                          width: AppDimension.kSpacing,
+                        ),
+                        BaseButton(
+                          width: 125,
+                          backgroundColor: AppColor.primaryRed,
+                          label: "Kapat",
+                          onPressed: () {
+                            Get.back();
+                          },
+                          icon: const Icon(
+                            Icons.close,
+                            color: AppColor.secondaryText,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(AppDimension.kSpacing),
+                  child: Divider(
+                    height: 1,
+                    color: AppColor.primaryAppColor.withOpacity(0.25),
+                  ),
+                ),
+                Expanded(
+                  child: kIsWeb ? webLayout(context) : mobileLayout(context),
+                ),
+              ],
+            ),
           ),
-          Expanded(
-            child: kIsWeb ? webLayout(context) : mobileLayout(context),
+        ),
+        Visibility(
+          visible: controller.loader.value,
+          child: SizedBox.expand(
+            child: CircularProgressIndicator(),
           ),
-        ],
-      ),
+        )
+      ],
     );
   }
 
@@ -51,26 +121,23 @@ class LocationQRPage extends StatelessWidget {
             margin: const EdgeInsets.all(AppDimension.kSpacing),
             child: Padding(
               padding: const EdgeInsets.all(AppDimension.kSpacing),
-              child: SizedBox(
-                height: MediaQuery.of(Get.context!).size.height - 250,
-                child: Obx(() => GoogleMap(
-                      onMapCreated: controller.onMapCreated,
-                      initialCameraPosition: const CameraPosition(
-                        target: LatLng(39.914450395953565, 32.84726686473151),
-                        zoom: 5.5,
-                      ),
-                      onTap: controller.onMapTap,
-                      markers: controller.selectedLocation.value == null
-                          ? {}
-                          : {
-                              Marker(
-                                markerId: const MarkerId('selectedLocation'),
-                                position: controller.selectedLocation.value!,
-                              ),
-                            },
-                      circles: controller.circles.toSet(),
-                    )),
-              ),
+              child: Obx(() => GoogleMap(
+                    onMapCreated: controller.onMapCreated,
+                    initialCameraPosition: const CameraPosition(
+                      target: LatLng(39.914450395953565, 32.84726686473151),
+                      zoom: 5.5,
+                    ),
+                    onTap: controller.onMapTap,
+                    markers: controller.selectedLocation.value == null
+                        ? {}
+                        : {
+                            Marker(
+                              markerId: const MarkerId('selectedLocation'),
+                              position: controller.selectedLocation.value!,
+                            ),
+                          },
+                    circles: controller.circles.toSet(),
+                  )),
             ),
           ),
         ),
@@ -83,13 +150,13 @@ class LocationQRPage extends StatelessWidget {
             margin: const EdgeInsets.all(AppDimension.kSpacing),
             child: Padding(
               padding: const EdgeInsets.all(AppDimension.kSpacing),
-              child: SizedBox(
-                height: MediaQuery.of(Get.context!).size.height - 250,
-                child: SingleChildScrollView(
-                  controller: controller.scrollController,
+              child: SingleChildScrollView(
+                controller: controller.scrollController,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 5.0),
                   child: Wrap(
                     alignment: WrapAlignment.center,
-                    runSpacing: AppDimension.kSpacing * 2,
+                    runSpacing: AppDimension.kSpacing,
                     spacing: AppDimension.kSpacing,
                     children: [
                       SizedBox(
@@ -190,21 +257,9 @@ class LocationQRPage extends StatelessWidget {
                       Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          BaseButton(
-                            width: 250,
-                            label: "Kaydet ve QR Oluştur",
-                            onPressed: () => controller.generateQRCode(),
-                            icon: const Icon(
-                              Icons.qr_code,
-                              color: AppColor.secondaryText,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: AppDimension.kSpacing,
-                          ),
                           Obx(
                             () => ColorfulQrCode(
-                              data: controller.qrCodeData.value ?? "",
+                              data: controller.qrCodeData.value,
                               eventTypeId: controller.eventTypeId.value,
                             ),
                           ),
@@ -218,7 +273,7 @@ class LocationQRPage extends StatelessWidget {
                                 width: 250,
                                 backgroundColor: AppColor.primaryGreen,
                                 label: "QR Kod İndir",
-                                onPressed: () {},
+                                onPressed: controller.downloadColorfulQRCode,
                                 icon: const Icon(
                                   Icons.download,
                                   color: AppColor.secondaryText,
@@ -379,7 +434,11 @@ class LocationQRPage extends StatelessWidget {
                       BaseButton(
                         width: 250,
                         label: "Kaydet ve QR Oluştur",
-                        onPressed: () => controller.generateQRCode(),
+                        onPressed: () {
+                          controller.generateQRCode();
+                          controller.saveQRCodeSetting(
+                              qrCodeSetting: qrCodeSetting);
+                        },
                         icon: const Icon(
                           Icons.qr_code,
                           color: AppColor.secondaryText,
@@ -388,8 +447,10 @@ class LocationQRPage extends StatelessWidget {
                       const SizedBox(
                         height: AppDimension.kSpacing,
                       ),
-                      Obx(() =>
-                          QRCodeDisplay(data: controller.qrCodeData.value)),
+                      Obx(() => ColorfulQrCode(
+                            data: controller.qrCodeData.value,
+                            eventTypeId: 1,
+                          )),
                       const SizedBox(
                         height: AppDimension.kSpacing,
                       ),
@@ -440,7 +501,7 @@ class LocationQRPage extends StatelessWidget {
           ),
         ),
       ),
-      value: controller.eventTypeId?.value,
+      value: controller.eventTypeId.value,
       items: eventTypes.map((eventType) {
         return DropdownMenuItem<int>(
           value: eventType.id,

@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hrms/controllers/location_qr_controller.dart';
 import 'package:hrms/widgets/base_button.dart';
 import 'package:hrms/widgets/page_title.dart';
+import 'package:hrms/widgets/qr_code_colorful.dart';
 import 'package:sidebarx/sidebarx.dart';
 import '../constants/colors.dart';
 import '../constants/dimensions.dart';
-import '../controllers/company_controller.dart';
 import 'master_scaffold.dart';
 
-class CompanyPage extends StatelessWidget {
-  final CompanyController controller = Get.put(CompanyController());
+class QRCodeListPage extends StatelessWidget {
+  final LocationQRController controller = Get.put(LocationQRController());
   final SidebarXController sidebarController =
-      SidebarXController(selectedIndex: 1, extended: true);
+      SidebarXController(selectedIndex: 5, extended: true);
 
-  CompanyPage({super.key});
+  QRCodeListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,27 +33,30 @@ class CompanyPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
-                      width: width,
-                      child: PageTitleWidget(
-                        title: "Şirket Oluşturma",
-                        rightWidgets: BaseButton(
-                          label: "Yeni",
-                          icon: const Icon(
-                            Icons.add,
-                            color: AppColor.secondaryText,
-                          ),
-                          onPressed: () {
-                            controller.openEditPopup(
-                                "Yeni Şirket Oluşturma", null);
-                          },
+                    width: width,
+                    child: PageTitleWidget(
+                      title: "Lokasyon ve QR Oluşturma",
+                      rightWidgets: BaseButton(
+                        label: "Yeni",
+                        icon: const Icon(
+                          Icons.add,
+                          color: AppColor.secondaryText,
                         ),
-                      )),
-                  SizedBox(width: width, child: titleCardWidget()),
-                  Expanded(
-                    child: controller.companies.isEmpty
-                        ? const Center(child: CircularProgressIndicator())
-                        : SizedBox(width: width, child: itemsCardWidget()),
+                        onPressed: () {
+                          controller.openEditPopup(
+                              "Lokasyon ve QR Düzenleme", null);
+                        },
+                      ),
+                    ),
                   ),
+                  SizedBox(
+                    width: width,
+                    child: titleCardWidget(),
+                  ),
+                  Expanded(
+                      child: controller.qrCodeSettings.isEmpty
+                          ? const Center(child: CircularProgressIndicator())
+                          : SizedBox(width: width, child: itemsCardWidget())),
                 ],
               ),
             ),
@@ -66,14 +70,18 @@ class CompanyPage extends StatelessWidget {
     return Card(
       color: AppColor.cardBackgroundColor,
       shadowColor: AppColor.cardShadowColor,
-      margin: const EdgeInsets.symmetric(horizontal: AppDimension.kSpacing),
+      margin: const EdgeInsets.symmetric(
+          horizontal: AppDimension.kSpacing,
+          vertical: AppDimension.kSpacing / 2),
       child: Padding(
-        padding: const EdgeInsets.all(AppDimension.kSpacing / 2),
+        padding: const EdgeInsets.symmetric(
+            vertical: AppDimension.kSpacing,
+            horizontal: AppDimension.kSpacing / 2),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const SizedBox(
-              width: 30,
+              width: 20,
               child: Text(
                 "#",
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -83,10 +91,24 @@ class CompanyPage extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
+            Visibility(
+              visible: MediaQuery.of(Get.context!).size.width > 1280,
+              child: const SizedBox(
+                width: 50,
+                child: Text(
+                  "QR",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
             const SizedBox(
-              width: 150,
+              width: 125,
               child: Text(
-                "Şirket Adı",
+                "Lokasyon",
                 style: TextStyle(fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
                 maxLines: 2,
@@ -94,50 +116,19 @@ class CompanyPage extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            Visibility(
-              visible: MediaQuery.of(Get.context!).size.width > 1280,
-              child: const SizedBox(
-                width: 150,
-                child: Text(
-                  "Yönetici Adı",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ),
-            Visibility(
-              visible: MediaQuery.of(Get.context!).size.width > 1280,
-              child: const SizedBox(
-                width: 150,
-                child: Text(
-                  "Yönetici E-Mail",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ),
-            Visibility(
-              visible: MediaQuery.of(Get.context!).size.width > 1280,
-              child: const SizedBox(
-                width: 150,
-                child: Text(
-                  "Yönetici Telefonu",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
-                ),
+            const SizedBox(
+              width: 70,
+              child: Text(
+                "QR Türü",
+                style: TextStyle(fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
             const SizedBox(
-              width: 75,
+              width: 100,
               child: Text(
                 "Düzenle",
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -160,68 +151,56 @@ class CompanyPage extends StatelessWidget {
       margin: const EdgeInsets.symmetric(
           horizontal: AppDimension.kSpacing,
           vertical: AppDimension.kSpacing / 2),
-      child: Padding(
-        padding: const EdgeInsets.all(AppDimension.kSpacing / 2),
-        child: Obx(() {
+      child: Obx(
+        () {
           return ListView.builder(
-            controller: controller.scrollController,
-            itemCount: controller.companies.length,
+            controller: ScrollController(),
+            itemCount: controller.qrCodeSettings.length,
             itemBuilder: (context, index) {
-              final company = controller.companies[index];
+              final qrCodeSettings = controller.qrCodeSettings[index];
               return Column(
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        vertical: AppDimension.kSpacing / 2),
+                        vertical: AppDimension.kSpacing,
+                        horizontal: AppDimension.kSpacing / 2),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                          width: 30,
-                          child: Text(
-                            "${index + 1}",
-                            textAlign: TextAlign.center,
+                            width: 20,
+                            child: Text(
+                              "${index + 1}",
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            )),
+                        Visibility(
+                          visible:
+                              MediaQuery.of(Get.context!).size.width > 1280,
+                          child: SizedBox(
+                            width: 100,
+                            child: ColorfulQrCode(
+                              data: qrCodeSettings.uniqueKey!,
+                              eventTypeId: qrCodeSettings.eventType!,
+                              size: 75,
+                            ),
                           ),
                         ),
                         SizedBox(
-                          width: 150,
+                            width: 125,
+                            child: Text(qrCodeSettings.name ?? "",
+                                textAlign: TextAlign.center)),
+                        SizedBox(
+                          width: 70,
                           child: Text(
-                            company.name ?? "",
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        Visibility(
-                          visible:
-                              MediaQuery.of(Get.context!).size.width > 1280,
-                          child: SizedBox(
-                            width: 150,
-                            child: Text(
-                              company.managerName ?? "",
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
-                        Visibility(
-                          visible:
-                              MediaQuery.of(Get.context!).size.width > 1280,
-                          child: SizedBox(
-                            width: 150,
-                            child: Text(
-                              company.managerEmail ?? "",
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
-                        Visibility(
-                          visible:
-                              MediaQuery.of(Get.context!).size.width > 1280,
-                          child: SizedBox(
-                            width: 150,
-                            child: Text(
-                              company.managerPhone ?? "",
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
+                              controller.eventTypes
+                                  .where(
+                                      (x) => x.id == qrCodeSettings.eventType!)
+                                  .first
+                                  .typeName,
+                              textAlign: TextAlign.center),
                         ),
                         SizedBox(
                           width: 100,
@@ -230,19 +209,18 @@ class CompanyPage extends StatelessWidget {
                               IconButton(
                                 onPressed: () {
                                   controller.openEditPopup(
-                                      "Şirket Düzenleme", company);
+                                      "Lokasyon ve QR Düzenleme",
+                                      qrCodeSettings);
                                 },
                                 icon: const Icon(
                                   Icons.edit_square,
                                   color: AppColor.primaryOrange,
                                 ),
                               ),
-                              const SizedBox(
-                                width: AppDimension.kSpacing,
-                              ),
                               IconButton(
                                 onPressed: () {
-                                  controller.deleteCompany(company);
+                                  controller
+                                      .deleteQRCodeSetting(qrCodeSettings);
                                 },
                                 icon: const Icon(
                                   Icons.delete,
@@ -263,7 +241,7 @@ class CompanyPage extends StatelessWidget {
               );
             },
           );
-        }),
+        },
       ),
     );
   }

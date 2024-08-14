@@ -1,20 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:hrms/constants/colors.dart';
 
 class ArrowBorderedCard extends StatelessWidget {
   final Widget body;
-  const ArrowBorderedCard({
-    super.key,
-    required this.body,
-  });
+  final List<Color>? backgroundColor;
+  const ArrowBorderedCard(
+      {super.key, required this.body, this.backgroundColor});
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: ArrowBorderPainter(),
-      child: Container(
-        color: Colors.white,
-        padding: const EdgeInsets.all(16.0),
-        child: body,
+      child: Padding(
+        padding: const EdgeInsets.all(2.5),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: const Alignment(0.0, -1.0),
+              end: const Alignment(0.0, 1.0),
+              colors: backgroundColor ?? AppColor.gradientDefault,
+              stops: [0.0, 1.0],
+            ),
+            boxShadow: [
+              const BoxShadow(
+                color: Color(0x08000000),
+                offset: Offset(0, 10),
+                blurRadius: 99,
+              ),
+            ],
+          ),
+          padding: const EdgeInsets.all(16.0),
+          child: body,
+        ),
       ),
     );
   }
