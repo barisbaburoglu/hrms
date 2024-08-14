@@ -102,7 +102,18 @@ class EditFormQRCodeSetting extends StatelessWidget {
         Visibility(
           visible: controller.loader.value,
           child: SizedBox.expand(
-            child: CircularProgressIndicator(),
+            child: Container(
+              color: Colors.black.withOpacity(0.5),
+              child: const Center(
+                child: SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 5,
+                  ),
+                ),
+              ),
+            ),
           ),
         )
       ],
@@ -123,9 +134,10 @@ class EditFormQRCodeSetting extends StatelessWidget {
               padding: const EdgeInsets.all(AppDimension.kSpacing),
               child: Obx(() => GoogleMap(
                     onMapCreated: controller.onMapCreated,
-                    initialCameraPosition: const CameraPosition(
-                      target: LatLng(39.914450395953565, 32.84726686473151),
-                      zoom: 5.5,
+                    initialCameraPosition: CameraPosition(
+                      target: controller.selectedLocation.value ??
+                          const LatLng(39.914450395953565, 32.84726686473151),
+                      zoom: 18,
                     ),
                     onTap: controller.onMapTap,
                     markers: controller.selectedLocation.value == null
@@ -305,9 +317,10 @@ class EditFormQRCodeSetting extends StatelessWidget {
             height: 250,
             child: Obx(() => GoogleMap(
                   onMapCreated: controller.onMapCreated,
-                  initialCameraPosition: const CameraPosition(
-                    target: LatLng(39.914450395953565, 32.84726686473151),
-                    zoom: 5,
+                  initialCameraPosition: CameraPosition(
+                    target: controller.selectedLocation.value ??
+                        const LatLng(39.914450395953565, 32.84726686473151),
+                    zoom: 15,
                   ),
                   onTap: controller.onMapTap,
                   markers: controller.selectedLocation.value == null

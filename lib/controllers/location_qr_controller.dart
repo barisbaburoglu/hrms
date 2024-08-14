@@ -339,6 +339,9 @@ class LocationQRController extends GetxController {
     eventTypeId.value = qrCodeSetting.eventType!;
     isOutOfLoc.value = qrCodeSetting.enableOutOfLocation ?? false;
     qrCodeData.value = qrCodeSetting.uniqueKey;
+    selectedLocation.value = LatLng(
+        qrCodeSetting.locationLatitude!, qrCodeSetting.locationLongitude!);
+    updateCircle();
   }
 
   void clearEmployeeFields() {

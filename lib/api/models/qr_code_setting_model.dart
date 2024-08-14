@@ -58,9 +58,7 @@ class QRCodeSetting {
       this.updateUserID});
 
   QRCodeSetting.fromJson(Map<String, dynamic> json) {
-    if (id != null) {
-      id = json['id'];
-    }
+    id = json['id'];
     companyId = json['companyId'];
     uniqueKey = json['uniqueKey'];
     name = json['name'];

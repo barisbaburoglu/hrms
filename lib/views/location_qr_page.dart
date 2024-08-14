@@ -248,23 +248,25 @@ class LocationQRPage extends StatelessWidget {
           margin: const EdgeInsets.all(AppDimension.kSpacing),
           child: SizedBox(
             height: 250,
-            child: Obx(() => GoogleMap(
-                  onMapCreated: controller.onMapCreated,
-                  initialCameraPosition: const CameraPosition(
-                    target: LatLng(39.914450395953565, 32.84726686473151),
-                    zoom: 5,
-                  ),
-                  onTap: controller.onMapTap,
-                  markers: controller.selectedLocation.value == null
-                      ? {}
-                      : {
-                          Marker(
-                            markerId: const MarkerId('selectedLocation'),
-                            position: controller.selectedLocation.value!,
-                          ),
-                        },
-                  circles: controller.circles.toSet(),
-                )),
+            child: Obx(
+              () => GoogleMap(
+                onMapCreated: controller.onMapCreated,
+                initialCameraPosition: const CameraPosition(
+                  target: LatLng(39.914450395953565, 32.84726686473151),
+                  zoom: 5,
+                ),
+                onTap: controller.onMapTap,
+                markers: controller.selectedLocation.value == null
+                    ? {}
+                    : {
+                        Marker(
+                          markerId: const MarkerId('selectedLocation'),
+                          position: controller.selectedLocation.value!,
+                        ),
+                      },
+                circles: controller.circles.toSet(),
+              ),
+            ),
           ),
         ),
         // SingleChildScrollView widget'ı altında diğer içerikler

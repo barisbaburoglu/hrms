@@ -26,7 +26,7 @@ class QRCodeSettingService {
 
   Future<void> updateEmployeeType(QRCodeSetting qrCodeSetting) async {
     await apiService.putRequest(
-        '/EmployeeTypeServices', qrCodeSetting.toJson());
+        '/QRCodeSettingServices', qrCodeSetting.toJson());
   }
 
   Future<void> deleteQRCodeSetting(QRCodeSetting qrCodeSetting) async {
