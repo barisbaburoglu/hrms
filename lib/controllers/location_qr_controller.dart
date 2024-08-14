@@ -99,7 +99,7 @@ class LocationQRController extends GetxController {
                     double.parse(coordinatesController.text.split(",")[0]),
                 locationLongitude:
                     double.parse(coordinatesController.text.split(",")[1]),
-                eventType: eventTypeId!.value,
+                eventType: eventTypeId.value,
                 uniqueKey: qrCodeData.value,
               ),
             );
@@ -114,7 +114,7 @@ class LocationQRController extends GetxController {
                     double.parse(coordinatesController.text.split(",")[0]),
                 locationLongitude:
                     double.parse(coordinatesController.text.split(",")[1]),
-                eventType: eventTypeId!.value,
+                eventType: eventTypeId.value,
                 uniqueKey: qrCodeData.value,
               ),
             );
@@ -128,7 +128,7 @@ class LocationQRController extends GetxController {
   }
 
   void setEventTypeId(int? id) {
-    eventTypeId?.value = id!;
+    eventTypeId.value = id!;
   }
 
   void scrollToEnd() {
@@ -243,7 +243,7 @@ class LocationQRController extends GetxController {
         // Web platformu için
         final blob = html.Blob([pngBytes]);
         final url = html.Url.createObjectUrlFromBlob(blob);
-        final anchor = html.AnchorElement(href: url)
+        html.AnchorElement(href: url)
           ..setAttribute("download",
               "${eventTypeId.value == 1 ? "entry-qr" : "exit-qr"}.png")
           ..click();
@@ -359,10 +359,16 @@ class LocationQRController extends GetxController {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),
-        child: EditFormQRCodeSetting(
-          title: title,
-          qrCodeSetting: qrCodeSetting,
-        ),
+        child: LayoutBuilder(builder: (context, constraints) {
+          // Ekran genişliği kontrolü
+          double screenWidth = constraints.maxWidth;
+
+          return EditFormQRCodeSetting(
+            isWeb: screenWidth > 980,
+            title: title,
+            qrCodeSetting: qrCodeSetting,
+          );
+        }),
       ),
     );
   }

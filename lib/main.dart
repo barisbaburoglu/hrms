@@ -8,7 +8,6 @@ import 'package:hrms/views/damaged_page.dart';
 import 'package:hrms/views/dashboard.dart';
 import 'package:hrms/views/department_page.dart';
 import 'package:hrms/views/employee_type_page.dart';
-import 'package:hrms/views/location_qr_page.dart';
 import 'package:hrms/views/map_page.dart';
 import 'package:hrms/views/parcel_page.dart';
 import 'package:hrms/views/qrCode_list_page.dart';
@@ -57,7 +56,6 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/parcel', page: () => ParcelPage()),
         GetPage(name: '/map', page: () => MapPage()),
         GetPage(name: '/qrcode-list', page: () => QRCodeListPage()),
-        GetPage(name: '/location-qr', page: () => LocationQRPage()),
         GetPage(name: '/attendance', page: () => AttendancePage()),
       ],
     );

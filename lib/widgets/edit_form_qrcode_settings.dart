@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -13,6 +12,7 @@ import '../constants/colors.dart';
 import '../constants/dimensions.dart';
 
 class EditFormQRCodeSetting extends StatelessWidget {
+  final bool isWeb;
   final String title;
   final QRCodeSetting? qrCodeSetting;
   final LocationQRController controller = Get.find<LocationQRController>();
@@ -21,6 +21,7 @@ class EditFormQRCodeSetting extends StatelessWidget {
     super.key,
     required this.title,
     this.qrCodeSetting,
+    required this.isWeb,
   });
 
   @override
@@ -42,8 +43,9 @@ class EditFormQRCodeSetting extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  runSpacing: AppDimension.kSpacing / 2,
                   children: [
                     Text(
                       title,
@@ -54,7 +56,7 @@ class EditFormQRCodeSetting extends StatelessWidget {
                       children: [
                         BaseButton(
                           width: 200,
-                          label: "Kaydet ve QR Oluştur",
+                          label: "Kaydet",
                           onPressed: () {
                             controller.loader.value = true;
                             controller.generateQRCode();
@@ -66,8 +68,8 @@ class EditFormQRCodeSetting extends StatelessWidget {
                             color: AppColor.secondaryText,
                           ),
                         ),
-                        SizedBox(
-                          width: AppDimension.kSpacing,
+                        const SizedBox(
+                          width: AppDimension.kSpacing / 2,
                         ),
                         BaseButton(
                           width: 125,
@@ -93,7 +95,7 @@ class EditFormQRCodeSetting extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  child: kIsWeb ? webLayout(context) : mobileLayout(context),
+                  child: isWeb ? webLayout(context) : mobileLayout(context),
                 ),
               ],
             ),
@@ -314,7 +316,7 @@ class EditFormQRCodeSetting extends StatelessWidget {
           color: AppColor.cardBackgroundColor,
           margin: const EdgeInsets.all(AppDimension.kSpacing),
           child: SizedBox(
-            height: 250,
+            height: 150,
             child: Obx(() => GoogleMap(
                   onMapCreated: controller.onMapCreated,
                   initialCameraPosition: CameraPosition(
@@ -444,22 +446,6 @@ class EditFormQRCodeSetting extends StatelessWidget {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      BaseButton(
-                        width: 250,
-                        label: "Kaydet ve QR Oluştur",
-                        onPressed: () {
-                          controller.generateQRCode();
-                          controller.saveQRCodeSetting(
-                              qrCodeSetting: qrCodeSetting);
-                        },
-                        icon: const Icon(
-                          Icons.qr_code,
-                          color: AppColor.secondaryText,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: AppDimension.kSpacing,
-                      ),
                       Obx(() => ColorfulQrCode(
                             data: controller.qrCodeData.value,
                             eventTypeId: 1,
