@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hrms/constants/colors.dart';
 import 'package:hrms/constants/dimensions.dart';
+import 'package:hrms/controllers/auth_controller.dart';
 import 'package:hrms/views/master_scaffold.dart';
+import 'package:hrms/widgets/base_button.dart';
 import 'package:sidebarx/sidebarx.dart';
 import '../controllers/attendance_controller.dart';
 import '../widgets/arrow_bordered_card.dart';
@@ -12,6 +14,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class DashboardPage extends StatelessWidget {
   final AttendanceController controller = Get.put(AttendanceController());
+  final AuthController controllerAuth = Get.put(AuthController());
 
   final SidebarXController sidebarController =
       SidebarXController(selectedIndex: 0, extended: true);
@@ -53,8 +56,13 @@ class DashboardPage extends StatelessWidget {
                     children: [
                       SizedBox(
                         width: width,
-                        child: const PageTitleWidget(
+                        child: PageTitleWidget(
                           title: "Hoşgeldiniz Barış Babüroğlu,",
+                          rightWidgets: BaseButton(
+                            label: "Çıkış Yap",
+                            onPressed: controllerAuth.logout,
+                            icon: const Icon(Icons.logout),
+                          ),
                         ),
                       ),
                       Padding(

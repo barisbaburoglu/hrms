@@ -19,15 +19,23 @@ class ApiService {
   }
 
   Future<http.Response> postRequest(
-      String endpoint, Map<String, dynamic> data) async {
+    String endpoint,
+    Map<String, dynamic> data,
+  ) async {
     final url = Uri.parse('$baseUrl$endpoint');
+
+    var body = json.encode(data);
     final response = await http.post(
       url,
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode(data),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization':
+            'Bearer CfDJ8ClhByVBVwtLqPSz24y3ZXqRbMRYRoU0PKK0flGwk3nMl-gABLPJ9toJvGzHhSpxlytsrm50mD02tenRZ3Jp0wfzuNZJ7V8B8bYyg56pVlvmPHe-6qH2oIMwKfOf2dbZEUTIr9YstmryphbQD3wQUt_Ry9pq7l2FiIdDJu_BuSo5z7ujspLdMXSf_iyJfOYlDYYnlexpAq0i6Po07rl5K5bPKfPdI9bgR2U5GEsJoiDgbuQEvjY6kFDfALRBX25sI2jqX071ebq49WeKI5YUADB-wZcwxhsv3llz1DLHJRgeIK2B5UVWh82IraI1L4M-mJJfDirNsM8PPj2aGsiDML7OzF6Z4X2CPR8sl2SSPXWeUjvIGmKoT4V_O4aedEns309S_Dk1TF5Lwa5qqyUMSqD1onsk-ArRD20AbcSNYM73N-3383kjLs8VZPfonpez0HESanaWHqjEpaR18RtHJ1nma3C-m2o-l6XtuDBTUnZvxpyKnFyif_OwXZKsPWIQnymJdzz1Y4r_FDU5mXS9286F8UzG7ArpzmGGjvJ7a22cvR4dkcnkFpMAgPfvU0u91V2VzlLa3TSyzFy4eMjdyMb3ULYvdVSyjrNcsnlgcp1Uy78C8hCr9RyJl_ce2r4l1EGAE2tbqA8uhCb5-oIgKq_xm9khDY6KWPOCYmARt4unuNmCpbKXY7dYTaIka15DFbFPUbAZdlUfi86cgAJ8BVs'
+      },
+      body: body,
     );
     if (response.statusCode != 200) {
-      throw Exception('Failed to create data');
+      throw Exception(response.statusCode);
     }
     return response;
   }

@@ -10,16 +10,16 @@ class BottomNavigationController extends GetxController {
         Get.toNamed('/map');
         break;
       case 1:
-        Get.toNamed('/location-qr');
+        Get.toNamed('/parcel');
         break;
       case 2:
-        Get.toNamed('/');
+        Get.toNamed('/home');
         break;
       case 3:
-        Get.toNamed('/');
+        Get.toNamed('/home');
         break;
       case 4:
-        Get.toNamed('/');
+        Get.toNamed('/home');
         break;
     }
   }

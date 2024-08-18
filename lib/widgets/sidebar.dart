@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:get/get.dart';
@@ -101,7 +102,8 @@ class LeftSidebarX extends StatelessWidget {
           icon: Icons.home,
           label: 'Anasayfa',
           onTap: () {
-            sidebarController.navigateTo('/', 0); // Navigate to the home page
+            sidebarController.navigateTo(
+                kIsWeb ? '/index' : '/home', 0); // Navigate to the home page
           },
         ),
         // SidebarXItem(

@@ -117,7 +117,7 @@ class EditFormQRCodeSetting extends StatelessWidget {
               ),
             ),
           ),
-        )
+        ),
       ],
     );
   }
