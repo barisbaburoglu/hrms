@@ -40,7 +40,7 @@ class ApiProvider {
         ApiService('https://devinsofthrmsystemmobileapi.azurewebsites.net/api');
 
     _authApiService =
-        ApiService('https://devinsofthrmsystemmobileapi.azurewebsites.net');
+        ApiService('https://devinsofthrmsystemdashapi.azurewebsites.net');
 
     _companyService = CompanyService(_dashApiService);
 
