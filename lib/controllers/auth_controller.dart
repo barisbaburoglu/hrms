@@ -18,12 +18,6 @@ class AuthController extends GetxController {
   static RxBool isLoggedIn = false.obs;
   static RxString accessToken = "".obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    //checkUserStatus();
-  }
-
   void checkUserStatus() async {
     String? storedToken;
     String? storedExpiration;
@@ -78,8 +72,8 @@ class AuthController extends GetxController {
         Get.showSnackbar(
           CustomGetBar(
             textColor: AppColor.secondaryText,
-            message: "Hatalı İşlem",
-            duration: Duration(seconds: 3),
+            message: "Hatalı İşlem $e",
+            duration: const Duration(seconds: 3),
             iconData: Icons.error,
             backgroundColor: AppColor.primaryRed,
           ),

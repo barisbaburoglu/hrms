@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/place_google.dart';
@@ -29,8 +30,7 @@ class ApiService {
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization':
-            'Bearer CfDJ8ClhByVBVwtLqPSz24y3ZXqRbMRYRoU0PKK0flGwk3nMl-gABLPJ9toJvGzHhSpxlytsrm50mD02tenRZ3Jp0wfzuNZJ7V8B8bYyg56pVlvmPHe-6qH2oIMwKfOf2dbZEUTIr9YstmryphbQD3wQUt_Ry9pq7l2FiIdDJu_BuSo5z7ujspLdMXSf_iyJfOYlDYYnlexpAq0i6Po07rl5K5bPKfPdI9bgR2U5GEsJoiDgbuQEvjY6kFDfALRBX25sI2jqX071ebq49WeKI5YUADB-wZcwxhsv3llz1DLHJRgeIK2B5UVWh82IraI1L4M-mJJfDirNsM8PPj2aGsiDML7OzF6Z4X2CPR8sl2SSPXWeUjvIGmKoT4V_O4aedEns309S_Dk1TF5Lwa5qqyUMSqD1onsk-ArRD20AbcSNYM73N-3383kjLs8VZPfonpez0HESanaWHqjEpaR18RtHJ1nma3C-m2o-l6XtuDBTUnZvxpyKnFyif_OwXZKsPWIQnymJdzz1Y4r_FDU5mXS9286F8UzG7ArpzmGGjvJ7a22cvR4dkcnkFpMAgPfvU0u91V2VzlLa3TSyzFy4eMjdyMb3ULYvdVSyjrNcsnlgcp1Uy78C8hCr9RyJl_ce2r4l1EGAE2tbqA8uhCb5-oIgKq_xm9khDY6KWPOCYmARt4unuNmCpbKXY7dYTaIka15DFbFPUbAZdlUfi86cgAJ8BVs'
+        'Authorization': 'Bearer ${GetStorage().read('accessToken')}'
       },
       body: body,
     );

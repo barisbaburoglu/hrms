@@ -79,7 +79,7 @@ class DashboardPage extends StatelessWidget {
                             StaggeredGridTile.count(
                               crossAxisCellCount: 3,
                               mainAxisCellCount: screenWidth <= 600
-                                  ? 1 / 2
+                                  ? 2 / 3
                                   : (screenWidth > 600 && screenWidth <= 1190)
                                       ? 2 / 3
                                       : 1,
@@ -233,7 +233,7 @@ class DashboardPage extends StatelessWidget {
                                       ? 2
                                       : 1,
                               mainAxisCellCount: screenWidth <= 600
-                                  ? 1 / 2
+                                  ? 1
                                   : (screenWidth > 600 && screenWidth <= 1190)
                                       ? 4 / 5
                                       : 1,
@@ -332,7 +332,7 @@ class DashboardPage extends StatelessWidget {
                             StaggeredGridTile.count(
                               crossAxisCellCount: 1,
                               mainAxisCellCount: screenWidth <= 600
-                                  ? 1 / 3
+                                  ? 1 / 2
                                   : (screenWidth > 600 && screenWidth <= 1190)
                                       ? 2 / 5
                                       : 1 / 2,
@@ -368,7 +368,7 @@ class DashboardPage extends StatelessWidget {
                             StaggeredGridTile.count(
                               crossAxisCellCount: 1,
                               mainAxisCellCount: screenWidth <= 600
-                                  ? 1 / 3
+                                  ? 1 / 2
                                   : (screenWidth > 600 && screenWidth <= 1190)
                                       ? 2 / 5
                                       : 1 / 2,
@@ -404,7 +404,7 @@ class DashboardPage extends StatelessWidget {
                             StaggeredGridTile.count(
                               crossAxisCellCount: 1,
                               mainAxisCellCount: screenWidth <= 600
-                                  ? 1 / 3
+                                  ? 1 / 2
                                   : (screenWidth > 600 && screenWidth <= 1190)
                                       ? 2 / 5
                                       : 1 / 2,
@@ -440,7 +440,7 @@ class DashboardPage extends StatelessWidget {
                             StaggeredGridTile.count(
                               crossAxisCellCount: 1,
                               mainAxisCellCount: screenWidth <= 600
-                                  ? 1 / 3
+                                  ? 1 / 2
                                   : (screenWidth > 600 && screenWidth <= 1190)
                                       ? 2 / 5
                                       : 1 / 2,

@@ -20,8 +20,10 @@ class PageTitleWidget extends StatelessWidget {
       margin: const EdgeInsets.all(AppDimension.kSpacing),
       child: Padding(
         padding: const EdgeInsets.all(AppDimension.kSpacing),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Wrap(
+          spacing: AppDimension.kSpacing,
+          runSpacing: AppDimension.kSpacing,
+          alignment: WrapAlignment.spaceBetween,
           children: [
             Text(
               title,

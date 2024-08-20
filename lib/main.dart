@@ -30,6 +30,10 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  Widget loadPage(Widget page) {
+    return GetStorage().read('accessToken') == null ? SignInPage() : page;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -49,16 +53,17 @@ class MyApp extends StatelessWidget {
       initialRoute: GetStorage().read('accessToken') == null ? '/' : '/index',
       getPages: [
         GetPage(name: '/', page: () => SignInPage()),
-        GetPage(name: '/employee-types', page: () => EmployeeTypePage()),
-        GetPage(name: '/employee', page: () => EmployeePage()),
-        GetPage(name: '/departments', page: () => DepartmentPage()),
-        GetPage(name: '/company', page: () => CompanyPage()),
-        GetPage(name: '/damaged', page: () => const DamagedPage()),
-        GetPage(name: '/parcel', page: () => ParcelPage()),
-        GetPage(name: '/map', page: () => MapPage()),
-        GetPage(name: '/qrcode-list', page: () => QRCodeListPage()),
-        GetPage(name: '/index', page: () => DashboardPage()),
-        GetPage(name: '/home', page: () => AttendancePage()),
+        GetPage(
+            name: '/employee-types', page: () => loadPage(EmployeeTypePage())),
+        GetPage(name: '/employee', page: () => loadPage(EmployeePage())),
+        GetPage(name: '/departments', page: () => loadPage(DepartmentPage())),
+        GetPage(name: '/company', page: () => loadPage(CompanyPage())),
+        GetPage(name: '/qrcode-list', page: () => loadPage(QRCodeListPage())),
+        GetPage(name: '/index', page: () => loadPage(DashboardPage())),
+        GetPage(name: '/home', page: () => loadPage(AttendancePage())),
+        GetPage(name: '/damaged', page: () => loadPage(const DamagedPage())),
+        GetPage(name: '/parcel', page: () => loadPage(ParcelPage())),
+        GetPage(name: '/map', page: () => loadPage(MapPage())),
       ],
     );
   }
