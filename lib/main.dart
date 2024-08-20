@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -20,12 +21,31 @@ import 'views/dashboard.dart';
 import 'views/employee_page.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
+import 'package:universal_html/html.dart' as html;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
   await initializeDateFormatting('tr_TR', null);
   await DefaultCacheManager().emptyCache();
+  if (kIsWeb) clearCookiesAndSiteData();
   runApp(const MyApp());
+}
+
+void clearCookiesAndSiteData() {
+  // Clear all cookies
+  var cookies = html.document.cookie?.split('; ') ?? [];
+  for (var cookie in cookies) {
+    var key = cookie.split('=').first;
+    html.document.cookie =
+        '$key=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+  }
+
+  // Optionally clear local storage and session storage
+  html.window.localStorage.clear();
+  html.window.sessionStorage.clear();
+
+  print("cache temizlendi");
 }
 
 class MyApp extends StatelessWidget {
