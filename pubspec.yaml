@@ -48,6 +48,7 @@ dependencies:
   image_gallery_saver: ^2.0.3
   permission_handler: ^10.2.0
   qr_code_scanner: ^1.0.1
+  flutter_cache_manager: ^3.4.1
 
 
 dev_dependencies:

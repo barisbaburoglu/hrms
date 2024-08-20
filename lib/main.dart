@@ -18,11 +18,13 @@ import 'themes/checkbox_theme.dart';
 import 'themes/scrollbar_theme.dart';
 import 'views/dashboard.dart';
 import 'views/employee_page.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
   await initializeDateFormatting('tr_TR', null);
+  await DefaultCacheManager().emptyCache();
   runApp(const MyApp());
 }
 

@@ -60,7 +60,7 @@ class SignInPage extends StatelessWidget {
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.black54,
+                                      color: AppColor.primaryAppColor,
                                       letterSpacing: 1.5,
                                     ),
                                   )),
@@ -111,8 +111,11 @@ class SignInPage extends StatelessWidget {
                                   ),
                                   const Spacer(),
                                   const Center(
-                                      child: Text(
-                                    "Henüz kayıt olmadıysan KAYIT OL",
+                                      child: InkWell(
+                                    mouseCursor: SystemMouseCursors.click,
+                                    child: Text(
+                                      "Henüz kayıt olmadıysan KAYIT OL",
+                                    ),
                                   )),
                                   const Spacer(),
                                 ],
