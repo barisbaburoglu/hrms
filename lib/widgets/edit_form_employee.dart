@@ -1,14 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hrms/controllers/employee_controller.dart';
-import 'package:hrms/widgets/base_button.dart';
-import 'package:hrms/widgets/base_input.dart';
 import 'package:intl/intl.dart';
 
 import '../api/models/employee_model.dart';
 import '../constants/colors.dart';
 import '../constants/dimensions.dart';
+import '../controllers/employee_controller.dart';
+import 'base_button.dart';
+import 'base_input.dart';
 
 class EditFormEmployee extends StatelessWidget {
   final String title;
@@ -148,6 +148,10 @@ class EditFormEmployee extends StatelessWidget {
                               width: inputWidth,
                               height: 50,
                               child: _buildDepartmentDropdown())),
+                          Obx(() => SizedBox(
+                              width: inputWidth,
+                              height: 50,
+                              child: _buildShiftDropdown())),
                           SizedBox(
                               width: inputWidth,
                               height: 40,
@@ -202,6 +206,7 @@ class EditFormEmployee extends StatelessWidget {
     return DropdownButtonFormField<int>(
       decoration: const InputDecoration(
         labelText: "Şirket",
+        labelStyle: TextStyle(fontSize: 12),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
             color: AppColor.primaryGrey,
@@ -213,7 +218,7 @@ class EditFormEmployee extends StatelessWidget {
           ),
         ),
       ),
-      value: controller.companyId?.value,
+      value: controller.companyId.value,
       items: companies.map((company) {
         return DropdownMenuItem<int>(
           value: company.id,
@@ -240,6 +245,7 @@ class EditFormEmployee extends StatelessWidget {
     return DropdownButtonFormField<int>(
       decoration: const InputDecoration(
         labelText: "Çalışan Tipi",
+        labelStyle: TextStyle(fontSize: 12),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
             color: AppColor.primaryGrey,
@@ -251,7 +257,7 @@ class EditFormEmployee extends StatelessWidget {
           ),
         ),
       ),
-      value: controller.employeeTypeId?.value,
+      value: controller.employeeTypeId.value,
       items: employeeTypes.map((type) {
         return DropdownMenuItem<int>(
           value: type.id,
@@ -278,6 +284,7 @@ class EditFormEmployee extends StatelessWidget {
     return DropdownButtonFormField<int>(
       decoration: const InputDecoration(
         labelText: "Bölüm",
+        labelStyle: TextStyle(fontSize: 12),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
             color: AppColor.primaryGrey,
@@ -289,7 +296,7 @@ class EditFormEmployee extends StatelessWidget {
           ),
         ),
       ),
-      value: controller.departmentId?.value,
+      value: controller.departmentId.value,
       items: departments.map((department) {
         return DropdownMenuItem<int>(
           value: department.id,
@@ -305,6 +312,46 @@ class EditFormEmployee extends StatelessWidget {
       }).toList(),
       onChanged: (value) {
         controller.setDepartmentId(value);
+      },
+    );
+  }
+
+  Widget _buildShiftDropdown() {
+    final shifts = controller.shifts;
+
+    return DropdownButtonFormField<int>(
+      decoration: const InputDecoration(
+        labelText: "Çalışma Takvimi",
+        labelStyle: TextStyle(fontSize: 12),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: AppColor.primaryGrey,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: AppColor.primaryAppColor,
+          ),
+        ),
+      ),
+      value: controller.shiftId.value,
+      items: shifts.isNotEmpty
+          ? shifts.map((shift) {
+              return DropdownMenuItem<int>(
+                value: shift.id,
+                child: Text(
+                  shift.name ?? "",
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppColor.primaryText,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+              );
+            }).toList()
+          : [],
+      onChanged: (value) {
+        controller.setShiftId(value);
       },
     );
   }

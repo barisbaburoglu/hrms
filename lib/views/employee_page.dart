@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hrms/widgets/base_button.dart';
-import 'package:hrms/widgets/page_title.dart';
 import 'package:sidebarx/sidebarx.dart';
+
 import '../constants/colors.dart';
 import '../constants/dimensions.dart';
 import '../controllers/employee_controller.dart';
+import '../widgets/base_button.dart';
+import '../widgets/page_title.dart';
 import 'master_scaffold.dart';
 
 class EmployeePage extends StatelessWidget {
@@ -73,7 +74,7 @@ class EmployeePage extends StatelessWidget {
           horizontal: AppDimension.kSpacing,
           vertical: AppDimension.kSpacing / 2),
       child: Padding(
-        padding: const EdgeInsets.all(AppDimension.kSpacing),
+        padding: const EdgeInsets.all(AppDimension.kSpacing / 2),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -183,86 +184,89 @@ class EmployeePage extends StatelessWidget {
             itemCount: controller.employees.length,
             itemBuilder: (context, index) {
               final employee = controller.employees[index];
-              return Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(AppDimension.kSpacing),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                            width: 20,
-                            child: Text("${index + 1}",
-                                textAlign: TextAlign.center)),
-                        SizedBox(
-                            width: 50,
-                            child: Text(employee.employeeNumber.toString(),
-                                textAlign: TextAlign.center)),
-                        Visibility(
-                          visible:
-                              MediaQuery.of(Get.context!).size.width > 1280,
-                          child: SizedBox(
-                              width: 150,
-                              child: Text(employee.name ?? "",
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: AppDimension.kSpacing / 2),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: AppDimension.kSpacing / 2),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                              width: 20,
+                              child: Text("${index + 1}",
                                   textAlign: TextAlign.center)),
-                        ),
-                        SizedBox(
-                            width: 125,
-                            child: Text(employee.surname ?? "",
-                                textAlign: TextAlign.center)),
-                        Visibility(
-                          visible:
-                              MediaQuery.of(Get.context!).size.width > 1280,
-                          child: SizedBox(
-                            width: 150,
-                            child: Text(employee.email ?? "",
-                                textAlign: TextAlign.center),
-                          ),
-                        ),
-                        Visibility(
+                          SizedBox(
+                              width: 50,
+                              child: Text(employee.employeeNumber.toString(),
+                                  textAlign: TextAlign.center)),
+                          Visibility(
                             visible:
                                 MediaQuery.of(Get.context!).size.width > 1280,
                             child: SizedBox(
                                 width: 150,
-                                child: Text(employee.phone ?? "",
-                                    textAlign: TextAlign.center))),
-                        SizedBox(
-                          width: 100,
-                          child: Row(
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  controller.openEditPopup(
-                                      "Çalışan Düzenleme", employee);
-                                },
-                                icon: const Icon(
-                                  Icons.edit_square,
-                                  color: AppColor.primaryOrange,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: AppDimension.kSpacing,
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  controller.deleteEmployee(employee);
-                                },
-                                icon: const Icon(
-                                  Icons.delete,
-                                  color: AppColor.primaryRed,
-                                ),
-                              ),
-                            ],
+                                child: Text(employee.name ?? "",
+                                    textAlign: TextAlign.center)),
                           ),
-                        ),
-                      ],
+                          SizedBox(
+                              width: 125,
+                              child: Text(employee.surname ?? "",
+                                  textAlign: TextAlign.center)),
+                          Visibility(
+                            visible:
+                                MediaQuery.of(Get.context!).size.width > 1280,
+                            child: SizedBox(
+                              width: 150,
+                              child: Text(employee.email ?? "",
+                                  textAlign: TextAlign.center),
+                            ),
+                          ),
+                          Visibility(
+                              visible:
+                                  MediaQuery.of(Get.context!).size.width > 1280,
+                              child: SizedBox(
+                                  width: 150,
+                                  child: Text(employee.phone ?? "",
+                                      textAlign: TextAlign.center))),
+                          SizedBox(
+                            width: 100,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    controller.openEditPopup(
+                                        "Çalışan Düzenleme", employee);
+                                  },
+                                  icon: const Icon(
+                                    Icons.edit_square,
+                                    color: AppColor.primaryOrange,
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    controller.deleteEmployee(employee);
+                                  },
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: AppColor.primaryRed,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Divider(
-                    height: 1,
-                    color: AppColor.primaryAppColor.withOpacity(0.25),
-                  )
-                ],
+                    Divider(
+                      height: 1,
+                      color: AppColor.primaryAppColor.withOpacity(0.25),
+                    )
+                  ],
+                ),
               );
             },
           );

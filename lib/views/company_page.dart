@@ -226,6 +226,7 @@ class CompanyPage extends StatelessWidget {
                         SizedBox(
                           width: 100,
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               IconButton(
                                 onPressed: () {
@@ -236,9 +237,6 @@ class CompanyPage extends StatelessWidget {
                                   Icons.edit_square,
                                   color: AppColor.primaryOrange,
                                 ),
-                              ),
-                              const SizedBox(
-                                width: AppDimension.kSpacing,
                               ),
                               IconButton(
                                 onPressed: () {

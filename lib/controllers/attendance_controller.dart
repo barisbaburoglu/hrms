@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../api/api_provider.dart';
+import '../api/models/users_entry_exit_event_model.dart';
 import '../api/models/work_entry_exit_event_model.dart';
 import '../constants/colors.dart';
 import '../widgets/custom_snack_bar.dart';
@@ -24,17 +25,64 @@ class AttendanceController extends GetxController {
   RxBool isProcessing = false.obs;
   RxBool savingEntryExit = false.obs;
 
+  RxString entryTime = ''.obs;
+  RxString exitTime = ''.obs;
+  RxString workingHours = ''.obs;
+
+  Rx<UsersEntryExitEvent> lastEntryExit = UsersEntryExitEvent().obs;
+
   @override
   void onInit() {
     super.onInit();
     _updateTime();
     _updateDate();
+    getLastEntryExit();
   }
 
   @override
   void onClose() {
     controller?.dispose();
     super.onClose();
+  }
+
+  void getLastEntryExit() async {
+    try {
+      var body = {
+        "limit": 1,
+        "orders": [
+          {
+            "fieldName": "Id",
+            "direction": "ASC",
+          }
+        ],
+        "filters": []
+      };
+      var lastEntryExitModel = await ApiProvider()
+          .usersEntryExitEventService
+          .getLastEntryExitEvents(body);
+
+      lastEntryExit.value = lastEntryExitModel.results!.first;
+
+      DateTime parsedEntryDateTime =
+          DateTime.parse(lastEntryExit.value.entry!.eventTime.toString());
+
+      entryTime.value =
+          "${parsedEntryDateTime.hour.toString().padLeft(2, '0')}:${parsedEntryDateTime.minute.toString().padLeft(2, '0')}";
+
+      DateTime parsedExitDateTime =
+          DateTime.parse(lastEntryExit.value.exit!.eventTime.toString());
+
+      exitTime.value =
+          "${parsedExitDateTime.hour.toString().padLeft(2, '0')}:${parsedExitDateTime.minute.toString().padLeft(2, '0')}";
+
+      Duration workingDuration =
+          parsedExitDateTime.difference(parsedEntryDateTime);
+
+      workingHours.value =
+          "${workingDuration.inHours}:${(workingDuration.inMinutes % 60).toString().padLeft(2, '0')}";
+    } catch (e) {
+      print("Hata: $e");
+    }
   }
 
   Future<void> saveWorkEntryExitEvent() async {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hrms/api/models/shift_model.dart';
 
 import '../api/api_provider.dart';
 import '../api/models/company_model.dart';
@@ -18,9 +19,10 @@ class EmployeeController extends GetxController {
   TextEditingController employeeNumberController = TextEditingController();
 
   DateTime? employmentDate;
-  RxInt? companyId = RxInt(1);
-  RxInt? employeeTypeId = RxInt(1);
-  RxInt? departmentId = RxInt(1);
+  Rxn<int> companyId = Rxn<int>();
+  Rxn<int> employeeTypeId = Rxn<int>();
+  Rxn<int> departmentId = Rxn<int>();
+  Rxn<int> shiftId = Rxn<int>();
 
   var employees = <Employee>[].obs;
 
@@ -30,6 +32,8 @@ class EmployeeController extends GetxController {
 
   var employeeTypes = <EmployeeType>[].obs;
 
+  var shifts = <Shift>[].obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -37,6 +41,16 @@ class EmployeeController extends GetxController {
     fetchCompanies();
     fetchDepartments();
     fetchEmployeeTypes();
+    fetchShifts();
+  }
+
+  void fetchShifts() async {
+    try {
+      var shiftModel = await ApiProvider().shiftService.fetchShifts();
+      shifts.value = shiftModel.shifts ?? [];
+    } catch (e) {
+      print("Hata: $e");
+    }
   }
 
   void fetchCompanies() async {
@@ -71,7 +85,7 @@ class EmployeeController extends GetxController {
   void fetchEmployees() async {
     try {
       var employeeTypeModel =
-          await ApiProvider().employeeService.fetchEmployees();
+          await ApiProvider().employeeService.fetchEmployees(null);
       employees.value = employeeTypeModel.employees ?? [];
     } catch (e) {
       print("Hata: $e");
@@ -92,9 +106,10 @@ class EmployeeController extends GetxController {
     try {
       if (employee == null) {
         await ApiProvider().employeeService.createEmployee(Employee(
-              companyId: companyId!.value,
-              employeeTypeId: employeeTypeId!.value,
-              departmentId: departmentId!.value,
+              companyId: companyId.value,
+              employeeTypeId: employeeTypeId.value,
+              departmentId: departmentId.value,
+              shiftId: shiftId.value,
               employeeNumber: int.parse(employeeNumberController.text),
               name: nameController.text,
               surname: surnameController.text,
@@ -105,9 +120,10 @@ class EmployeeController extends GetxController {
       } else {
         await ApiProvider().employeeService.updateEmployee(Employee(
               id: employee.id,
-              companyId: companyId!.value,
-              employeeTypeId: employeeTypeId!.value,
-              departmentId: departmentId!.value,
+              companyId: companyId.value,
+              employeeTypeId: employeeTypeId.value,
+              departmentId: departmentId.value,
+              shiftId: shiftId.value,
               employeeNumber: int.parse(employeeNumberController.text),
               name: nameController.text,
               surname: surnameController.text,
@@ -133,9 +149,10 @@ class EmployeeController extends GetxController {
         : '0';
 
     employmentDate = DateTime.parse(employee.employmentDate!);
-    companyId!.value = employee.companyId!;
-    employeeTypeId!.value = employee.employeeTypeId!;
-    departmentId!.value = employee.departmentId!;
+    companyId.value = employee.companyId!;
+    employeeTypeId.value = employee.employeeTypeId!;
+    departmentId.value = employee.departmentId!;
+    shiftId.value = employee.shiftId!;
   }
 
   void clearEmployeeFields() {
@@ -145,9 +162,10 @@ class EmployeeController extends GetxController {
     phoneController.clear();
     employeeNumberController.clear();
     employmentDate = null;
-    companyId!.value = 1;
-    employeeTypeId!.value = 1;
-    departmentId!.value = 1;
+    companyId.value = null;
+    employeeTypeId.value = null;
+    departmentId.value = null;
+    shiftId.value = null;
   }
 
   void openEditPopup(String title, Employee? employee) {
@@ -171,14 +189,18 @@ class EmployeeController extends GetxController {
   }
 
   void setCompanyId(int? id) {
-    companyId?.value = id!;
+    companyId.value = id!;
   }
 
   void setEmployeeTypeId(int? id) {
-    employeeTypeId?.value = id!;
+    employeeTypeId.value = id!;
   }
 
   void setDepartmentId(int? id) {
-    departmentId?.value = id!;
+    departmentId.value = id!;
+  }
+
+  void setShiftId(int? id) {
+    shiftId.value = id!;
   }
 }

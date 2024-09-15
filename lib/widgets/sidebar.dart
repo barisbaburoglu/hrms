@@ -84,13 +84,13 @@ class LeftSidebarX extends StatelessWidget {
           padding: const EdgeInsets.only(top: 20.0),
           child: SizedBox(
             height: 100,
-            width: 100, // Width ve height eşit olmalı ki daire oluşsun
+            width: 100,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: ClipOval(
                 child: Image.asset(
                   'assets/images/avatar.png',
-                  fit: BoxFit.cover, // Resmin tamamının görünmesini sağlar
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -102,95 +102,63 @@ class LeftSidebarX extends StatelessWidget {
           icon: Icons.home,
           label: 'Anasayfa',
           onTap: () {
-            sidebarController.navigateTo(
-                kIsWeb ? '/index' : '/home', 0); // Navigate to the home page
+            sidebarController.navigateTo(kIsWeb ? '/index' : '/home', 0);
           },
         ),
-        // SidebarXItem(
-        //   icon: Icons.qr_code,
-        //   label: 'Hasarlı Binalar',
-        //   onTap: () {
-        //     sidebarController.navigateTo(
-        //         '/damaged', 1); // Navigate to the QR page
-        //   },
-        // ),
-        // SidebarXItem(
-        //   icon: Icons.qr_code,
-        //   label: 'Parsel Görüntüle',
-        //   onTap: () {
-        //     sidebarController.navigateTo(
-        //         '/parcel', 2); // Navigate to the QR page
-        //   },
-        // ),
-        // SidebarXItem(
-        //   icon: Icons.qr_code,
-        //   label: 'Giriş/Çıkış',
-        //   onTap: () {
-        //     sidebarController.navigateTo('/', 3); // Navigate to the QR page
-        //   },
-        // ),
-        // SidebarXItem(
-        //   icon: Icons.date_range,
-        //   label: 'İzinler',
-        //   onTap: () {
-        //     sidebarController.navigateTo(
-        //         '/', 4); // Navigate to the permissions page
-        //   },
-        // ),
-        // SidebarXItem(
-        //   icon: Icons.notifications,
-        //   label: 'Duyurular',
-        //   onTap: () {
-        //     sidebarController.navigateTo(
-        //         '/', 5); // Navigate to the notifications page
-        //   },
-        // ),
-        // SidebarXItem(
-        //   icon: Icons.map,
-        //   label: 'Map',
-        //   onTap: () {
-        //     sidebarController.navigateTo('/map', 6); // Navigate to the map page
-        //   },
-        // ),
         SidebarXItem(
           icon: Icons.work,
           label: 'Şirket Bilgileri',
           onTap: () {
-            sidebarController.navigateTo(
-                '/company', 1); // Navigate to the home page
+            sidebarController.navigateTo('/company', 1);
           },
         ),
         SidebarXItem(
           icon: Icons.type_specimen,
           label: 'Çalışan Türleri',
           onTap: () {
-            sidebarController.navigateTo(
-                '/employee-types', 2); // Navigate to the home page
+            sidebarController.navigateTo('/employee-types', 2);
           },
         ),
         SidebarXItem(
           icon: Icons.group_work_outlined,
           label: 'Bölümler',
           onTap: () {
-            sidebarController.navigateTo(
-                '/departments', 3); // Navigate to the home page
+            sidebarController.navigateTo('/departments', 3);
           },
         ),
-
         SidebarXItem(
           icon: Icons.people,
           label: 'Çalışanlar',
           onTap: () {
-            sidebarController.navigateTo(
-                '/employee', 4); // Navigate to the home page
+            sidebarController.navigateTo('/employee', 4);
           },
         ),
         SidebarXItem(
           icon: Icons.location_pin,
           label: 'Lokasyon ve QR',
           onTap: () {
-            sidebarController.navigateTo(
-                '/qrcode-list', 5); // Navigate to the home page
+            sidebarController.navigateTo('/qrcode-list', 5);
+          },
+        ),
+        SidebarXItem(
+          icon: Icons.door_sliding_outlined,
+          label: 'Giriş Çıkışlar',
+          onTap: () {
+            sidebarController.navigateTo('/events', 6);
+          },
+        ),
+        SidebarXItem(
+          icon: Icons.calendar_month_outlined,
+          label: 'Çalışma Takvimi',
+          onTap: () {
+            sidebarController.navigateTo('/shifts', 7);
+          },
+        ),
+        SidebarXItem(
+          icon: Icons.beach_access,
+          label: 'Tatil İşlemleri',
+          onTap: () {
+            sidebarController.navigateTo('/shift-employee', 8);
           },
         ),
       ],

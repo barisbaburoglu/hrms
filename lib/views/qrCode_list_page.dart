@@ -35,7 +35,7 @@ class QRCodeListPage extends StatelessWidget {
                   SizedBox(
                     width: width,
                     child: PageTitleWidget(
-                      title: "Lokasyon ve QR Oluşturma",
+                      title: "Lokasyon &\nQR Oluşturma",
                       rightWidgets: BaseButton(
                         label: "Yeni",
                         icon: const Icon(
@@ -44,7 +44,7 @@ class QRCodeListPage extends StatelessWidget {
                         ),
                         onPressed: () {
                           controller.openEditPopup(
-                              "Lokasyon ve QR Düzenleme", null);
+                              "Lokasyon & QR Düzenleme", null);
                         },
                       ),
                     ),

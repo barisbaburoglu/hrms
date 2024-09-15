@@ -24,6 +24,7 @@ class PageTitleWidget extends StatelessWidget {
           spacing: AppDimension.kSpacing,
           runSpacing: AppDimension.kSpacing,
           alignment: WrapAlignment.spaceBetween,
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             Text(
               title,

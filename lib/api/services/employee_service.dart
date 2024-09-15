@@ -8,9 +8,9 @@ class EmployeeService {
 
   EmployeeService(this.apiService);
 
-  Future<EmployeeModel> fetchEmployees() async {
-    final response = await apiService
-        .postRequest('/EmployeeServices/All', {"orders": [], "filters": []});
+  Future<EmployeeModel> fetchEmployees(Map<String, dynamic>? filter) async {
+    final response = await apiService.postRequest(
+        '/EmployeeServices/All', filter ?? {"orders": [], "filters": []});
     return EmployeeModel.fromJson(json.decode(response.body));
   }
 

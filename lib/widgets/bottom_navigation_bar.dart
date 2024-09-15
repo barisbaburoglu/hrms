@@ -3,8 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../constants/colors.dart'; // AppColor'ınızı içe aktarın
-import '../controllers/bottom_navigation_controller.dart'; // Oluşturduğunuz kontrolcüyü içe aktarın
+import '../constants/colors.dart';
+import '../controllers/bottom_navigation_controller.dart';
 
 class CustomConvexAppBar extends StatelessWidget {
   final BottomNavigationController controller =
@@ -21,7 +21,7 @@ class CustomConvexAppBar extends StatelessWidget {
               backgroundColor: AppColor.primaryAppColor,
               style: TabStyle.reactCircle,
               items: const [
-                TabItem(icon: Icons.map, title: "Harita"),
+                TabItem(icon: Icons.event, title: "Hareket"),
                 TabItem(icon: Icons.qr_code, title: "QR"),
                 TabItem(icon: Icons.home, title: "Anasayfa"),
                 TabItem(icon: Icons.notifications, title: "Duyuru"),

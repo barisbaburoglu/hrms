@@ -142,7 +142,8 @@ class EmployeeTypePage extends StatelessWidget {
               return Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(AppDimension.kSpacing / 2),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: AppDimension.kSpacing / 2),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -176,6 +177,7 @@ class EmployeeTypePage extends StatelessWidget {
                         SizedBox(
                           width: 100,
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               IconButton(
                                 onPressed: () {
@@ -186,9 +188,6 @@ class EmployeeTypePage extends StatelessWidget {
                                   Icons.edit_square,
                                   color: AppColor.primaryOrange,
                                 ),
-                              ),
-                              const SizedBox(
-                                width: AppDimension.kSpacing,
                               ),
                               IconButton(
                                 onPressed: () {

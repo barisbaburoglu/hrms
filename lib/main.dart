@@ -8,9 +8,12 @@ import 'package:hrms/views/company_page.dart';
 import 'package:hrms/views/damaged_page.dart';
 import 'package:hrms/views/department_page.dart';
 import 'package:hrms/views/employee_type_page.dart';
+import 'package:hrms/views/events_entry_exit_page.dart';
 import 'package:hrms/views/map_page.dart';
 import 'package:hrms/views/parcel_page.dart';
 import 'package:hrms/views/qrCode_list_page.dart';
+import 'package:hrms/views/shift_calendar_page.dart';
+import 'package:hrms/views/shift_employee_page.dart';
 import 'package:hrms/views/sign_in_page.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
@@ -28,7 +31,7 @@ void main() async {
   await GetStorage.init();
   await initializeDateFormatting('tr_TR', null);
   await DefaultCacheManager().emptyCache();
-  if (kIsWeb) clearCookiesAndSiteData();
+  // if (kIsWeb) clearCookiesAndSiteData();
   runApp(const MyApp());
 }
 
@@ -41,7 +44,6 @@ void clearCookiesAndSiteData() {
         '$key=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
   }
 
-  // Optionally clear local storage and session storage
   html.window.localStorage.clear();
   html.window.sessionStorage.clear();
 
@@ -71,7 +73,11 @@ class MyApp extends StatelessWidget {
           textTheme: ButtonTextTheme.primary,
         ),
       ),
-      initialRoute: GetStorage().read('accessToken') == null ? '/' : '/index',
+      initialRoute: GetStorage().read('accessToken') == null
+          ? '/'
+          : kIsWeb
+              ? '/index'
+              : '/home',
       getPages: [
         GetPage(name: '/', page: () => SignInPage()),
         GetPage(
@@ -85,6 +91,10 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/damaged', page: () => loadPage(const DamagedPage())),
         GetPage(name: '/parcel', page: () => loadPage(ParcelPage())),
         GetPage(name: '/map', page: () => loadPage(MapPage())),
+        GetPage(name: '/events', page: () => loadPage(EventsEntryExitPage())),
+        GetPage(name: '/shifts', page: () => loadPage(ShiftCalendarPage())),
+        GetPage(
+            name: '/shift-employee', page: () => loadPage(ShiftEmployeePage())),
       ],
     );
   }

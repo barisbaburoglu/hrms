@@ -91,19 +91,22 @@ class AttendancePage extends StatelessWidget {
                   Container(
                     color: Colors.grey[200],
                     padding: const EdgeInsets.all(16),
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
                           width: 100,
                           child: Column(
                             children: [
-                              Text(
-                                '10:12',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              Text(
+                              controller.entryTime.isEmpty
+                                  ? const Icon(Icons.timer)
+                                  : Text(
+                                      controller.entryTime.value,
+                                      style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                              const Text(
                                 'Giriş',
                                 textAlign: TextAlign.center,
                                 maxLines: 2,
@@ -115,8 +118,15 @@ class AttendancePage extends StatelessWidget {
                           width: 100,
                           child: Column(
                             children: [
-                              Icon(Icons.timer_off),
-                              Text(
+                              controller.exitTime.isEmpty
+                                  ? const Icon(Icons.timer_off)
+                                  : Text(
+                                      controller.exitTime.value,
+                                      style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                              const Text(
                                 'Çıkış',
                                 textAlign: TextAlign.center,
                                 maxLines: 2,
@@ -128,8 +138,15 @@ class AttendancePage extends StatelessWidget {
                           width: 100,
                           child: Column(
                             children: [
-                              Icon(Icons.access_time),
-                              Text(
+                              controller.workingHours.isEmpty
+                                  ? const Icon(Icons.access_time)
+                                  : Text(
+                                      controller.workingHours.value,
+                                      style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                              const Text(
                                 'Çalışma Saati',
                                 textAlign: TextAlign.center,
                                 maxLines: 2,

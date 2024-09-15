@@ -1,3 +1,5 @@
+import 'shift_off_day_model.dart';
+
 class EmployeeModel {
   List<Employee>? employees;
   int? totalCount;
@@ -32,12 +34,14 @@ class Employee {
   int? companyId;
   int? employeeTypeId;
   int? departmentId;
+  int? shiftId;
   int? employeeNumber;
   String? name;
   String? surname;
   String? employmentDate;
   String? email;
   String? phone;
+  List<ShiftOffDay>? employeeShiftDayOffs;
   String? createdAt;
   int? createUserID;
   String? updatedAt;
@@ -48,12 +52,14 @@ class Employee {
       this.companyId,
       this.employeeTypeId,
       this.departmentId,
+      this.shiftId,
       this.employeeNumber,
       this.name,
       this.surname,
       this.employmentDate,
       this.email,
       this.phone,
+      this.employeeShiftDayOffs,
       this.createdAt,
       this.createUserID,
       this.updatedAt,
@@ -64,12 +70,19 @@ class Employee {
     companyId = json['companyId'];
     employeeTypeId = json['employeeTypeId'];
     departmentId = json['departmentId'];
+    shiftId = json['shiftId'];
     employeeNumber = json['employeeNumber'];
     name = json['name'];
     surname = json['surname'];
     employmentDate = json['employmentDate'];
     email = json['email'];
     phone = json['phone'];
+    if (json['employeeShiftDayOffs'] != null) {
+      employeeShiftDayOffs = <ShiftOffDay>[];
+      json['employeeShiftDayOffs'].forEach((v) {
+        employeeShiftDayOffs!.add(ShiftOffDay.fromJson(v));
+      });
+    }
     createdAt = json['createdAt'];
     createUserID = json['createUserID'];
     updatedAt = json['updatedAt'];
@@ -90,6 +103,9 @@ class Employee {
     if (departmentId != null) {
       data['departmentId'] = departmentId;
     }
+    if (shiftId != null) {
+      data['shiftId'] = shiftId;
+    }
     if (employeeNumber != null) {
       data['employeeNumber'] = employeeNumber;
     }
@@ -107,6 +123,10 @@ class Employee {
     }
     if (phone != null) {
       data['phone'] = phone;
+    }
+    if (employeeShiftDayOffs != null) {
+      data['employeeShiftDayOffs'] =
+          employeeShiftDayOffs!.map((v) => v.toJson()).toList();
     }
     if (createdAt != null) {
       data['createdAt'] = createdAt;

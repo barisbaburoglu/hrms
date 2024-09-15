@@ -7,7 +7,7 @@ class BottomNavigationController extends GetxController {
     currentIndex.value = index;
     switch (index) {
       case 0:
-        Get.toNamed('/map');
+        Get.toNamed('/events');
         break;
       case 1:
         Get.toNamed('/parcel');
