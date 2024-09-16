@@ -9,6 +9,7 @@ import 'package:hrms/views/damaged_page.dart';
 import 'package:hrms/views/department_page.dart';
 import 'package:hrms/views/employee_type_page.dart';
 import 'package:hrms/views/events_entry_exit_page.dart';
+import 'package:hrms/views/leave_page.dart';
 import 'package:hrms/views/map_page.dart';
 import 'package:hrms/views/parcel_page.dart';
 import 'package:hrms/views/qrCode_list_page.dart';
@@ -25,6 +26,8 @@ import 'views/employee_page.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 import 'package:universal_html/html.dart' as html;
+
+import 'views/profile_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -95,6 +98,8 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/shifts', page: () => loadPage(ShiftCalendarPage())),
         GetPage(
             name: '/shift-employee', page: () => loadPage(ShiftEmployeePage())),
+        GetPage(name: '/profile', page: () => loadPage(ProfilePage())),
+        GetPage(name: '/leave', page: () => loadPage(LeavePage())),
       ],
     );
   }

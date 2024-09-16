@@ -1,14 +1,14 @@
-import 'package:hrms/api/services/department_service.dart';
-import 'package:hrms/api/services/employee_type_service.dart';
-import 'package:hrms/api/services/qr_code_setting_service.dart';
-import 'package:hrms/api/services/shift_service.dart';
-import 'package:hrms/api/services/users_entry_exit_event_service.dart';
-import 'package:hrms/api/services/work_entry_exit_event_service.dart';
-
 import 'services/api_service.dart';
 import 'services/auth_service.dart';
 import 'services/company_service.dart';
+import 'services/department_service.dart';
 import 'services/employee_service.dart';
+import 'services/employee_type_service.dart';
+import 'services/leave_service.dart';
+import 'services/qr_code_setting_service.dart';
+import 'services/shift_service.dart';
+import 'services/users_entry_exit_event_service.dart';
+import 'services/work_entry_exit_event_service.dart';
 
 class ApiProvider {
   static final ApiProvider _instance = ApiProvider._internal();
@@ -38,6 +38,8 @@ class ApiProvider {
 
   late ShiftService _shiftService;
 
+  late LeaveService _leaveService;
+
   ApiProvider._internal() {
     _dashApiService =
         ApiService('https://devinsofthrmsystemdashapi.azurewebsites.net/api');
@@ -65,6 +67,8 @@ class ApiProvider {
     _usersEntryExitEventService = UsersEntryExitEventService(_mobilApiService);
 
     _shiftService = ShiftService(_dashApiService);
+
+    _leaveService = LeaveService(_dashApiService);
   }
 
   AuthService get authService => _authService;
@@ -86,4 +90,6 @@ class ApiProvider {
       _usersEntryExitEventService;
 
   ShiftService get shiftService => _shiftService;
+
+  LeaveService get leaveService => _leaveService;
 }

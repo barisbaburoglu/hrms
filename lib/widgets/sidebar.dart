@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:hrms/constants/dimensions.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:get/get.dart';
 import '../constants/colors.dart';
-import '../controllers/sidebar_controller.dart'; // Controller'ı içe aktarın
+import '../controllers/sidebar_controller.dart';
+import 'base_button.dart'; // Controller'ı içe aktarın
 
 class LeftSidebarX extends StatelessWidget {
   const LeftSidebarX({
@@ -25,14 +27,14 @@ class LeftSidebarX extends StatelessWidget {
           color: AppColor.canvasColor,
           borderRadius: BorderRadius.circular(20),
         ),
-        hoverColor: AppColor.scaffoldBackgroundColor,
+        hoverColor: AppColor.primaryAppColor,
         textStyle: const TextStyle(
           color: AppColor.primaryAppColor,
           fontWeight: FontWeight.bold,
         ),
         selectedTextStyle: const TextStyle(color: Colors.white),
         hoverTextStyle: const TextStyle(
-          color: Colors.grey,
+          color: AppColor.secondaryText,
           fontWeight: FontWeight.w500,
         ),
         itemTextPadding: const EdgeInsets.only(left: 30),
@@ -80,21 +82,42 @@ class LeftSidebarX extends StatelessWidget {
         height: 1,
       ),
       headerBuilder: (context, extended) {
-        return Padding(
-          padding: const EdgeInsets.only(top: 20.0),
-          child: SizedBox(
-            height: 100,
-            width: 100,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ClipOval(
-                child: Image.asset(
-                  'assets/images/avatar.png',
-                  fit: BoxFit.cover,
+        return Column(
+          children: [
+            SizedBox(
+              height: 100,
+              width: 100,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ClipOval(
+                  child: Image.asset(
+                    'assets/images/avatar.png',
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
-          ),
+            BaseButton(
+              backgroundColor: AppColor.cardBackgroundColor,
+              textColor: AppColor.primaryText,
+              width: 125,
+              label: "Profile",
+              onPressed: () {
+                sidebarController.navigateTo('/profile', 99);
+              },
+              icon: const Icon(
+                Icons.arrow_right,
+                color: AppColor.primaryText,
+              ),
+            ),
+            const Padding(
+              padding:
+                  EdgeInsets.symmetric(vertical: AppDimension.kSpacing / 2),
+              child: Divider(
+                color: AppColor.primaryAppColor,
+              ),
+            )
+          ],
         );
       },
       items: [
