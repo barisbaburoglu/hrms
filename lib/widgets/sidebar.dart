@@ -179,9 +179,16 @@ class LeftSidebarX extends StatelessWidget {
         ),
         SidebarXItem(
           icon: Icons.beach_access,
-          label: 'Tatil İşlemleri',
+          label: 'Tatil Girişi',
           onTap: () {
             sidebarController.navigateTo('/shift-employee', 8);
+          },
+        ),
+        SidebarXItem(
+          icon: Icons.request_page,
+          label: 'İzin Talepleri',
+          onTap: () {
+            sidebarController.navigateTo('/leave', 9);
           },
         ),
       ],
