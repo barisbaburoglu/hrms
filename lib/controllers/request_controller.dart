@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hrms/widgets/popup_request_details.dart';
 import 'package:intl/intl.dart';
 
 import '../api/api_provider.dart';
 import '../api/models/company_model.dart';
 import '../api/models/leave_model.dart';
-import '../widgets/edit_form_leave.dart';
+import '../widgets/edit_form_request.dart';
 
 enum LeaveType {
   annual, // 0
@@ -24,7 +25,7 @@ enum LeaveType {
   other, // 13
 }
 
-class LeaveController extends GetxController {
+class RequestController extends GetxController {
   final ScrollController scrollController = ScrollController();
 
   TextEditingController nameController = TextEditingController();
@@ -151,6 +152,18 @@ class LeaveController extends GetxController {
     }
   }
 
+  Future<void> patchStatusLeave(int id, int status) async {
+    try {
+      Get.back();
+
+      await ApiProvider().leaveService.patchLeave(id, status);
+
+      fetchLeaves();
+    } catch (e) {
+      print("Hata: $e");
+    }
+  }
+
   void setLeaveFields(Leave leave) {
     startDate = DateTime.parse(leave.startDate!);
     endDate = DateTime.parse(leave.endDate!);
@@ -169,7 +182,22 @@ class LeaveController extends GetxController {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),
-        child: EditFormLeave(
+        child: EditFormRequest(
+          title: title,
+          leave: leave,
+        ),
+      ),
+    );
+  }
+
+  void openApprovalPopup(String title, Leave? leave) {
+    Get.dialog(
+      Dialog(
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: PopupRequestDetails(
           title: title,
           leave: leave,
         ),

@@ -5,16 +5,16 @@ import 'package:intl/intl.dart';
 import '../api/models/leave_model.dart';
 import '../constants/colors.dart';
 import '../constants/dimensions.dart';
-import '../controllers/leave_controller.dart';
+import '../controllers/request_controller.dart';
 import 'base_button.dart';
 import 'base_input.dart';
 
-class EditFormLeave extends StatelessWidget {
+class EditFormRequest extends StatelessWidget {
   final String title;
   final Leave? leave;
-  final LeaveController controller = Get.put(LeaveController());
+  final RequestController controller = Get.put(RequestController());
 
-  EditFormLeave({
+  EditFormRequest({
     super.key,
     required this.title,
     this.leave,
@@ -80,7 +80,7 @@ class EditFormLeave extends StatelessWidget {
                         child: BaseInput(
                           isLabel: true,
                           errorRequired: false,
-                          label: "Sebep / Açıklama Giriniz",
+                          label: "Sebep / Açıklama",
                           controller: controller.leaveReasonController,
                           margin: EdgeInsets.zero,
                           textInputType: TextInputType.text,
@@ -187,7 +187,7 @@ class EditFormLeave extends StatelessWidget {
         }
       },
       child: AbsorbPointer(
-        child: GetBuilder<LeaveController>(
+        child: GetBuilder<RequestController>(
           builder: (_) {
             return BaseInput(
               label: "İzin Başlama Tarihi",
@@ -231,7 +231,7 @@ class EditFormLeave extends StatelessWidget {
         }
       },
       child: AbsorbPointer(
-        child: GetBuilder<LeaveController>(
+        child: GetBuilder<RequestController>(
           builder: (_) {
             return BaseInput(
               label: "İzin Bitiş Tarihi",

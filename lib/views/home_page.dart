@@ -2,22 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hrms/constants/colors.dart';
 import 'package:hrms/constants/dimensions.dart';
-import 'package:hrms/controllers/auth_controller.dart';
 import 'package:hrms/views/master_scaffold.dart';
 import 'package:hrms/widgets/arrow_bordered_card.dart';
 import 'package:hrms/widgets/base_button.dart';
 import 'package:intl/intl.dart';
 import 'package:sidebarx/sidebarx.dart';
-import '../controllers/attendance_controller.dart';
+import '../controllers/home_controller.dart';
 
-class AttendancePage extends StatelessWidget {
-  final AttendanceController controller = Get.put(AttendanceController());
-  final AuthController controllerAuth = Get.put(AuthController());
+class HomePage extends StatelessWidget {
+  final HomeController controller = Get.put(HomeController());
 
   final SidebarXController sidebarController =
       SidebarXController(selectedIndex: 0, extended: true);
 
-  AttendancePage({super.key});
+  HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -83,9 +81,14 @@ class AttendancePage extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  BaseButton(
-                    label: "Çıkış Yap",
-                    onPressed: controllerAuth.logout,
+                  SizedBox(
+                    width: 200,
+                    child: BaseButton(
+                      label: "Karekodsuz Giriş/Çıkış",
+                      onPressed: () {
+                        controller.openNoQRPopup("Karekodsuz Giriş/Çıkış Ekle");
+                      },
+                    ),
                   ),
                   const Spacer(),
                   Container(

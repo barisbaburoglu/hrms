@@ -19,7 +19,7 @@ class BottomNavigationController extends GetxController {
         Get.toNamed('/home');
         break;
       case 4:
-        Get.toNamed('/home');
+        Get.toNamed('/profile');
         break;
     }
   }

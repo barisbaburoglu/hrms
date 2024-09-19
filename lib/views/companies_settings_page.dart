@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sidebarx/sidebarx.dart';
+
 import '../constants/colors.dart';
 import '../constants/dimensions.dart';
-import '../controllers/leave_controller.dart';
+import '../controllers/companies_settings_controller.dart';
 import '../widgets/base_button.dart';
 import '../widgets/page_title.dart';
 import 'master_scaffold.dart';
 
-class LeavePage extends StatelessWidget {
-  final LeaveController controller = Get.put(LeaveController());
+class CompaniesSettingsPage extends StatelessWidget {
+  final CompaniesSettingsController controller =
+      Get.put(CompaniesSettingsController());
   final SidebarXController sidebarController =
-      SidebarXController(selectedIndex: 9, extended: true);
+      SidebarXController(selectedIndex: 1, extended: true);
 
-  LeavePage({super.key});
+  CompaniesSettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,7 @@ class LeavePage extends StatelessWidget {
                   SizedBox(
                       width: width,
                       child: PageTitleWidget(
-                        title: "İzin Talepleri",
+                        title: "Şirket Ayarları",
                         rightWidgets: BaseButton(
                           label: "Yeni",
                           icon: const Icon(
@@ -42,13 +44,13 @@ class LeavePage extends StatelessWidget {
                             color: AppColor.secondaryText,
                           ),
                           onPressed: () {
-                            controller.openEditPopup("Yeni İzin Talebi", null);
+                            Get.toNamed('/company-settigs-details');
                           },
                         ),
                       )),
                   SizedBox(width: width, child: titleCardWidget()),
                   Expanded(
-                    child: controller.leaves.isEmpty
+                    child: controller.companies.isEmpty
                         ? const Center(child: CircularProgressIndicator())
                         : SizedBox(width: width, child: itemsCardWidget()),
                   ),
@@ -85,7 +87,7 @@ class LeavePage extends StatelessWidget {
             const SizedBox(
               width: 150,
               child: Text(
-                "Başlama Tarihi",
+                "Şirket Adı",
                 style: TextStyle(fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
                 maxLines: 2,
@@ -98,7 +100,7 @@ class LeavePage extends StatelessWidget {
               child: const SizedBox(
                 width: 150,
                 child: Text(
-                  "Bitiş Tarihi",
+                  "Yönetici Adı",
                   style: TextStyle(fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                   maxLines: 2,
@@ -112,7 +114,7 @@ class LeavePage extends StatelessWidget {
               child: const SizedBox(
                 width: 150,
                 child: Text(
-                  "İzin türü",
+                  "Yönetici E-Mail",
                   style: TextStyle(fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                   maxLines: 2,
@@ -126,7 +128,7 @@ class LeavePage extends StatelessWidget {
               child: const SizedBox(
                 width: 150,
                 child: Text(
-                  "Sebep",
+                  "Yönetici Telefonu",
                   style: TextStyle(fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                   maxLines: 2,
@@ -136,9 +138,9 @@ class LeavePage extends StatelessWidget {
               ),
             ),
             const SizedBox(
-              width: 100,
+              width: 75,
               child: Text(
-                "Durumu",
+                "Düzenle",
                 style: TextStyle(fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
                 maxLines: 2,
@@ -164,84 +166,92 @@ class LeavePage extends StatelessWidget {
         child: Obx(() {
           return ListView.builder(
             controller: controller.scrollController,
-            itemCount: controller.leaves.length,
+            itemCount: controller.companies.length,
             itemBuilder: (context, index) {
-              final leave = controller.leaves[index];
+              final company = controller.companies[index];
               return Column(
                 children: [
-                  Container(
-                    color: leave.status == 1
-                        ? AppColor.primaryGreen
-                        : leave.status == 2
-                            ? AppColor.primaryRed
-                            : AppColor.primaryOrange,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: AppDimension.kSpacing / 2),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            width: 30,
-                            child: Text(
-                              "${index + 1}",
-                              textAlign: TextAlign.center,
-                            ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: AppDimension.kSpacing / 2),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: 30,
+                          child: Text(
+                            "${index + 1}",
+                            textAlign: TextAlign.center,
                           ),
-                          SizedBox(
+                        ),
+                        SizedBox(
+                          width: 150,
+                          child: Text(
+                            company.name ?? "",
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Visibility(
+                          visible:
+                              MediaQuery.of(Get.context!).size.width > 1280,
+                          child: SizedBox(
                             width: 150,
                             child: Text(
-                              leave.startDate ?? "",
+                              company.managerName ?? "",
                               textAlign: TextAlign.center,
                             ),
                           ),
-                          Visibility(
-                            visible:
-                                MediaQuery.of(Get.context!).size.width > 1280,
-                            child: SizedBox(
-                              width: 150,
-                              child: Text(
-                                leave.endDate ?? "",
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                          Visibility(
-                            visible:
-                                MediaQuery.of(Get.context!).size.width > 1280,
-                            child: SizedBox(
-                              width: 150,
-                              child: Text(
-                                controller.leaveTypeNames[controller
-                                    .leaveTypeFromJson[leave.leaveType]]!,
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                          Visibility(
-                            visible:
-                                MediaQuery.of(Get.context!).size.width > 1280,
-                            child: SizedBox(
-                              width: 150,
-                              child: Text(
-                                leave.reason ?? "",
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 100,
+                        ),
+                        Visibility(
+                          visible:
+                              MediaQuery.of(Get.context!).size.width > 1280,
+                          child: SizedBox(
+                            width: 150,
                             child: Text(
-                              leave.status == 1
-                                  ? "Onaylandı"
-                                  : leave.status == 2
-                                      ? "Reddedildi"
-                                      : "Onay Bekliyor",
+                              company.managerEmail ?? "",
                               textAlign: TextAlign.center,
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                        Visibility(
+                          visible:
+                              MediaQuery.of(Get.context!).size.width > 1280,
+                          child: SizedBox(
+                            width: 150,
+                            child: Text(
+                              company.managerPhone ?? "",
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 100,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  controller.openEditPopup(
+                                      "Şirket Düzenleme", company);
+                                },
+                                icon: const Icon(
+                                  Icons.edit_square,
+                                  color: AppColor.primaryOrange,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  controller.deleteCompany(company);
+                                },
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: AppColor.primaryRed,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   Divider(

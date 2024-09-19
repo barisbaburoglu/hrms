@@ -24,6 +24,8 @@ class EmployeeController extends GetxController {
   Rxn<int> departmentId = Rxn<int>();
   Rxn<int> shiftId = Rxn<int>();
 
+  Rxn<Employee> selectedEmployee = Rxn<Employee>();
+
   var employees = <Employee>[].obs;
 
   var companies = <Company>[].obs;
@@ -190,6 +192,10 @@ class EmployeeController extends GetxController {
 
   void setCompanyId(int? id) {
     companyId.value = id!;
+  }
+
+  void setEmployee(Employee? employee) {
+    selectedEmployee.value = employee!;
   }
 
   void setEmployeeTypeId(int? id) {

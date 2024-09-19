@@ -8,31 +8,33 @@ class BillingInformationService {
 
   BillingInformationService(this.apiService);
 
-  Future<List<BillingInformation>> fetchBillingInformations() async {
-    final response = await apiService.getRequest('/billing-informations');
-    List<dynamic> data = json.decode(response.body);
-    return data.map((json) => BillingInformation.fromJson(json)).toList();
+  Future<BillingInformationModel> fetchBillingInformations() async {
+    final response =
+        await apiService.getRequest('/BillingInformationServices/All');
+
+    return BillingInformationModel.fromJson(json.decode(response.body));
   }
 
   Future<BillingInformation> fetchBillingInformationById(int id) async {
-    final response = await apiService.getRequest('/billing-informations/$id');
+    final response =
+        await apiService.getRequest('/BillingInformationServices/$id');
     return BillingInformation.fromJson(json.decode(response.body));
   }
 
   Future<void> createBillingInformation(
       BillingInformation billingInformation) async {
     await apiService.postRequest(
-        '/billing-informations', billingInformation.toJson());
+        '/BillingInformationServices', billingInformation.toJson());
   }
 
   Future<void> updateBillingInformation(
       BillingInformation billingInformation) async {
     await apiService.putRequest(
-        '/billing-informations/${billingInformation.id}',
+        '/BillingInformationServices/${billingInformation.id}',
         billingInformation.toJson());
   }
 
   Future<void> deleteBillingInformation(int id) async {
-    await apiService.deleteRequest('/billing-informations/$id');
+    await apiService.deleteRequest('/BillingInformationServices/$id');
   }
 }

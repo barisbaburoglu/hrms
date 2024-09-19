@@ -20,7 +20,13 @@ class ApiService {
 
   Future<http.Response> getRequest(String endpoint) async {
     final url = Uri.parse('$baseUrl$endpoint');
-    final response = await http.get(url);
+    final response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${box.read('accessToken')}'
+      },
+    );
     if (response.statusCode == 401) {
       _handleUnauthorized();
     } else if (response.statusCode != 200) {
@@ -58,7 +64,30 @@ class ApiService {
     var body = json.encode(data);
     final response = await http.put(
       url,
-      headers: {'Content-Type': 'application/json'},
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${box.read('accessToken')}'
+      },
+      body: body,
+    );
+    if (response.statusCode == 401) {
+      _handleUnauthorized(); // 401 hatası için kontrol
+    } else if (response.statusCode != 200) {
+      throw Exception('Failed to update data');
+    }
+    return response;
+  }
+
+  Future<http.Response> patchRequest(
+      String endpoint, Map<String, dynamic> data) async {
+    final url = Uri.parse('$baseUrl$endpoint');
+    var body = json.encode(data);
+    final response = await http.patch(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${box.read('accessToken')}'
+      },
       body: body,
     );
     if (response.statusCode == 401) {
@@ -71,7 +100,13 @@ class ApiService {
 
   Future<http.Response> deleteRequest(String endpoint) async {
     final url = Uri.parse('$baseUrl$endpoint');
-    final response = await http.delete(url);
+    final response = await http.delete(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${box.read('accessToken')}'
+      },
+    );
     if (response.statusCode == 401) {
       _handleUnauthorized(); // 401 hatası için kontrol
     } else if (response.statusCode != 200) {

@@ -38,4 +38,9 @@ class LeaveService {
   Future<void> deleteLeave(int id) async {
     await apiService.deleteRequest('/LeaveRequestServices?Id=$id');
   }
+
+  Future<void> patchLeave(int id, int status) async {
+    await apiService
+        .patchRequest('/LeaveRequestServices/$id', {"Status": status});
+  }
 }

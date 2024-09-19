@@ -46,7 +46,7 @@ class ProfilePage extends StatelessWidget {
                       title: "Profile Bilgileri",
                       rightWidgets: BaseButton(
                         backgroundColor: AppColor.primaryOrange,
-                        width: screenWidth < 360 ? double.infinity : 125,
+                        width: screenWidth < 360 ? double.infinity : 140,
                         label: "Güncelle",
                         onPressed: () {
                           //controllerEmployee.saveEmployee(employee: employee);

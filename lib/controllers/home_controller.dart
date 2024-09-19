@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hrms/widgets/no_qr_event_popup.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../api/api_provider.dart';
+import '../api/models/event_type_model.dart';
+import '../api/models/qr_code_setting_model.dart';
 import '../api/models/users_entry_exit_event_model.dart';
 import '../api/models/work_entry_exit_event_model.dart';
 import '../constants/colors.dart';
 import '../widgets/custom_snack_bar.dart';
 import '../widgets/qr_view.dart';
 
-class AttendanceController extends GetxController {
+class HomeController extends GetxController {
   var currentTime = ''.obs;
   var currentDate = ''.obs;
 
@@ -27,20 +30,49 @@ class AttendanceController extends GetxController {
   RxString exitTime = ''.obs;
   RxString workingHours = ''.obs;
 
+  var qrCodeSettings = <QRCodeSetting>[].obs;
+
+  var eventTypes = <EventType>[].obs;
+
+  Rxn<int> selectedEventTypeId = Rxn<int>();
+
+  Rxn<QRCodeSetting> selectedLocation = Rxn<QRCodeSetting>();
+
   Rx<UsersEntryExitEvent> lastEntryExit = UsersEntryExitEvent().obs;
 
   @override
   void onInit() {
     super.onInit();
+
+    initEventTypes();
+
     _updateTime();
     _updateDate();
     getLastEntryExit();
+    fetchQrCodeSettings();
   }
 
   @override
   void onClose() {
     controller?.dispose();
     super.onClose();
+  }
+
+  void initEventTypes() {
+    eventTypes.add(EventType(id: 1, typeName: "Giriş"));
+
+    eventTypes.add(EventType(id: 2, typeName: "Çıkış"));
+  }
+
+  void fetchQrCodeSettings() async {
+    try {
+      var qrCodeSettingModel =
+          await ApiProvider().qrCodeSettingService.fetchQRCodeSettings();
+      qrCodeSettings.value = qrCodeSettingModel.qrCodeSettings ?? [];
+      update();
+    } catch (e) {
+      print("Hata: $e");
+    }
   }
 
   void getLastEntryExit() async {
@@ -83,12 +115,28 @@ class AttendanceController extends GetxController {
     }
   }
 
-  Future<void> saveWorkEntryExitEvent() async {
+  Future<void> saveNoQREntryExitEvent(String uniqueKey) async {
+    if (selectedEventTypeId.value != null && selectedLocation.value != null) {
+      await saveWorkEntryExitEvent(uniqueKey);
+    } else {
+      Get.showSnackbar(
+        CustomGetBar(
+          textColor: AppColor.secondaryText,
+          message: "Lütfen Tüm Alanları Seçin!",
+          duration: const Duration(seconds: 3),
+          iconData: Icons.check,
+          backgroundColor: AppColor.primaryGreen,
+        ),
+      );
+    }
+  }
+
+  Future<void> saveWorkEntryExitEvent(String uniqueKey) async {
     try {
       await ApiProvider()
           .workEntryExitEventService
           .createWorkEntryExitEvent(WorkEntryExitEvent(
-            uniqueKey: result.value,
+            uniqueKey: uniqueKey,
             locationLatitude: 36.8,
             locationLongitude: 37.8,
           ));
@@ -116,6 +164,33 @@ class AttendanceController extends GetxController {
         ),
       );
     }
+  }
+
+  void openNoQRPopup(String title) {
+    Get.dialog(
+      Dialog(
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: NoQrEventPopup(
+          title: title,
+        ),
+      ),
+    );
+  }
+
+  void clearEventFields() {
+    selectedEventTypeId.value = null;
+    selectedLocation.value = null;
+  }
+
+  void setEventTypeId(int? id) {
+    selectedEventTypeId.value = id!;
+  }
+
+  void setLocationId(QRCodeSetting? qrCodeSetting) {
+    selectedLocation.value = qrCodeSetting!;
   }
 
   void _updateTime() {
@@ -173,7 +248,7 @@ class AttendanceController extends GetxController {
     ).then((value) async {
       isProcessing.value = false;
       if (result.value.isNotEmpty) {
-        await saveWorkEntryExitEvent();
+        await saveWorkEntryExitEvent(result.value);
       }
     });
   }

@@ -1,5 +1,6 @@
 import 'services/api_service.dart';
 import 'services/auth_service.dart';
+import 'services/billing_information_service.dart';
 import 'services/company_service.dart';
 import 'services/department_service.dart';
 import 'services/employee_service.dart';
@@ -40,6 +41,8 @@ class ApiProvider {
 
   late LeaveService _leaveService;
 
+  late BillingInformationService _billingInformationService;
+
   ApiProvider._internal() {
     _dashApiService =
         ApiService('https://devinsofthrmsystemdashapi.azurewebsites.net/api');
@@ -69,6 +72,8 @@ class ApiProvider {
     _shiftService = ShiftService(_dashApiService);
 
     _leaveService = LeaveService(_dashApiService);
+
+    _billingInformationService = BillingInformationService(_dashApiService);
   }
 
   AuthService get authService => _authService;
@@ -92,4 +97,7 @@ class ApiProvider {
   ShiftService get shiftService => _shiftService;
 
   LeaveService get leaveService => _leaveService;
+
+  BillingInformationService get billingInformationService =>
+      _billingInformationService;
 }

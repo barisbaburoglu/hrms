@@ -5,7 +5,7 @@ import 'package:sidebarx/sidebarx.dart';
 import 'package:get/get.dart';
 import '../constants/colors.dart';
 import '../controllers/sidebar_controller.dart';
-import 'base_button.dart'; // Controller'ı içe aktarın
+import 'base_button.dart';
 
 class LeftSidebarX extends StatelessWidget {
   const LeftSidebarX({
@@ -79,16 +79,39 @@ class LeftSidebarX extends StatelessWidget {
       ),
       footerDivider: Divider(
         color: AppColor.primaryAppColor.withOpacity(0.3),
-        height: 1,
       ),
+      footerBuilder: (context, extended) {
+        return _controller.extended
+            ? Padding(
+                padding: const EdgeInsets.all(AppDimension.kSpacing / 2),
+                child: BaseButton(
+                  backgroundColor: AppColor.cardBackgroundColor,
+                  textColor: AppColor.primaryText,
+                  label: "Çıkış",
+                  onPressed: () {
+                    sidebarController.logout();
+                  },
+                  icon: const Icon(Icons.logout),
+                ),
+              )
+            : IconButton(
+                onPressed: () {
+                  sidebarController.logout();
+                },
+                icon: const Icon(
+                  Icons.logout,
+                  color: AppColor.primaryAppColor,
+                ),
+              );
+      },
       headerBuilder: (context, extended) {
         return Column(
           children: [
             SizedBox(
-              height: 100,
-              width: 100,
+              height: _controller.extended ? 100 : 75,
+              width: _controller.extended ? 100 : 75,
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(AppDimension.kSpacing / 2),
                 child: ClipOval(
                   child: Image.asset(
                     'assets/images/avatar.png',
@@ -97,22 +120,32 @@ class LeftSidebarX extends StatelessWidget {
                 ),
               ),
             ),
-            BaseButton(
-              backgroundColor: AppColor.cardBackgroundColor,
-              textColor: AppColor.primaryText,
-              width: 125,
-              label: "Profile",
-              onPressed: () {
-                sidebarController.navigateTo('/profile', 99);
-              },
-              icon: const Icon(
-                Icons.arrow_right,
-                color: AppColor.primaryText,
-              ),
-            ),
+            _controller.extended
+                ? BaseButton(
+                    backgroundColor: AppColor.cardBackgroundColor,
+                    textColor: AppColor.primaryText,
+                    width: 125,
+                    label: "Profile",
+                    onPressed: () {
+                      sidebarController.navigateTo('/profile', 99);
+                    },
+                    icon: const Icon(
+                      Icons.person,
+                      color: AppColor.primaryText,
+                    ),
+                  )
+                : IconButton(
+                    onPressed: () {
+                      sidebarController.navigateTo('/profile', 99);
+                    },
+                    icon: const Icon(
+                      Icons.person,
+                      color: AppColor.primaryAppColor,
+                    ),
+                  ),
             const Padding(
               padding:
-                  EdgeInsets.symmetric(vertical: AppDimension.kSpacing / 2),
+                  EdgeInsets.symmetric(vertical: AppDimension.kSpacing / 4),
               child: Divider(
                 color: AppColor.primaryAppColor,
               ),
@@ -186,9 +219,16 @@ class LeftSidebarX extends StatelessWidget {
         ),
         SidebarXItem(
           icon: Icons.request_page,
-          label: 'İzin Talepleri',
+          label: 'Talep Oluştur',
           onTap: () {
             sidebarController.navigateTo('/leave', 9);
+          },
+        ),
+        SidebarXItem(
+          icon: Icons.settings,
+          label: 'Şirket Ayarları',
+          onTap: () {
+            sidebarController.navigateTo('/company-settigs-details', 10);
           },
         ),
       ],

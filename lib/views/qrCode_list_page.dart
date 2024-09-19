@@ -94,7 +94,7 @@ class QRCodeListPage extends StatelessWidget {
             Visibility(
               visible: MediaQuery.of(Get.context!).size.width > 1280,
               child: const SizedBox(
-                width: 50,
+                width: 100,
                 child: Text(
                   "QR",
                   style: TextStyle(fontWeight: FontWeight.bold),

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hrms/controllers/attendance_controller.dart';
+import 'package:hrms/controllers/home_controller.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QrScannerView extends StatelessWidget {
-  final AttendanceController qrScannerController =
-      Get.put(AttendanceController());
+  final HomeController qrScannerController = Get.put(HomeController());
+
+  QrScannerView({super.key});
 
   @override
   Widget build(BuildContext context) {

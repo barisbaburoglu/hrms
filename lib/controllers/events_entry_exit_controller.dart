@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hrms/widgets/edit_event_entry_exit.dart';
 
 import '../api/api_provider.dart';
 import '../api/models/company_model.dart';
@@ -14,6 +15,8 @@ class EventsEntryExitController extends GetxController {
   RxString exitTime = ''.obs;
   RxString workingHours = ''.obs;
   RxList lastEntryExit = [].obs;
+
+  DateTime? eventDate;
 
   @override
   void onInit() {
@@ -77,5 +80,24 @@ class EventsEntryExitController extends GetxController {
     } catch (e) {
       print("Hata: $e");
     }
+  }
+
+  void openEditEvent(String title) {
+    Get.dialog(
+      Dialog(
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: EditEventEntryExit(
+          title: title,
+        ),
+      ),
+    );
+  }
+
+  void setEventDate(DateTime date) {
+    eventDate = date;
+    update();
   }
 }

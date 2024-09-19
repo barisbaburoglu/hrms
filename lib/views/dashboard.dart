@@ -45,13 +45,8 @@ class DashboardPage extends StatelessWidget {
                     children: [
                       SizedBox(
                         width: width,
-                        child: PageTitleWidget(
+                        child: const PageTitleWidget(
                           title: "Hoşgeldiniz Barış Babüroğlu,",
-                          rightWidgets: BaseButton(
-                            label: "Çıkış Yap",
-                            onPressed: controllerAuth.logout,
-                            icon: const Icon(Icons.logout),
-                          ),
                         ),
                       ),
                       Padding(

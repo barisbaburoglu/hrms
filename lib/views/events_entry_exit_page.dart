@@ -34,10 +34,22 @@ class EventsEntryExitPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
-                      width: width,
-                      child: const PageTitleWidget(
-                        title: "Giriş & Çıkışlar",
-                      )),
+                    width: width,
+                    child: PageTitleWidget(
+                      title: "Giriş & Çıkışlar",
+                      rightWidgets: BaseButton(
+                        label: "Yeni",
+                        icon: const Icon(
+                          Icons.add,
+                          color: AppColor.secondaryText,
+                        ),
+                        onPressed: () {
+                          controller
+                              .openEditEvent("Giriş/Çıkış Kaydı Oluşturma");
+                        },
+                      ),
+                    ),
+                  ),
                   SizedBox(width: width, child: titleCardWidget()),
                   Expanded(
                     child: controller.lastEntryExit.isEmpty

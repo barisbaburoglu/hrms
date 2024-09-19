@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:hrms/constants/colors.dart';
-import 'package:hrms/views/attendance_page.dart';
+import 'package:hrms/views/companies_settings_page.dart';
+import 'package:hrms/views/home_page.dart';
 import 'package:hrms/views/company_page.dart';
 import 'package:hrms/views/damaged_page.dart';
 import 'package:hrms/views/department_page.dart';
 import 'package:hrms/views/employee_type_page.dart';
 import 'package:hrms/views/events_entry_exit_page.dart';
-import 'package:hrms/views/leave_page.dart';
+import 'package:hrms/views/request_page.dart';
 import 'package:hrms/views/map_page.dart';
 import 'package:hrms/views/parcel_page.dart';
 import 'package:hrms/views/qrCode_list_page.dart';
@@ -21,6 +22,7 @@ import 'package:intl/date_symbol_data_local.dart';
 
 import 'themes/checkbox_theme.dart';
 import 'themes/scrollbar_theme.dart';
+import 'views/company_settings_details_page.dart';
 import 'views/dashboard.dart';
 import 'views/employee_page.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -90,7 +92,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/company', page: () => loadPage(CompanyPage())),
         GetPage(name: '/qrcode-list', page: () => loadPage(QRCodeListPage())),
         GetPage(name: '/index', page: () => loadPage(DashboardPage())),
-        GetPage(name: '/home', page: () => loadPage(AttendancePage())),
+        GetPage(name: '/home', page: () => loadPage(HomePage())),
         GetPage(name: '/damaged', page: () => loadPage(const DamagedPage())),
         GetPage(name: '/parcel', page: () => loadPage(ParcelPage())),
         GetPage(name: '/map', page: () => loadPage(MapPage())),
@@ -100,6 +102,12 @@ class MyApp extends StatelessWidget {
             name: '/shift-employee', page: () => loadPage(ShiftEmployeePage())),
         GetPage(name: '/profile', page: () => loadPage(ProfilePage())),
         GetPage(name: '/leave', page: () => loadPage(LeavePage())),
+        GetPage(
+            name: '/companies-settings',
+            page: () => loadPage(CompaniesSettingsPage())),
+        GetPage(
+            name: '/company-settigs-details',
+            page: () => loadPage(CompanySettingsDetailsPage())),
       ],
     );
   }
