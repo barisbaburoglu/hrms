@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hrms/widgets/popup_request_details.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:hrms/widgets/edit_form_employee_request.dart';
 import 'package:intl/intl.dart';
 
 import '../api/api_provider.dart';
-import '../api/models/company_model.dart';
+import '../api/models/employee_request_model.dart';
 import '../api/models/leave_model.dart';
+import '../api/models/qr_code_setting_model.dart';
+import '../api/models/work_entry_exit_event_exception_model.dart';
+import '../widgets/edit_form_event_request.dart';
 import '../widgets/edit_form_request.dart';
+import '../widgets/popup_employee_request_details.dart';
+import '../widgets/popup_event_request_details.dart';
+import '../widgets/popup_leave_request_details.dart';
 
 enum LeaveType {
   annual, // 0
@@ -26,7 +33,14 @@ enum LeaveType {
 }
 
 class RequestController extends GetxController {
-  final ScrollController scrollController = ScrollController();
+  GetStorage storageBox = GetStorage();
+
+  final ScrollController scrollControllerEvent = ScrollController();
+  final ScrollController scrollControllerLeave = ScrollController();
+  final ScrollController scrollControllerEmployeeRequest = ScrollController();
+
+  TextEditingController subjectController = TextEditingController();
+  TextEditingController detailController = TextEditingController();
 
   TextEditingController nameController = TextEditingController();
   TextEditingController managerNameController = TextEditingController();
@@ -35,9 +49,17 @@ class RequestController extends GetxController {
 
   var leaves = <Leave>[].obs;
 
+  var eventExceptions = <WorkEntryExitEventException>[].obs;
+
+  var employeeRequests = <EmployeeRequest>[].obs;
+
   DateTime? startDate;
 
   DateTime? endDate;
+
+  var qrCodeSettings = <QRCodeSetting>[].obs;
+
+  Rxn<QRCodeSetting> selectedLocation = Rxn<QRCodeSetting>();
 
   var selectedLeaveType = LeaveType.annual.obs; // Default to annual leave
 
@@ -96,13 +118,61 @@ class RequestController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    fetchEventExceptions();
+    fetchQrCodeSettings();
     fetchLeaves();
+    fetchEmployeeRequests();
+  }
+
+  void fetchQrCodeSettings() async {
+    try {
+      var qrCodeSettingModel =
+          await ApiProvider().qrCodeSettingService.fetchQRCodeSettings();
+      qrCodeSettings.value = qrCodeSettingModel.qrCodeSettings ?? [];
+      update();
+    } catch (e) {
+      print("Hata: $e");
+    }
   }
 
   void fetchLeaves() async {
     try {
       var leaveModel = await ApiProvider().leaveService.fetchLeaves(null);
       leaves.value = leaveModel.leaves ?? [];
+    } catch (e) {
+      print("Hata: $e");
+    }
+  }
+
+  void fetchEventExceptions() async {
+    try {
+      var body = {
+        "orders": [
+          {"fieldName": "CreatedAt", "direction": "DESC"}
+        ],
+        "filters": []
+      };
+      var eventExceptionsModel = await ApiProvider()
+          .usersEntryExitEventService
+          .getWorkEntryExitEventExceptions(body);
+      eventExceptions.value =
+          eventExceptionsModel.workEntryExitEventExceptions ?? [];
+    } catch (e) {
+      print("Hata: $e");
+    }
+  }
+
+  void fetchEmployeeRequests() async {
+    try {
+      var filter = {
+        "orders": [
+          {"fieldName": "createdAt", "direction": "DESC"}
+        ],
+        "filters": []
+      };
+      var employeeRequestModel =
+          await ApiProvider().employeeService.fetchEmployeeRequests(filter);
+      employeeRequests.value = employeeRequestModel.employeeRequests ?? [];
     } catch (e) {
       print("Hata: $e");
     }
@@ -118,11 +188,21 @@ class RequestController extends GetxController {
     }
   }
 
+  void deleteEmployeeRequest(int id) async {
+    try {
+      await ApiProvider().employeeService.deleteEmployeeRequest(id);
+
+      fetchLeaves();
+    } catch (e) {
+      print("Hata: $e");
+    }
+  }
+
   Future<void> saveLeave({Leave? leave}) async {
     try {
       if (leave == null) {
         await ApiProvider().leaveService.createLeave(Leave(
-              employeeId: 4,
+              employeeId: storageBox.read("employeeId"),
               companyId: 1,
               leaveType: leaveTypeToId[selectedLeaveType.value],
               reason: leaveReasonController.text,
@@ -135,7 +215,7 @@ class RequestController extends GetxController {
       } else {
         await ApiProvider().leaveService.updateLeave(Leave(
               id: leave.id,
-              employeeId: 4,
+              employeeId: storageBox.read("employeeId"),
               companyId: leave.companyId,
               leaveType: leaveTypeToId[selectedLeaveType.value],
               reason: leaveReasonController.text,
@@ -146,6 +226,72 @@ class RequestController extends GetxController {
             ));
       }
       fetchLeaves();
+      Get.back();
+    } catch (e) {
+      print("Hata: $e");
+    }
+  }
+
+  Future<void> saveEvent({WorkEntryExitEventException? eventException}) async {
+    try {
+      if (eventException == null) {
+        await ApiProvider()
+            .usersEntryExitEventService
+            .createWorkEntryExitEventException(WorkEntryExitEventException(
+              employeeId: storageBox.read("employeeId"),
+              qrCodeSettingId: selectedLocation.value!.id,
+              eventType: selectedLocation.value!.eventType,
+              reason: leaveReasonController.text,
+              eventTime: startDate!.toString(),
+              status: 0,
+              createdAt: DateTime.now().toString(),
+              updatedAt: DateTime.now().toString(),
+            ));
+      } else {
+        await ApiProvider()
+            .usersEntryExitEventService
+            .updateWorkEntryExitEventException(WorkEntryExitEventException(
+              id: eventException.id,
+              employeeId: storageBox.read("employeeId"),
+              qrCodeSettingId: selectedLocation.value!.id,
+              eventType: selectedLocation.value!.eventType,
+              reason: leaveReasonController.text,
+              eventTime: DateFormat('yyyy-MM-dd').format(startDate!).toString(),
+              status: eventException.status,
+              updatedAt: DateTime.now().toIso8601String(),
+            ));
+      }
+      fetchEventExceptions();
+      Get.back();
+    } catch (e) {
+      print("Hata: $e");
+    }
+  }
+
+  Future<void> saveEmployeeRequest({EmployeeRequest? employeeRequest}) async {
+    try {
+      if (employeeRequest == null) {
+        await ApiProvider()
+            .employeeService
+            .createEmployeeRequest(EmployeeRequest(
+              employeeId: storageBox.read("employeeId"),
+              subject: subjectController.text,
+              detail: detailController.text,
+              createdAt: DateTime.now().toString(),
+              updatedAt: DateTime.now().toString(),
+            ));
+      } else {
+        await ApiProvider()
+            .employeeService
+            .updateEmployeeRequest(EmployeeRequest(
+              id: employeeRequest.id,
+              employeeId: storageBox.read("employeeId"),
+              subject: subjectController.text,
+              detail: detailController.text,
+              updatedAt: DateTime.now().toIso8601String(),
+            ));
+      }
+      fetchEmployeeRequests();
       Get.back();
     } catch (e) {
       print("Hata: $e");
@@ -164,6 +310,20 @@ class RequestController extends GetxController {
     }
   }
 
+  Future<void> patchStatusEvent(int id, int status) async {
+    try {
+      Get.back();
+
+      await ApiProvider()
+          .workEntryExitEventService
+          .patchEventStatus(id, status);
+
+      fetchEventExceptions();
+    } catch (e) {
+      print("Hata: $e");
+    }
+  }
+
   void setLeaveFields(Leave leave) {
     startDate = DateTime.parse(leave.startDate!);
     endDate = DateTime.parse(leave.endDate!);
@@ -171,8 +331,29 @@ class RequestController extends GetxController {
     selectedLeaveType.value = leaveTypeFromJson[leave.leaveType]!;
   }
 
+  void setEventFields(WorkEntryExitEventException eventException) {
+    startDate = DateTime.parse(eventException.eventTime!);
+    leaveReasonController.text = eventException.reason ?? '';
+    selectedLocation.value = qrCodeSettings
+        .firstWhere((x) => x.id == eventException.qrCodeSettingId);
+  }
+
+  void setEmployeeRequestFields(EmployeeRequest employeeRequest) {
+    subjectController.text = employeeRequest.subject!;
+    detailController.text = employeeRequest.detail!;
+  }
+
   void clearLeaveFields() {
     leaveReasonController.clear();
+  }
+
+  void clearEventFields() {
+    selectedLocation.value = null;
+  }
+
+  void clearEmployeeRequestFields() {
+    subjectController.text = "";
+    detailController.text = "";
   }
 
   void openEditPopup(String title, Leave? leave) {
@@ -190,16 +371,80 @@ class RequestController extends GetxController {
     );
   }
 
-  void openApprovalPopup(String title, Leave? leave) {
+  void openEventEditPopup(
+      String title, WorkEntryExitEventException? workEntryExitEventException) {
     Get.dialog(
       Dialog(
         backgroundColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),
-        child: PopupRequestDetails(
+        child: EditFormEventRequest(
+          title: title,
+          workEntryExitEventException: workEntryExitEventException,
+        ),
+      ),
+    );
+  }
+
+  void openEditEmployeeRequestPopup(
+      String title, EmployeeRequest? employeeRequest) {
+    Get.dialog(
+      Dialog(
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: EditFormEmployeeRequest(
+          title: title,
+          employeeRequest: employeeRequest,
+        ),
+      ),
+    );
+  }
+
+  void openLeaveRequestApprovalPopup(String title, Leave? leave) {
+    Get.dialog(
+      Dialog(
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: PopupLeaveRequestDetails(
           title: title,
           leave: leave,
+        ),
+      ),
+    );
+  }
+
+  void openEventRequestApprovalPopup(
+      String title, WorkEntryExitEventException? workEntryExitEventException) {
+    Get.dialog(
+      Dialog(
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: PopupEventRequestDetails(
+          title: title,
+          eventException: workEntryExitEventException,
+        ),
+      ),
+    );
+  }
+
+  void openEmployeeRequestPopup(
+      String title, EmployeeRequest? employeeRequest) {
+    Get.dialog(
+      Dialog(
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: PopupEmployeeRequestDetails(
+          title: title,
+          employeeRequest: employeeRequest,
         ),
       ),
     );
@@ -217,5 +462,9 @@ class RequestController extends GetxController {
   void setEndDate(DateTime date) {
     endDate = date;
     update();
+  }
+
+  void setLocationId(QRCodeSetting? qrCodeSetting) {
+    selectedLocation.value = qrCodeSetting!;
   }
 }

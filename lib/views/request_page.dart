@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:sidebarx/sidebarx.dart';
 import '../constants/colors.dart';
 import '../constants/dimensions.dart';
@@ -91,8 +92,52 @@ class LeavePage extends StatelessWidget {
                             height: screenHeight - 200,
                             child: TabBarView(
                               children: [
-                                const Center(
-                                    child: Text("Giriş/Çıkış Talepleri")),
+                                Column(
+                                  children: [
+                                    SizedBox(
+                                      width: width,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal:
+                                                    AppDimension.kSpacing),
+                                            child: BaseButton(
+                                              label: "Yeni",
+                                              icon: const Icon(
+                                                Icons.add,
+                                                color: AppColor.secondaryText,
+                                              ),
+                                              onPressed: () {
+                                                controller.openEventEditPopup(
+                                                    "Yeni Giriş/Çıkış Talebi",
+                                                    null);
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: AppDimension.kSpacing / 2,
+                                    ),
+                                    SizedBox(
+                                        width: width,
+                                        child: titleEventCardWidget()),
+                                    Expanded(
+                                      child: controller.leaves.isEmpty
+                                          ? const Center(
+                                              child:
+                                                  CircularProgressIndicator())
+                                          : SizedBox(
+                                              width: width,
+                                              child:
+                                                  itemsEntryExitEventExceptionsWidget()),
+                                    ),
+                                  ],
+                                ),
                                 Column(
                                   children: [
                                     SizedBox(
@@ -132,11 +177,59 @@ class LeavePage extends StatelessWidget {
                                                   CircularProgressIndicator())
                                           : SizedBox(
                                               width: width,
-                                              child: itemsCardWidget()),
+                                              child:
+                                                  itemsLeaveRequestsWidget()),
                                     ),
                                   ],
                                 ),
-                                const Center(child: Text("Diğer Talepler")),
+                                Column(
+                                  children: [
+                                    SizedBox(
+                                      width: width,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal:
+                                                    AppDimension.kSpacing),
+                                            child: BaseButton(
+                                              label: "Yeni",
+                                              icon: const Icon(
+                                                Icons.add,
+                                                color: AppColor.secondaryText,
+                                              ),
+                                              onPressed: () {
+                                                controller
+                                                    .openEditEmployeeRequestPopup(
+                                                        "Talep Oluşturma",
+                                                        null);
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: AppDimension.kSpacing / 2,
+                                    ),
+                                    SizedBox(
+                                        width: width,
+                                        child:
+                                            titleEmployeeRequestCardWidget()),
+                                    Expanded(
+                                      child: controller.leaves.isEmpty
+                                          ? const Center(
+                                              child:
+                                                  CircularProgressIndicator())
+                                          : SizedBox(
+                                              width: width,
+                                              child:
+                                                  itemsEmployeeRequestsWidget()),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),
@@ -244,7 +337,7 @@ class LeavePage extends StatelessWidget {
     );
   }
 
-  Widget itemsCardWidget() {
+  Widget itemsLeaveRequestsWidget() {
     return Card(
       color: AppColor.cardBackgroundColor,
       shadowColor: AppColor.cardShadowColor,
@@ -255,7 +348,7 @@ class LeavePage extends StatelessWidget {
         padding: const EdgeInsets.all(AppDimension.kSpacing / 2),
         child: Obx(() {
           return ListView.builder(
-            controller: controller.scrollController,
+            controller: controller.scrollControllerLeave,
             itemCount: controller.leaves.length,
             itemBuilder: (context, index) {
               final leave = controller.leaves[index];
@@ -263,14 +356,22 @@ class LeavePage extends StatelessWidget {
                 children: [
                   InkWell(
                     onTap: () {
-                      controller.openApprovalPopup("İzin Detayları", leave);
+                      controller.openLeaveRequestApprovalPopup(
+                          "Talep Detayları", leave);
                     },
                     child: Container(
-                      color: leave.status == 1
-                          ? AppColor.primaryGreen
-                          : leave.status == 2
-                              ? AppColor.primaryRed
-                              : AppColor.primaryOrange,
+                      decoration: BoxDecoration(
+                        border: Border(
+                          right: BorderSide(
+                            color: leave.status == 1
+                                ? AppColor.primaryGreen
+                                : leave.status == 2
+                                    ? AppColor.primaryRed
+                                    : AppColor.primaryOrange,
+                            width: 8.0,
+                          ),
+                        ),
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             vertical: AppDimension.kSpacing / 2),
@@ -333,11 +434,361 @@ class LeavePage extends StatelessWidget {
                                     : leave.status == 2
                                         ? "Reddedildi"
                                         : "Onay Bekliyor",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: leave.status == 1
+                                      ? AppColor.primaryGreen
+                                      : leave.status == 2
+                                          ? AppColor.primaryRed
+                                          : AppColor.primaryOrange,
+                                ),
                                 textAlign: TextAlign.center,
                               ),
                             ),
                           ],
                         ),
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    height: 1,
+                    color: AppColor.primaryAppColor.withOpacity(0.25),
+                  )
+                ],
+              );
+            },
+          );
+        }),
+      ),
+    );
+  }
+
+  Widget titleEventCardWidget() {
+    return Card(
+      color: AppColor.cardBackgroundColor,
+      shadowColor: AppColor.cardShadowColor,
+      margin: const EdgeInsets.symmetric(horizontal: AppDimension.kSpacing),
+      child: Padding(
+        padding: const EdgeInsets.all(AppDimension.kSpacing / 2),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const SizedBox(
+              width: 30,
+              child: Text(
+                "#",
+                style: TextStyle(fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            const SizedBox(
+              width: 150,
+              child: Text(
+                "Konum",
+                style: TextStyle(fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            Visibility(
+              visible: MediaQuery.of(Get.context!).size.width > 1280,
+              child: const SizedBox(
+                width: 150,
+                child: Text(
+                  "Tarih",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+            Visibility(
+              visible: MediaQuery.of(Get.context!).size.width > 1280,
+              child: const SizedBox(
+                width: 150,
+                child: Text(
+                  "Sebep",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: 100,
+              child: Text(
+                "Durumu",
+                style: TextStyle(fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget itemsEntryExitEventExceptionsWidget() {
+    return Card(
+      color: AppColor.cardBackgroundColor,
+      shadowColor: AppColor.cardShadowColor,
+      margin: const EdgeInsets.symmetric(
+          horizontal: AppDimension.kSpacing,
+          vertical: AppDimension.kSpacing / 2),
+      child: Padding(
+        padding: const EdgeInsets.all(AppDimension.kSpacing / 2),
+        child: Obx(() {
+          return ListView.builder(
+            controller: controller.scrollControllerEvent,
+            itemCount: controller.eventExceptions.length,
+            itemBuilder: (context, index) {
+              final eventException = controller.eventExceptions[index];
+              return Column(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      controller.openEventRequestApprovalPopup(
+                          "Talep Detayları", eventException);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          right: BorderSide(
+                            color: eventException.status == 1
+                                ? AppColor.primaryGreen
+                                : eventException.status == 2
+                                    ? AppColor.primaryRed
+                                    : AppColor.primaryOrange,
+                            width: 8.0,
+                          ),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: AppDimension.kSpacing / 2),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: 30,
+                              child: Text(
+                                "${index + 1}",
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 150,
+                              child: Text(
+                                controller.qrCodeSettings
+                                        .firstWhere((x) =>
+                                            x.id ==
+                                            eventException.qrCodeSettingId)
+                                        .name ??
+                                    "",
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Visibility(
+                              visible:
+                                  MediaQuery.of(Get.context!).size.width > 1280,
+                              child: SizedBox(
+                                width: 150,
+                                child: Text(
+                                  DateFormat('yyyy.MM.dd HH:mm')
+                                      .format(DateTime.parse(
+                                          eventException.eventTime!))
+                                      .toString(),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            Visibility(
+                              visible:
+                                  MediaQuery.of(Get.context!).size.width > 1280,
+                              child: SizedBox(
+                                width: 150,
+                                child: Text(
+                                  eventException.reason ?? "",
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 100,
+                              child: Text(
+                                eventException.status == 1
+                                    ? "Onaylandı"
+                                    : eventException.status == 2
+                                        ? "Reddedildi"
+                                        : "Onay Bekliyor",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: eventException.status == 1
+                                      ? AppColor.primaryGreen
+                                      : eventException.status == 2
+                                          ? AppColor.primaryRed
+                                          : AppColor.primaryOrange,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    height: 1,
+                    color: AppColor.primaryAppColor.withOpacity(0.25),
+                  )
+                ],
+              );
+            },
+          );
+        }),
+      ),
+    );
+  }
+
+  Widget titleEmployeeRequestCardWidget() {
+    return Card(
+      color: AppColor.cardBackgroundColor,
+      shadowColor: AppColor.cardShadowColor,
+      margin: const EdgeInsets.symmetric(horizontal: AppDimension.kSpacing),
+      child: Padding(
+        padding: const EdgeInsets.all(AppDimension.kSpacing / 2),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const SizedBox(
+              width: 30,
+              child: Text(
+                "#",
+                style: TextStyle(fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            const SizedBox(
+              width: 150,
+              child: Text(
+                "Konu",
+                style: TextStyle(fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            const SizedBox(
+              width: 150,
+              child: Text(
+                "Detay",
+                style: TextStyle(fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            Visibility(
+              visible: MediaQuery.of(Get.context!).size.width > 1280,
+              child: const SizedBox(
+                width: 150,
+                child: Text(
+                  "Tarih",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget itemsEmployeeRequestsWidget() {
+    return Card(
+      color: AppColor.cardBackgroundColor,
+      shadowColor: AppColor.cardShadowColor,
+      margin: const EdgeInsets.symmetric(
+          horizontal: AppDimension.kSpacing,
+          vertical: AppDimension.kSpacing / 2),
+      child: Padding(
+        padding: const EdgeInsets.all(AppDimension.kSpacing / 2),
+        child: Obx(() {
+          return ListView.builder(
+            controller: controller.scrollControllerEmployeeRequest,
+            itemCount: controller.employeeRequests.length,
+            itemBuilder: (context, index) {
+              final employeeRequest = controller.employeeRequests[index];
+              return Column(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      controller.openEmployeeRequestPopup(
+                          "Talep Detayları", employeeRequest);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: AppDimension.kSpacing / 2),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: 30,
+                            child: Text(
+                              "${index + 1}",
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 150,
+                            child: Text(
+                              employeeRequest.subject ?? "",
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 150,
+                            child: Text(
+                              employeeRequest.detail ?? "",
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Visibility(
+                            visible:
+                                MediaQuery.of(Get.context!).size.width > 1280,
+                            child: SizedBox(
+                              width: 150,
+                              child: Text(
+                                DateFormat('yyyy.MM.dd HH:mm')
+                                    .format(DateTime.parse(
+                                        employeeRequest.createdAt!))
+                                    .toString(),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

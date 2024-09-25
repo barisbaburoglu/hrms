@@ -53,7 +53,9 @@ class EventsEntryExitPage extends StatelessWidget {
                   SizedBox(width: width, child: titleCardWidget()),
                   Expanded(
                     child: controller.lastEntryExit.isEmpty
-                        ? const Center(child: CircularProgressIndicator())
+                        ? const Center(
+                            child: Text("Data Not Found"),
+                          )
                         : SizedBox(width: width, child: itemsCardWidget()),
                   ),
                 ],

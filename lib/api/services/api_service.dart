@@ -12,10 +12,10 @@ class ApiService {
 
   ApiService(this.baseUrl);
 
-  // 401 hatası durumunda çalışacak fonksiyon
+  // 401 hatası
   void _handleUnauthorized() {
-    box.erase(); // Oturum verilerini temizler
-    Get.offAllNamed('/sign-in'); // Sign-in sayfasına yönlendirir
+    box.erase(); // Oturum verilerini temizle
+    Get.offAllNamed('/sign-in');
   }
 
   Future<http.Response> getRequest(String endpoint) async {
@@ -37,7 +37,7 @@ class ApiService {
 
   Future<http.Response> postRequest(
     String endpoint,
-    Map<String, dynamic> data,
+    Map<String, dynamic>? data,
   ) async {
     final url = Uri.parse('$baseUrl$endpoint');
 
@@ -51,7 +51,7 @@ class ApiService {
       body: body,
     );
     if (response.statusCode == 401) {
-      _handleUnauthorized(); // 401 hatası için kontrol
+      _handleUnauthorized();
     } else if (response.statusCode != 200) {
       throw Exception(response.statusCode);
     }
@@ -71,7 +71,7 @@ class ApiService {
       body: body,
     );
     if (response.statusCode == 401) {
-      _handleUnauthorized(); // 401 hatası için kontrol
+      _handleUnauthorized();
     } else if (response.statusCode != 200) {
       throw Exception('Failed to update data');
     }
@@ -91,7 +91,7 @@ class ApiService {
       body: body,
     );
     if (response.statusCode == 401) {
-      _handleUnauthorized(); // 401 hatası için kontrol
+      _handleUnauthorized();
     } else if (response.statusCode != 200) {
       throw Exception('Failed to update data');
     }
@@ -108,7 +108,7 @@ class ApiService {
       },
     );
     if (response.statusCode == 401) {
-      _handleUnauthorized(); // 401 hatası için kontrol
+      _handleUnauthorized();
     } else if (response.statusCode != 200) {
       throw Exception('Failed to delete data');
     }

@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import '../api/api_provider.dart';
 import '../api/models/login_model.dart';
 import '../api/models/login_response.model.dart';
+import '../api/models/user_info_model.dart';
 import '../constants/colors.dart';
 import '../widgets/custom_snack_bar.dart';
 
@@ -17,6 +18,12 @@ class AuthController extends GetxController {
   RxBool loader = false.obs;
   static RxBool isLoggedIn = false.obs;
   static RxString accessToken = "".obs;
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+  }
 
   void checkUserStatus() async {
     String? storedToken;
@@ -61,9 +68,26 @@ class AuthController extends GetxController {
           String expiresIn = response.expiresIn.toString();
           String accessToken = response.accessToken!;
           String refreshToken = response.refreshToken!;
+
           await storageBox.write('accessToken', accessToken);
           await storageBox.write('expiresIn', expiresIn);
           await storageBox.write('refreshToken', refreshToken);
+
+          UserInfo userInfo = await ApiProvider().authService.fetchtUserInfo();
+          int userId = userInfo.id ?? 0;
+          int employeeId = userInfo.employeeId ?? 0;
+          String name = userInfo.name ?? "";
+          String surname = userInfo.surname ?? "";
+          String email = userInfo.email ?? "";
+          int employeeNumber = userInfo.employeeNumber ?? 0;
+
+          await storageBox.write('userId', userId);
+          await storageBox.write('employeeId', employeeId);
+          await storageBox.write('name', name);
+          await storageBox.write('surname', surname);
+          await storageBox.write('email', email);
+          await storageBox.write('employeeNumber', employeeNumber);
+
           loader.value = false;
           kIsWeb ? Get.toNamed("/index") : Get.toNamed("/home");
         } else {}

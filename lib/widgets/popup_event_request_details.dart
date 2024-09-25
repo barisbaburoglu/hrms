@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../api/models/leave_model.dart';
+import '../api/models/work_entry_exit_event_exception_model.dart';
 import '../constants/colors.dart';
 import '../constants/dimensions.dart';
 import '../controllers/request_controller.dart';
 import 'base_button.dart';
 import 'base_input.dart';
 
-class PopupRequestDetails extends StatelessWidget {
+class PopupEventRequestDetails extends StatelessWidget {
   final String title;
-  final Leave? leave;
+  final WorkEntryExitEventException? eventException;
   final RequestController controller = Get.put(RequestController());
 
-  PopupRequestDetails({
+  PopupEventRequestDetails({
     super.key,
     required this.title,
-    this.leave,
+    this.eventException,
   });
 
   @override
@@ -24,8 +24,8 @@ class PopupRequestDetails extends StatelessWidget {
     double screenWidth = MediaQuery.of(Get.context!).size.width;
     double inputWidth = screenWidth > 1280 ? 310 : double.infinity;
 
-    if (leave != null) {
-      controller.setLeaveFields(leave!);
+    if (eventException != null) {
+      controller.setEventFields(eventException!);
     } else {
       controller.clearLeaveFields();
     }
@@ -67,10 +67,9 @@ class PopupRequestDetails extends StatelessWidget {
                           readOnly: true,
                           isLabel: true,
                           errorRequired: false,
-                          label: "İzin Türü",
+                          label: "Konum Seçimi",
                           controller: TextEditingController(
-                            text: controller.leaveTypeNames[controller
-                                .leaveTypeFromJson[leave!.leaveType]]!,
+                            text: controller.selectedLocation.value!.name ?? "",
                           ),
                           margin: EdgeInsets.zero,
                           textInputType: TextInputType.text,
@@ -85,26 +84,9 @@ class PopupRequestDetails extends StatelessWidget {
                           readOnly: true,
                           isLabel: true,
                           errorRequired: false,
-                          label: "İzin Başlama Tarihi",
+                          label: "Tarih",
                           controller: TextEditingController(
-                            text: leave!.startDate ?? "",
-                          ),
-                          margin: EdgeInsets.zero,
-                          textInputType: TextInputType.text,
-                          inputFormatters: const [],
-                          onChanged: (value) {},
-                        ),
-                      ),
-                      SizedBox(
-                        width: inputWidth,
-                        height: 40,
-                        child: BaseInput(
-                          readOnly: true,
-                          isLabel: true,
-                          errorRequired: false,
-                          label: "İzin Bitiş Tarihi",
-                          controller: TextEditingController(
-                            text: leave!.endDate ?? "",
+                            text: eventException!.eventTime ?? "",
                           ),
                           margin: EdgeInsets.zero,
                           textInputType: TextInputType.text,
@@ -131,7 +113,7 @@ class PopupRequestDetails extends StatelessWidget {
                   ),
                 ],
               ),
-              leave!.status != 0
+              eventException!.status != 0
                   ? Wrap(
                       alignment: WrapAlignment.center,
                       runSpacing: AppDimension.kSpacing,
@@ -140,33 +122,38 @@ class PopupRequestDetails extends StatelessWidget {
                         BaseButton(
                           width: 200,
                           backgroundColor: AppColor.canvasColor,
-                          textColor: leave!.status == 1
+                          textColor: eventException!.status == 1
                               ? AppColor.primaryGreen
                               : AppColor.primaryRed,
-                          label:
-                              leave!.status == 1 ? "Onaylandı" : "Reddedildi",
+                          label: eventException!.status == 1
+                              ? "Onaylandı"
+                              : "Reddedildi",
                           onPressed: () {},
                           icon: Icon(
-                            leave!.status == 1 ? Icons.check : Icons.block,
-                            color: leave!.status == 1
+                            eventException!.status == 1
+                                ? Icons.check
+                                : Icons.block,
+                            color: eventException!.status == 1
                                 ? AppColor.primaryGreen
                                 : AppColor.primaryRed,
                           ),
                         ),
                         BaseButton(
-                          backgroundColor: leave!.status == 1
+                          backgroundColor: eventException!.status == 1
                               ? AppColor.primaryRed
                               : AppColor.primaryGreen,
                           width: screenWidth < 360 ? double.infinity : 125,
-                          label: leave!.status == 1 ? "Red" : "Onay",
+                          label: eventException!.status == 1 ? "Red" : "Onay",
                           onPressed: () {
-                            controller.patchStatusLeave(
-                              leave!.id!,
-                              leave!.status == 1 ? 2 : 1,
+                            controller.patchStatusEvent(
+                              eventException!.id!,
+                              eventException!.status == 1 ? 2 : 1,
                             );
                           },
                           icon: Icon(
-                            leave!.status == 1 ? Icons.block : Icons.check,
+                            eventException!.status == 1
+                                ? Icons.block
+                                : Icons.check,
                             color: AppColor.secondaryText,
                           ),
                         ),
@@ -182,7 +169,7 @@ class PopupRequestDetails extends StatelessWidget {
                           backgroundColor: AppColor.primaryRed,
                           label: "Red",
                           onPressed: () {
-                            controller.patchStatusLeave(leave!.id!, 2);
+                            controller.patchStatusEvent(eventException!.id!, 2);
                           },
                           icon: const Icon(
                             Icons.block,
@@ -194,7 +181,7 @@ class PopupRequestDetails extends StatelessWidget {
                           width: screenWidth < 360 ? double.infinity : 125,
                           label: "Onay",
                           onPressed: () {
-                            controller.patchStatusLeave(leave!.id!, 1);
+                            controller.patchStatusEvent(eventException!.id!, 1);
                           },
                           icon: const Icon(
                             Icons.check,

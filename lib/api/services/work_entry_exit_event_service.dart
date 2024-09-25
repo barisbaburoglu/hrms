@@ -20,4 +20,9 @@ class WorkEntryExitEventService {
     await apiService.postRequest(
         '/WorkEntryExitEventServices/EntryExit', workEntryExitEvent.toJson());
   }
+
+  Future<void> patchEventStatus(int id, int status) async {
+    await apiService.patchRequest(
+        '/WorkEntryExitEventExceptionServices/$id', {"Status": status});
+  }
 }

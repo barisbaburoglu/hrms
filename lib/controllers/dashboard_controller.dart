@@ -1,12 +1,16 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../api/models/attendance_summary_model.dart';
 import '../constants/colors.dart';
 
 class DashboardController extends GetxController {
+  GetStorage storageBox = GetStorage();
   Rx<int> touchedIndex = 0.obs;
+
+  Rx<String> userNameSurname = "".obs;
 
   var attendanceSummary = Rxn<AttendanceSummary>();
 
@@ -35,6 +39,10 @@ class DashboardController extends GetxController {
   }
 
   void fetchAttendanceSummary() async {
+    String userName = storageBox.read('name');
+    String userSurName = storageBox.read('surname');
+
+    userNameSurname.value = "$userName $userSurName";
     // Örnek veri, burada verileri API'den alabilirsiniz
     var jsonResponse = {
       "present": {

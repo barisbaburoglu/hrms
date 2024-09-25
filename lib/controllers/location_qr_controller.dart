@@ -108,7 +108,7 @@ class LocationQRController extends GetxController {
               QRCodeSetting(
                 id: qrCodeSetting.id,
                 name: nameController.text,
-                companyId: 1,
+                companyId: qrCodeSetting.companyId,
                 locationRadius: int.parse(locationRadiusController.text),
                 locationLatitude:
                     double.parse(coordinatesController.text.split(",")[0]),

@@ -13,12 +13,16 @@ class BaseInput extends StatelessWidget {
   final TextInputType textInputType;
   final List<TextInputFormatter>? inputFormatters;
   final Function(String)? onChanged;
+  final int? minLines;
+  final int? maxLines;
 
   const BaseInput(
       {super.key,
       this.errorRequired,
       this.readOnly,
       this.onChanged,
+      this.minLines,
+      this.maxLines,
       required this.isLabel,
       required this.label,
       required this.controller,
@@ -36,6 +40,8 @@ class BaseInput extends StatelessWidget {
         margin: margin,
         child: SizedBox.expand(
           child: TextFormField(
+            minLines: minLines ?? 1,
+            maxLines: maxLines,
             readOnly: readOnly ?? false,
             onChanged: (value) {
               if (onChanged != null) {
@@ -62,7 +68,7 @@ class BaseInput extends StatelessWidget {
             },
             textAlignVertical: TextAlignVertical.center,
             decoration: InputDecoration(
-              contentPadding: const EdgeInsets.only(left: 10.0),
+              contentPadding: const EdgeInsets.all(10.0),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   color: errorRequiredRx.value
