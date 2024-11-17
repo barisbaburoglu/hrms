@@ -10,8 +10,11 @@ class MasterScaffold extends StatelessWidget {
   final SidebarXController sidebarController;
   final Widget? body;
 
-  const MasterScaffold(
-      {super.key, required this.body, required this.sidebarController});
+  const MasterScaffold({
+    super.key,
+    required this.body,
+    required this.sidebarController,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -42,6 +42,7 @@ class Employee {
   String? email;
   String? phone;
   List<ShiftOffDay>? employeeShiftDayOffs;
+  List<IdentityUserRoles>? identityUserRoles;
   String? createdAt;
   int? createUserID;
   String? updatedAt;
@@ -59,6 +60,7 @@ class Employee {
       this.employmentDate,
       this.email,
       this.phone,
+      this.identityUserRoles,
       this.employeeShiftDayOffs,
       this.createdAt,
       this.createUserID,
@@ -81,6 +83,12 @@ class Employee {
       employeeShiftDayOffs = <ShiftOffDay>[];
       json['employeeShiftDayOffs'].forEach((v) {
         employeeShiftDayOffs!.add(ShiftOffDay.fromJson(v));
+      });
+    }
+    if (json['identityUserRoles'] != null) {
+      identityUserRoles = <IdentityUserRoles>[];
+      json['identityUserRoles'].forEach((v) {
+        identityUserRoles!.add(new IdentityUserRoles.fromJson(v));
       });
     }
     createdAt = json['createdAt'];
@@ -128,6 +136,11 @@ class Employee {
       data['employeeShiftDayOffs'] =
           employeeShiftDayOffs!.map((v) => v.toJson()).toList();
     }
+
+    if (this.identityUserRoles != null) {
+      data['identityUserRoles'] =
+          this.identityUserRoles!.map((v) => v.toJson()).toList();
+    }
     if (createdAt != null) {
       data['createdAt'] = createdAt;
     }
@@ -140,6 +153,28 @@ class Employee {
     if (updateUserID != null) {
       data['updateUserID'] = updateUserID;
     }
+    return data;
+  }
+}
+
+class IdentityUserRoles {
+  Null? companyId;
+  int? userId;
+  int? roleId;
+
+  IdentityUserRoles({this.companyId, this.userId, this.roleId});
+
+  IdentityUserRoles.fromJson(Map<String, dynamic> json) {
+    companyId = json['companyId'];
+    userId = json['userId'];
+    roleId = json['roleId'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['companyId'] = this.companyId;
+    data['userId'] = this.userId;
+    data['roleId'] = this.roleId;
     return data;
   }
 }

@@ -47,5 +47,7 @@
 	<true/>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>for download QR Codes</string>
+	<key>FirebaseMessagingAutoInitEnabled</key>
+	<string>NO</string>
 </dict>
 </plist>

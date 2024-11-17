@@ -1,4 +1,4 @@
-package com.example.hrms
+package com.devinsoft.hrms
 
 import io.flutter.embedding.android.FlutterActivity
 

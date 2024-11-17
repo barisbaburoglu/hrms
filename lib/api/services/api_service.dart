@@ -4,18 +4,38 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/place_google.dart';
+import '../models/user_role_actions_model.dart';
 
 class ApiService {
+  final List<UserRoleActionsModel> userRoleActions;
   final String baseUrl;
   final String apiKey = "AIzaSyCjuykcjzh76LDRr4uj80215JsyayYyUxM";
   final box = GetStorage();
 
-  ApiService(this.baseUrl);
+  ApiService(this.baseUrl, this.userRoleActions);
 
   // 401 hatası
   void _handleUnauthorized() {
     box.erase(); // Oturum verilerini temizle
     Get.offAllNamed('/sign-in');
+  }
+
+  bool _hasPermission(String grup, String action) {
+    if (userRoleActions.isEmpty) return false;
+
+    final userGroup = userRoleActions.firstWhere(
+      (element) => element.grup == grup,
+      orElse: () => UserRoleActionsModel(grup: null, actions: []),
+    );
+    return userGroup.actions?.contains(action) ?? false;
+  }
+
+  Future<http.Response> getRequestWithAuth(
+      String grup, String action, String endpoint) async {
+    if (!_hasPermission(grup, action)) {
+      throw Exception('Unauthorized access to $grup.$action');
+    }
+    return await getRequest(endpoint);
   }
 
   Future<http.Response> getRequest(String endpoint) async {

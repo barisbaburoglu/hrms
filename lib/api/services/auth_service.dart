@@ -1,8 +1,11 @@
 import 'dart:convert';
 
+import 'package:get_storage/get_storage.dart';
+
 import '../models/login_model.dart';
 import '../models/login_response.model.dart';
 import '../models/user_info_model.dart';
+import '../models/user_role_actions_model.dart';
 import 'api_service.dart';
 
 class AuthService {
@@ -22,8 +25,30 @@ class AuthService {
     return LoginResponseModel.fromJson(json.decode(response.body));
   }
 
-  Future<UserInfo> fetchtUserInfo() async {
-    final response = await apiService.getRequest('/api/DashServices/UserInfo');
+  Future<UserInfo> fetchUserInfo() async {
+    final response = await apiService.getRequest('/api/USerServices/UserInfo');
     return UserInfo.fromJson(json.decode(response.body));
+  }
+
+  Future<List<UserRoleActionsModel>> fetchUserRoleActions() async {
+    final response = await apiService
+        .getRequest('/api/UserRoleActionServices/UserRoleActions');
+
+    List<dynamic> data = json.decode(response.body);
+
+    List<UserRoleActionsModel> actions =
+        data.map((json) => UserRoleActionsModel.fromJson(json)).toList();
+
+    saveUserRoleActionsToStorage(actions);
+
+    return actions;
+  }
+
+  void saveUserRoleActionsToStorage(
+      List<UserRoleActionsModel> userRoleActions) {
+    final box = GetStorage();
+    List<Map<String, dynamic>> jsonList =
+        userRoleActions.map((item) => item.toJson()).toList();
+    box.write('userRoleActions', jsonList); // JSON listesi olarak kaydet
   }
 }

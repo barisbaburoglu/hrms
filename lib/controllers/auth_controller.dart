@@ -6,6 +6,7 @@ import '../api/api_provider.dart';
 import '../api/models/login_model.dart';
 import '../api/models/login_response.model.dart';
 import '../api/models/user_info_model.dart';
+import '../api/models/user_role_actions_model.dart';
 import '../constants/colors.dart';
 import '../widgets/custom_snack_bar.dart';
 
@@ -18,6 +19,8 @@ class AuthController extends GetxController {
   RxBool loader = false.obs;
   static RxBool isLoggedIn = false.obs;
   static RxString accessToken = "".obs;
+
+  var userRoleActions = <UserRoleActionsModel>[].obs;
 
   @override
   void onInit() {
@@ -73,7 +76,9 @@ class AuthController extends GetxController {
           await storageBox.write('expiresIn', expiresIn);
           await storageBox.write('refreshToken', refreshToken);
 
-          UserInfo userInfo = await ApiProvider().authService.fetchtUserInfo();
+          await ApiProvider().authService.fetchUserRoleActions();
+
+          UserInfo userInfo = await ApiProvider().authService.fetchUserInfo();
           int userId = userInfo.id ?? 0;
           int employeeId = userInfo.employeeId ?? 0;
           String name = userInfo.name ?? "";
@@ -139,6 +144,16 @@ class AuthController extends GetxController {
           backgroundColor: AppColor.primaryOrange,
         ),
       );
+    }
+  }
+
+  void fetchUserRoleActions() async {
+    userRoleActions.value = [];
+    try {
+      userRoleActions.value =
+          await ApiProvider().authService.fetchUserRoleActions();
+    } catch (e) {
+      print("Hata: $e");
     }
   }
 }

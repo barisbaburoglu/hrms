@@ -218,17 +218,24 @@ class LeftSidebarX extends StatelessWidget {
           },
         ),
         SidebarXItem(
+          icon: Icons.settings,
+          label: 'Vardiya Planı',
+          onTap: () {
+            sidebarController.navigateTo('/shift-plan', 9);
+          },
+        ),
+        SidebarXItem(
           icon: Icons.request_page,
           label: 'Talep Oluştur',
           onTap: () {
-            sidebarController.navigateTo('/leave', 9);
+            sidebarController.navigateTo('/leave', 10);
           },
         ),
         SidebarXItem(
           icon: Icons.settings,
           label: 'Şirket Ayarları',
           onTap: () {
-            sidebarController.navigateTo('/company-settigs-details', 10);
+            sidebarController.navigateTo('/company-settigs-details', 11);
           },
         ),
       ],

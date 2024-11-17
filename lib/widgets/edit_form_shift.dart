@@ -27,9 +27,9 @@ class EditFormShift extends StatelessWidget {
     double screenWidth = MediaQuery.of(Get.context!).size.width;
 
     if (shift != null) {
-      // controller.setCompanyFields(shift!);
+      controller.nameController.text = shift!.name!;
     } else {
-      //controller.clearCompanyFields();
+      controller.nameController.text = "";
     }
 
     return SizedBox(

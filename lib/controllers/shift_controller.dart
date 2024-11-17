@@ -160,7 +160,8 @@ class ShiftController extends GetxController {
               startTime: shiftDay.startTime,
               endTime: shiftDay.endTime,
               dayOfWeek: shiftDay.dayOfWeek,
-              duration: shiftDay.duration,
+              duration: int.parse(
+                  calculateDuration(shiftDay.startTime!, shiftDay.endTime!)),
               updatedAt: DateTime.now(),
             ));
       } else {
@@ -171,7 +172,8 @@ class ShiftController extends GetxController {
               startTime: shiftDay.startTime,
               endTime: shiftDay.endTime,
               dayOfWeek: shiftDay.dayOfWeek,
-              duration: shiftDay.duration,
+              duration: int.parse(
+                  calculateDuration(shiftDay.startTime!, shiftDay.endTime!)),
               createdAt: DateTime.now(),
               updatedAt: DateTime.now(),
             ));

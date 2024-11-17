@@ -36,6 +36,14 @@ class EmployeeController extends GetxController {
 
   var shifts = <Shift>[].obs;
 
+  var selectedEmployees = <int>[].obs;
+
+  var isAllEmployeesSelected = false.obs;
+
+  var filteredEmployees = <Employee>[].obs;
+
+  var employeeSearchQuery = ''.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -86,9 +94,11 @@ class EmployeeController extends GetxController {
 
   void fetchEmployees() async {
     try {
+      filteredEmployees.clear();
       var employeeTypeModel =
           await ApiProvider().employeeService.fetchEmployees(null);
       employees.value = employeeTypeModel.employees ?? [];
+      filteredEmployees.value = employees;
     } catch (e) {
       print("Hata: $e");
     }
@@ -102,6 +112,42 @@ class EmployeeController extends GetxController {
     } catch (e) {
       print("Hata: $e");
     }
+  }
+
+  void toggleEmployeeSelection(int employeeId) {
+    if (selectedEmployees.contains(employeeId)) {
+      selectedEmployees.remove(employeeId);
+    } else {
+      selectedEmployees.add(employeeId);
+    }
+    isAllEmployeesSelected.value =
+        selectedEmployees.length == filteredEmployees.length;
+    update();
+  }
+
+  void selectAllEmployees(bool selectAll) {
+    if (selectAll) {
+      selectedEmployees.value = filteredEmployees.map((e) => e.id!).toList();
+    } else {
+      selectedEmployees.clear();
+    }
+    isAllEmployeesSelected.value = selectAll;
+  }
+
+  void searchEmployees(String query) {
+    employeeSearchQuery.value = query;
+    if (query.isEmpty) {
+      filteredEmployees.value = employees;
+    } else {
+      filteredEmployees.value = employees
+          .where((employee) =>
+              '${employee.name?.toLowerCase()} ${employee.surname?.toLowerCase()} ${employee.employeeNumber}'
+                  .contains(query.toLowerCase()))
+          .toList();
+    }
+
+    isAllEmployeesSelected.value =
+        selectedEmployees.length == filteredEmployees.length;
   }
 
   Future<void> saveEmployee({Employee? employee}) async {
@@ -208,5 +254,15 @@ class EmployeeController extends GetxController {
 
   void setShiftId(int? id) {
     shiftId.value = id!;
+  }
+
+  // Çalışanın seçili olup olmadığını kontrol eder
+  bool isEmployeeSelected(int employeeId) {
+    return selectedEmployees.contains(employeeId);
+  }
+
+  // Tüm seçimleri temizler
+  void clearSelections() {
+    selectedEmployees.clear();
   }
 }

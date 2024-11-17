@@ -118,7 +118,6 @@ class RequestController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchEventExceptions();
     fetchQrCodeSettings();
     fetchLeaves();
     fetchEmployeeRequests();
@@ -133,6 +132,8 @@ class RequestController extends GetxController {
     } catch (e) {
       print("Hata: $e");
     }
+
+    fetchEventExceptions();
   }
 
   void fetchLeaves() async {

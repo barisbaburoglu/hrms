@@ -5,6 +5,8 @@ import 'package:get_storage/get_storage.dart';
 
 import '../api/models/attendance_summary_model.dart';
 import '../constants/colors.dart';
+import '../widgets/edit_event_entry_exit.dart';
+import '../widgets/no_qr_event_popup.dart';
 
 class DashboardController extends GetxController {
   GetStorage storageBox = GetStorage();
@@ -96,6 +98,20 @@ class DashboardController extends GetxController {
     };
 
     attendanceSummary.value = AttendanceSummary.fromJson(jsonResponse);
+  }
+
+  void openEditEvent(String title) {
+    Get.dialog(
+      Dialog(
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: EditEventEntryExit(
+          title: title,
+        ),
+      ),
+    );
   }
 
   List<PieChartSectionData> showingSections() {

@@ -37,24 +37,24 @@ class HomePage extends StatelessWidget {
                               .format(DateTime.now())
                               .toUpperCase(),
                           style: const TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold),
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         Text(
                           controller.currentTime.value,
                           style: const TextStyle(
-                            fontSize: 64,
+                            fontSize: 60,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'Digital',
                           ),
                         ),
                         Text(
                           controller.currentDate.value.toUpperCase(),
-                          style: const TextStyle(fontSize: 24),
+                          style: const TextStyle(fontSize: 20),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: AppDimension.dashContentSpacing),
+                  const SizedBox(height: AppDimension.kSpacing),
                   const Text(
                     "GİRİŞ / ÇIKIŞ\nQR TARA",
                     style: TextStyle(
@@ -73,7 +73,7 @@ class HomePage extends StatelessWidget {
                         children: [
                           Icon(
                             Icons.qr_code,
-                            size: 150,
+                            size: 100,
                             color: AppColor.primaryAppColor,
                           ),
                         ],
@@ -93,7 +93,7 @@ class HomePage extends StatelessWidget {
                   const Spacer(),
                   Container(
                     color: Colors.grey[200],
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

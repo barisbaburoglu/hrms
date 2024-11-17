@@ -7,6 +7,7 @@ import 'services/employee_service.dart';
 import 'services/employee_type_service.dart';
 import 'services/leave_service.dart';
 import 'services/qr_code_setting_service.dart';
+import 'services/role_service.dart';
 import 'services/shift_service.dart';
 import 'services/users_entry_exit_event_service.dart';
 import 'services/work_entry_exit_event_service.dart';
@@ -29,6 +30,8 @@ class ApiProvider {
 
   late EmployeeService _employeeService;
 
+  late RoleService _roleService;
+
   late DepartmentService _departmentService;
 
   late QRCodeSettingService _qrCodeSettingService;
@@ -44,14 +47,14 @@ class ApiProvider {
   late BillingInformationService _billingInformationService;
 
   ApiProvider._internal() {
-    _dashApiService =
-        ApiService('https://devinsofthrmsystemdashapi.azurewebsites.net/api');
+    _dashApiService = ApiService(
+        'https://devinsofthrmsystemdashapi.azurewebsites.net/api', []);
 
-    _mobilApiService =
-        ApiService('https://devinsofthrmsystemdashapi.azurewebsites.net/api');
+    _mobilApiService = ApiService(
+        'https://devinsofthrmsystemdashapi.azurewebsites.net/api', []);
 
     _authApiService =
-        ApiService('https://devinsofthrmsystemdashapi.azurewebsites.net');
+        ApiService('https://devinsofthrmsystemdashapi.azurewebsites.net', []);
 
     _authService = AuthService(_authApiService);
 
@@ -60,6 +63,8 @@ class ApiProvider {
     _employeeTypeService = EmployeeTypeService(_dashApiService);
 
     _employeeService = EmployeeService(_dashApiService);
+
+    _roleService = RoleService(_dashApiService);
 
     _departmentService = DepartmentService(_dashApiService);
 
@@ -83,6 +88,8 @@ class ApiProvider {
   EmployeeTypeService get employeeTypeService => _employeeTypeService;
 
   EmployeeService get employeeService => _employeeService;
+
+  RoleService get roleService => _roleService;
 
   DepartmentService get departmentService => _departmentService;
 

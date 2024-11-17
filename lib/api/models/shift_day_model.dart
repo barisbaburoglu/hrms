@@ -86,7 +86,7 @@ class ShiftDay {
       if (endTime != null) 'endTime': endTime,
       if (isOffDay != null) 'isOffDay': isOffDay,
       if (dayOfWeek != null) 'dayOfWeek': dayOfWeek,
-      if (duration != null) 'dayOfWeek': duration,
+      if (duration != null) 'duration': duration,
       if (createdAt != null) 'createdAt': createdAt!.toIso8601String(),
       if (updatedAt != null) 'updatedAt': updatedAt!.toIso8601String(),
       if (createUserId != null) 'createUserId': createUserId!,

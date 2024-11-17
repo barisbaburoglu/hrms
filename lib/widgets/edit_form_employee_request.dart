@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hrms/api/models/qr_code_setting_model.dart';
-import 'package:hrms/api/models/work_entry_exit_event_exception_model.dart';
 import 'package:intl/intl.dart';
 
 import '../api/models/employee_request_model.dart';
@@ -34,7 +33,7 @@ class EditFormEmployeeRequest extends StatelessWidget {
     }
 
     return SizedBox(
-      width: screenWidth > 1280 ? 740 : double.infinity,
+      width: inputWidth,
       height: 500,
       child: Card(
         color: AppColor.cardBackgroundColor,

@@ -23,7 +23,7 @@ class CustomGetBar extends GetSnackBar {
             children: [
               Icon(
                 iconData,
-                size: 30,
+                size: 25,
                 color: textColor,
               ),
               const SizedBox(width: AppDimension.kSpacing / 2),

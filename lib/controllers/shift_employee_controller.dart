@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hrms/api/models/shift_off_day_model.dart';
 
 import '../api/api_provider.dart';
 import '../api/models/employee_model.dart';
 import '../api/models/shift_day_model.dart';
 import '../api/models/shift_model.dart';
+import '../api/models/shift_off_day_model.dart';
+import '../api/models/week_model.dart';
 
 class ShiftEmployeeController extends GetxController {
   final ScrollController scrollController = ScrollController();
@@ -44,15 +45,18 @@ class ShiftEmployeeController extends GetxController {
   }
 
   void fetchShifts() async {
+    isLoading.value = true;
     try {
       var shiftModel = await ApiProvider().shiftService.fetchShifts();
       shifts.value = shiftModel.shifts ?? [];
     } catch (e) {
       print("Hata: $e");
     }
+    isLoading.value = false;
   }
 
   void fetchEmployees(int shiftId) async {
+    isLoading.value = true;
     try {
       var employeeTypeModel =
           await ApiProvider().employeeService.fetchEmployees({
@@ -86,19 +90,24 @@ class ShiftEmployeeController extends GetxController {
     } catch (e) {
       print("Hata: $e");
     }
+    isLoading.value = false;
+  }
+
+  void fetchShiftDays(int shiftId) async {
+    isLoading.value = true;
+    try {
+      var shiftDayModel =
+          await ApiProvider().shiftService.getShiftDaysByShiftId(shiftId);
+      shiftDays.value = shiftDayModel.shiftDays ?? [];
+    } catch (e) {
+      print("Hata: $e");
+    }
+    isLoading.value = false;
   }
 
   void setShiftId(int? id) async {
     shiftId.value = id!;
-    await fetchShiftDays(id);
+    fetchShiftDays(id);
     fetchEmployees(id);
-  }
-
-  Future<void> fetchShiftDays(int shiftId) async {
-    isLoading.value = true;
-    var shiftDayModel =
-        await ApiProvider().shiftService.getShiftDaysByShiftId(shiftId);
-    shiftDays.value = shiftDayModel.shiftDays ?? [];
-    isLoading.value = false;
   }
 }
