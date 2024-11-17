@@ -69,8 +69,8 @@ void main() async {
 
   await initializeDateFormatting('tr_TR', null);
 
-  NotificationService notificationService = NotificationService();
-  await notificationService.initialize();
+  // NotificationService notificationService = NotificationService();
+  // await notificationService.initialize();
 
   await DefaultCacheManager().emptyCache();
 
