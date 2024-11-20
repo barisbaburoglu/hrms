@@ -14,7 +14,7 @@ class CompanySettingsDetailsPage extends StatelessWidget {
   final CompaniesSettingsController controller =
       Get.put(CompaniesSettingsController());
   final SidebarXController sidebarController =
-      SidebarXController(selectedIndex: 11, extended: true);
+      SidebarXController(selectedIndex: 105, extended: true);
 
   CompanySettingsDetailsPage({super.key});
 

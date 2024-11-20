@@ -37,7 +37,12 @@ class BaseButton extends StatelessWidget {
               style: TextStyle(
                 color: textColor ?? AppColor.secondaryText,
                 fontWeight: FontWeight.bold,
+                fontSize: 12,
               ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              softWrap: true,
+              textAlign: TextAlign.center,
             ),
             icon != null ? const SizedBox(width: 5) : const SizedBox.shrink(),
             icon ?? const SizedBox.shrink(),

@@ -20,57 +20,51 @@ class LeftSidebarX extends StatelessWidget {
     final SidebarController sidebarController = Get.put(SidebarController());
 
     return SidebarX(
+      collapseIcon: Icons.arrow_back,
       controller: _controller,
       theme: SidebarXTheme(
-        margin: const EdgeInsets.all(10),
+        itemPadding: const EdgeInsets.all(0),
+        itemMargin: const EdgeInsets.only(left: 10),
+        padding: const EdgeInsets.all(0),
+        margin: const EdgeInsets.all(0),
+        selectedItemMargin: const EdgeInsets.only(left: 10),
+        selectedItemPadding: EdgeInsets.zero,
         decoration: BoxDecoration(
           color: AppColor.canvasColor,
           borderRadius: BorderRadius.circular(20),
         ),
-        hoverColor: AppColor.primaryAppColor,
         textStyle: const TextStyle(
+          fontSize: 12,
           color: AppColor.primaryAppColor,
           fontWeight: FontWeight.bold,
         ),
-        selectedTextStyle: const TextStyle(color: Colors.white),
+        hoverColor: Colors.transparent,
         hoverTextStyle: const TextStyle(
-          color: AppColor.secondaryText,
-          fontWeight: FontWeight.w500,
+          fontSize: 13,
+          color: AppColor.primaryText,
+          fontWeight: FontWeight.bold,
         ),
-        itemTextPadding: const EdgeInsets.only(left: 30),
-        selectedItemTextPadding: const EdgeInsets.only(left: 30),
+        selectedTextStyle: const TextStyle(
+          fontSize: 13,
+          color: AppColor.primaryText,
+          fontWeight: FontWeight.bold,
+        ),
+        itemTextPadding: const EdgeInsets.only(left: 15),
+        selectedItemTextPadding: const EdgeInsets.only(left: 25),
         itemDecoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(0),
           border: Border.all(color: AppColor.canvasColor),
-        ),
-        selectedItemDecoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: AppColor.darkGreen.withOpacity(0.37),
-          ),
-          gradient: LinearGradient(
-            colors: [
-              AppColor.primaryAppColor,
-              AppColor.primaryAppColor.withOpacity(0.5),
-              AppColor.canvasColor
-            ],
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.28),
-              blurRadius: 30,
-            )
-          ],
         ),
         iconTheme: const IconThemeData(
           color: AppColor.primaryAppColor,
           size: 20,
         ),
         selectedIconTheme: const IconThemeData(
-          color: Colors.white,
+          color: Colors.black,
           size: 20,
         ),
       ),
+      showToggleButton: false,
       extendedTheme: const SidebarXTheme(
         width: 200,
         decoration: BoxDecoration(
@@ -161,83 +155,430 @@ class LeftSidebarX extends StatelessWidget {
             sidebarController.navigateTo(kIsWeb ? '/index' : '/home', 0);
           },
         ),
-        SidebarXItem(
-          icon: Icons.work,
-          label: 'Şirket Bilgileri',
-          onTap: () {
-            sidebarController.navigateTo('/company', 1);
-          },
-        ),
-        SidebarXItem(
-          icon: Icons.type_specimen,
-          label: 'Çalışan Türleri',
-          onTap: () {
-            sidebarController.navigateTo('/employee-types', 2);
-          },
-        ),
-        SidebarXItem(
-          icon: Icons.group_work_outlined,
-          label: 'Bölümler',
-          onTap: () {
-            sidebarController.navigateTo('/departments', 3);
-          },
-        ),
-        SidebarXItem(
-          icon: Icons.people,
-          label: 'Çalışanlar',
-          onTap: () {
-            sidebarController.navigateTo('/employee', 4);
-          },
-        ),
-        SidebarXItem(
-          icon: Icons.location_pin,
-          label: 'Lokasyon ve QR',
-          onTap: () {
-            sidebarController.navigateTo('/qrcode-list', 5);
-          },
-        ),
-        SidebarXItem(
-          icon: Icons.door_sliding_outlined,
-          label: 'Giriş Çıkışlar',
-          onTap: () {
-            sidebarController.navigateTo('/events', 6);
-          },
-        ),
-        SidebarXItem(
-          icon: Icons.calendar_month_outlined,
-          label: 'Çalışma Takvimi',
-          onTap: () {
-            sidebarController.navigateTo('/shifts', 7);
-          },
-        ),
-        SidebarXItem(
-          icon: Icons.beach_access,
-          label: 'Tatil Girişi',
-          onTap: () {
-            sidebarController.navigateTo('/shift-employee', 8);
-          },
-        ),
-        SidebarXItem(
-          icon: Icons.settings,
-          label: 'Vardiya Planı',
-          onTap: () {
-            sidebarController.navigateTo('/shift-plan', 9);
-          },
-        ),
-        SidebarXItem(
-          icon: Icons.request_page,
-          label: 'Talep Oluştur',
-          onTap: () {
-            sidebarController.navigateTo('/leave', 10);
-          },
-        ),
-        SidebarXItem(
-          icon: Icons.settings,
-          label: 'Şirket Ayarları',
-          onTap: () {
-            sidebarController.navigateTo('/company-settigs-details', 11);
-          },
-        ),
+        if (sidebarController.hasPermission('CompanyService'))
+          SidebarXItem(
+            selectable: false,
+            iconBuilder: (context, selected) => MouseRegion(
+              onEnter: (_) {
+                sidebarController.setGroupHover(true, 'company');
+              },
+              onExit: (_) {
+                sidebarController.setGroupHover(false, 'company');
+              },
+              child: SizedBox(
+                width: !_controller.extended ? 60 : 170,
+                child: Obx(() {
+                  return ExpansionTile(
+                    initiallyExpanded: (_controller.selectedIndex >= 101 &&
+                        _controller.selectedIndex <= 199),
+                    tilePadding: EdgeInsets.zero,
+                    childrenPadding: EdgeInsets.zero,
+                    visualDensity: VisualDensity.compact,
+                    minTileHeight: 20,
+                    backgroundColor: Colors.transparent,
+                    collapsedBackgroundColor: Colors.transparent,
+                    enabled: true,
+                    leading: Icon(Icons.business,
+                        size: 20,
+                        color: (sidebarController.isGroupHovered("company") ||
+                                (_controller.selectedIndex >= 101 &&
+                                    _controller.selectedIndex <= 199))
+                            ? Colors.black
+                            : AppColor.primaryAppColor),
+                    collapsedIconColor:
+                        (sidebarController.isGroupHovered("company") ||
+                                (_controller.selectedIndex >= 101 &&
+                                    _controller.selectedIndex <= 199))
+                            ? Colors.black
+                            : AppColor.primaryAppColor,
+                    iconColor: (sidebarController.isGroupHovered("company") ||
+                            (_controller.selectedIndex >= 101 &&
+                                _controller.selectedIndex <= 199))
+                        ? Colors.black
+                        : AppColor.primaryAppColor,
+                    title: SizedBox(
+                      height: 20,
+                      child: Text(
+                        !_controller.extended ? ' ' : 'Şirket İşlemleri',
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color:
+                                (sidebarController.isGroupHovered("company") ||
+                                        (_controller.selectedIndex >= 101 &&
+                                            _controller.selectedIndex <= 199))
+                                    ? Colors.black
+                                    : AppColor.primaryAppColor),
+                      ),
+                    ),
+                    collapsedShape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero,
+                    ),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero,
+                    ),
+                    children: [
+                      ListTile(
+                        minTileHeight: 20,
+                        leading: Icon(Icons.work,
+                            size: !_controller.extended ? 17 : 20,
+                            color: (_controller.selectedIndex == 101)
+                                ? Colors.black
+                                : AppColor.primaryAppColor),
+                        title: Text(
+                          !_controller.extended ? ' ' : 'Şirketler',
+                          style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: (_controller.selectedIndex == 101)
+                                  ? Colors.black
+                                  : AppColor.primaryAppColor),
+                        ),
+                        onTap: () {
+                          sidebarController.navigateTo('/company', 101);
+                        },
+                      ),
+                      ListTile(
+                        minTileHeight: 20,
+                        leading: Icon(Icons.group_work_outlined,
+                            size: !_controller.extended ? 17 : 20,
+                            color: (_controller.selectedIndex == 102)
+                                ? Colors.black
+                                : AppColor.primaryAppColor),
+                        title: Text(
+                          !_controller.extended ? ' ' : 'Bölümler',
+                          style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: (_controller.selectedIndex == 102)
+                                  ? Colors.black
+                                  : AppColor.primaryAppColor),
+                        ),
+                        onTap: () {
+                          sidebarController.navigateTo('/departments', 102);
+                        },
+                      ),
+                      ListTile(
+                        minTileHeight: 20,
+                        leading: Icon(Icons.type_specimen,
+                            size: !_controller.extended ? 17 : 20,
+                            color: (_controller.selectedIndex == 103)
+                                ? Colors.black
+                                : AppColor.primaryAppColor),
+                        title: Text(
+                          !_controller.extended ? ' ' : 'Çalışan Türleri',
+                          style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: (_controller.selectedIndex == 103)
+                                  ? Colors.black
+                                  : AppColor.primaryAppColor),
+                        ),
+                        onTap: () {
+                          sidebarController.navigateTo('/employee-types', 103);
+                        },
+                      ),
+                      ListTile(
+                        minTileHeight: 20,
+                        leading: Icon(Icons.people,
+                            size: !_controller.extended ? 17 : 20,
+                            color: (_controller.selectedIndex == 104)
+                                ? Colors.black
+                                : AppColor.primaryAppColor),
+                        title: Text(
+                          !_controller.extended ? ' ' : 'Çalışanlar',
+                          style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: (_controller.selectedIndex == 104)
+                                  ? Colors.black
+                                  : AppColor.primaryAppColor),
+                        ),
+                        onTap: () {
+                          sidebarController.navigateTo('/employee', 104);
+                        },
+                      ),
+                      ListTile(
+                        minTileHeight: 20,
+                        leading: Icon(Icons.settings,
+                            size: !_controller.extended ? 17 : 20,
+                            color: (_controller.selectedIndex == 105)
+                                ? Colors.black
+                                : AppColor.primaryAppColor),
+                        title: Text(
+                          !_controller.extended ? ' ' : 'Ayarlar',
+                          style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: (_controller.selectedIndex == 105)
+                                  ? Colors.black
+                                  : AppColor.primaryAppColor),
+                        ),
+                        onTap: () {
+                          sidebarController.navigateTo(
+                              '/company-settigs-details', 105);
+                        },
+                      ),
+                    ],
+                  );
+                }),
+              ),
+            ),
+          ),
+        if (sidebarController.hasPermission('UserRoleService'))
+          SidebarXItem(
+            selectable: false,
+            iconBuilder: (context, selected) => MouseRegion(
+              onEnter: (_) {
+                sidebarController.setGroupHover(true, 'role');
+              },
+              onExit: (_) {
+                sidebarController.setGroupHover(false, 'role');
+              },
+              child: SizedBox(
+                width: !_controller.extended ? 60 : 170,
+                child: Obx(() {
+                  return ExpansionTile(
+                    initiallyExpanded: (_controller.selectedIndex >= 201 &&
+                        _controller.selectedIndex <= 299),
+                    tilePadding: EdgeInsets.zero,
+                    childrenPadding: EdgeInsets.zero,
+                    visualDensity: VisualDensity.compact,
+                    minTileHeight: 20,
+                    backgroundColor: Colors.transparent,
+                    collapsedBackgroundColor: Colors.transparent,
+                    enabled: true,
+                    leading: Icon(Icons.settings_accessibility,
+                        size: 20,
+                        color: (sidebarController.isGroupHovered("role") ||
+                                (_controller.selectedIndex >= 201 &&
+                                    _controller.selectedIndex <= 299))
+                            ? Colors.black
+                            : AppColor.primaryAppColor),
+                    collapsedIconColor:
+                        (sidebarController.isGroupHovered("role") ||
+                                (_controller.selectedIndex >= 201 &&
+                                    _controller.selectedIndex <= 299))
+                            ? Colors.black
+                            : AppColor.primaryAppColor,
+                    iconColor: (sidebarController.isGroupHovered("role") ||
+                            (_controller.selectedIndex >= 201 &&
+                                _controller.selectedIndex <= 299))
+                        ? Colors.black
+                        : AppColor.primaryAppColor,
+                    title: Text(
+                      !_controller.extended ? ' ' : 'Rol İşlemleri',
+                      style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: (sidebarController.isGroupHovered("role") ||
+                                  (_controller.selectedIndex >= 201 &&
+                                      _controller.selectedIndex <= 299))
+                              ? Colors.black
+                              : AppColor.primaryAppColor),
+                    ),
+                    collapsedShape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero,
+                    ),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero,
+                    ),
+                    children: [
+                      ListTile(
+                        minTileHeight: 20,
+                        leading: Icon(Icons.edit,
+                            size: !_controller.extended ? 17 : 20,
+                            color: (_controller.selectedIndex == 201)
+                                ? Colors.black
+                                : AppColor.primaryAppColor),
+                        title: Text(
+                          !_controller.extended ? ' ' : 'Rol / Yetki',
+                          style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: (_controller.selectedIndex == 201)
+                                  ? Colors.black
+                                  : AppColor.primaryAppColor),
+                        ),
+                        onTap: () {
+                          sidebarController.navigateTo('/roles', 201);
+                        },
+                      ),
+                      ListTile(
+                        minTileHeight: 20,
+                        leading: Icon(Icons.add_moderator,
+                            size: !_controller.extended ? 17 : 20,
+                            color: (_controller.selectedIndex == 202)
+                                ? Colors.black
+                                : AppColor.primaryAppColor),
+                        title: Text(
+                          !_controller.extended ? ' ' : 'Rol Atama',
+                          style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: (_controller.selectedIndex == 202)
+                                  ? Colors.black
+                                  : AppColor.primaryAppColor),
+                        ),
+                        onTap: () {
+                          sidebarController.navigateTo('/employee-roles', 202);
+                        },
+                      ),
+                    ],
+                  );
+                }),
+              ),
+            ),
+          ),
+        if (sidebarController.hasPermission('ShiftService'))
+          SidebarXItem(
+            selectable: false,
+            iconBuilder: (context, selected) => MouseRegion(
+              onEnter: (_) {
+                sidebarController.setGroupHover(true, 'shift');
+              },
+              onExit: (_) {
+                sidebarController.setGroupHover(false, 'shift');
+              },
+              child: SizedBox(
+                width: !_controller.extended ? 60 : 170,
+                child: Obx(() {
+                  return ExpansionTile(
+                    initiallyExpanded: (_controller.selectedIndex == 301 ||
+                        (_controller.selectedIndex >= 301 &&
+                            _controller.selectedIndex <= 399)),
+                    tilePadding: EdgeInsets.zero,
+                    childrenPadding: EdgeInsets.zero,
+                    visualDensity: VisualDensity.compact,
+                    minTileHeight: 20,
+                    backgroundColor: Colors.transparent,
+                    collapsedBackgroundColor: Colors.transparent,
+                    enabled: true,
+                    leading: Icon(Icons.calendar_month,
+                        size: 20,
+                        color: (sidebarController.isGroupHovered("shift") ||
+                                (_controller.selectedIndex >= 301 &&
+                                    _controller.selectedIndex <= 399))
+                            ? Colors.black
+                            : AppColor.primaryAppColor),
+                    collapsedIconColor:
+                        (sidebarController.isGroupHovered("shift") ||
+                                (_controller.selectedIndex >= 301 &&
+                                    _controller.selectedIndex <= 399))
+                            ? Colors.black
+                            : AppColor.primaryAppColor,
+                    iconColor: (sidebarController.isGroupHovered("shift") ||
+                            (_controller.selectedIndex >= 301 &&
+                                _controller.selectedIndex <= 399))
+                        ? Colors.black
+                        : AppColor.primaryAppColor,
+                    title: Text(
+                      !_controller.extended ? ' ' : 'Vardiya İşlemleri',
+                      style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: (sidebarController.isGroupHovered("shift") ||
+                                  (_controller.selectedIndex >= 301 &&
+                                      _controller.selectedIndex <= 399))
+                              ? Colors.black
+                              : AppColor.primaryAppColor),
+                    ),
+                    collapsedShape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero,
+                    ),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero,
+                    ),
+                    children: [
+                      ListTile(
+                        minTileHeight: 20,
+                        leading: Icon(Icons.calendar_month_outlined,
+                            size: !_controller.extended ? 17 : 20,
+                            color: (_controller.selectedIndex == 301)
+                                ? Colors.black
+                                : AppColor.primaryAppColor),
+                        title: Text(
+                          !_controller.extended ? ' ' : 'Çalışma Takvimi',
+                          style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: (_controller.selectedIndex == 301)
+                                  ? Colors.black
+                                  : AppColor.primaryAppColor),
+                        ),
+                        onTap: () {
+                          sidebarController.navigateTo('/shifts', 301);
+                        },
+                      ),
+                      ListTile(
+                        minTileHeight: 20,
+                        leading: Icon(Icons.beach_access,
+                            size: !_controller.extended ? 17 : 20,
+                            color: (_controller.selectedIndex == 302)
+                                ? Colors.black
+                                : AppColor.primaryAppColor),
+                        title: Text(
+                          !_controller.extended ? ' ' : 'Tatil Girişi',
+                          style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: (_controller.selectedIndex == 302)
+                                  ? Colors.black
+                                  : AppColor.primaryAppColor),
+                        ),
+                        onTap: () {
+                          sidebarController.navigateTo('/shift-employee', 302);
+                        },
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.add_moderator,
+                            size: !_controller.extended ? 17 : 20,
+                            color: (_controller.selectedIndex == 303)
+                                ? Colors.black
+                                : AppColor.primaryAppColor),
+                        title: Text(
+                          !_controller.extended ? ' ' : 'Vardiya Planı',
+                          style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: (_controller.selectedIndex == 303)
+                                  ? Colors.black
+                                  : AppColor.primaryAppColor),
+                        ),
+                        onTap: () {
+                          sidebarController.navigateTo('/shift-plan', 303);
+                        },
+                      ),
+                    ],
+                  );
+                }),
+              ),
+            ),
+          ),
+        if (sidebarController.hasPermission('QRCodeSettingService'))
+          SidebarXItem(
+            icon: Icons.location_pin,
+            label: 'Lokasyon ve QR',
+            onTap: () {
+              sidebarController.navigateTo('/qrcode-list', 4);
+            },
+          ),
+        if (sidebarController.hasPermission('WorkEntryExitEventService'))
+          SidebarXItem(
+            icon: Icons.door_sliding_outlined,
+            label: 'Giriş Çıkışlar',
+            onTap: () {
+              sidebarController.navigateTo('/events', 5);
+            },
+          ),
+        if (sidebarController.hasPermission('LeaveRequestService'))
+          SidebarXItem(
+            icon: Icons.request_page,
+            label: 'Talep Oluştur',
+            onTap: () {
+              sidebarController.navigateTo('/leave', 6);
+            },
+          ),
       ],
     );
   }

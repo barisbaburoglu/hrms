@@ -12,6 +12,7 @@ import '../widgets/edit_form_employee.dart';
 class EmployeeController extends GetxController {
   final ScrollController scrollController = ScrollController();
 
+  TextEditingController searchController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController surnameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -41,8 +42,6 @@ class EmployeeController extends GetxController {
   var isAllEmployeesSelected = false.obs;
 
   var filteredEmployees = <Employee>[].obs;
-
-  var employeeSearchQuery = ''.obs;
 
   @override
   void onInit() {
@@ -135,7 +134,7 @@ class EmployeeController extends GetxController {
   }
 
   void searchEmployees(String query) {
-    employeeSearchQuery.value = query;
+    searchController.text = query;
     if (query.isEmpty) {
       filteredEmployees.value = employees;
     } else {

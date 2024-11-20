@@ -6,7 +6,6 @@ import 'package:get_storage/get_storage.dart';
 import '../api/models/attendance_summary_model.dart';
 import '../constants/colors.dart';
 import '../widgets/edit_event_entry_exit.dart';
-import '../widgets/no_qr_event_popup.dart';
 
 class DashboardController extends GetxController {
   GetStorage storageBox = GetStorage();
@@ -41,8 +40,8 @@ class DashboardController extends GetxController {
   }
 
   void fetchAttendanceSummary() async {
-    String userName = storageBox.read('name');
-    String userSurName = storageBox.read('surname');
+    String userName = storageBox.read('name') ?? "";
+    String userSurName = storageBox.read('surname') ?? "";
 
     userNameSurname.value = "$userName $userSurName";
     // Örnek veri, burada verileri API'den alabilirsiniz

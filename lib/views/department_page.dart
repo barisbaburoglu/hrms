@@ -11,7 +11,7 @@ import 'master_scaffold.dart';
 class DepartmentPage extends StatelessWidget {
   final DepartmentController controller = Get.put(DepartmentController());
   final SidebarXController sidebarController =
-      SidebarXController(selectedIndex: 3, extended: true);
+      SidebarXController(selectedIndex: 102, extended: true);
 
   DepartmentPage({super.key});
 

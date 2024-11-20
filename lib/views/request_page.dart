@@ -12,7 +12,7 @@ import 'master_scaffold.dart';
 class LeavePage extends StatelessWidget {
   final RequestController controller = Get.put(RequestController());
   final SidebarXController sidebarController =
-      SidebarXController(selectedIndex: 10, extended: true);
+      SidebarXController(selectedIndex: 6, extended: true);
 
   LeavePage({super.key});
 

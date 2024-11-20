@@ -17,7 +17,7 @@ class EmployeeRolePage extends StatelessWidget {
   final RoleController controller = Get.put(RoleController());
 
   final SidebarXController sidebarController =
-      SidebarXController(selectedIndex: 1, extended: true);
+      SidebarXController(selectedIndex: 202, extended: true);
 
   EmployeeRolePage({super.key});
 
@@ -112,7 +112,9 @@ class EmployeeRolePage extends StatelessWidget {
                                             errorRequired: false,
                                             isLabel: true,
                                             label: "Çalışan Ara",
-                                            controller: TextEditingController(),
+                                            controller: controller
+                                                .employeesController
+                                                .searchController,
                                             margin: EdgeInsets.zero,
                                             textInputType: TextInputType.text,
                                             inputFormatters: const [],

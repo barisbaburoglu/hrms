@@ -1,25 +1,23 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:hrms/api/models/user_role_actions_model.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:universal_html/html.dart' as html;
 
-import 'api/services/notification_service.dart';
+import 'package:hrms/api/models/user_role_actions_model.dart';
+
 import 'constants/colors.dart';
 import 'themes/checkbox_theme.dart';
 import 'themes/scrollbar_theme.dart';
-import 'views/companies_settings_page.dart';
 import 'views/company_page.dart';
 import 'views/company_settings_details_page.dart';
 import 'views/dashboard.dart';
 import 'views/department_page.dart';
-import 'views/employee_role_page.dart';
 import 'views/employee_page.dart';
+import 'views/employee_role_page.dart';
 import 'views/employee_type_page.dart';
 import 'views/events_entry_exit_page.dart';
 import 'views/home_page.dart';
@@ -152,15 +150,6 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/employee-roles',
           page: () => loadPage(EmployeeRolePage()),
-          middlewares: [
-            AuthMiddleware(
-              requiredGrups: [
-                'EmployeeService',
-                'UserRoleService',
-                'UserRoleActionServices',
-              ],
-            ),
-          ],
         ),
         GetPage(
           name: '/roles',
@@ -274,17 +263,6 @@ class MyApp extends StatelessWidget {
             AuthMiddleware(
               requiredGrups: [
                 'LeaveRequestService',
-              ],
-            ),
-          ],
-        ),
-        GetPage(
-          name: '/companies-settings',
-          page: () => loadPage(CompaniesSettingsPage()),
-          middlewares: [
-            AuthMiddleware(
-              requiredGrups: [
-                'CompanyService',
               ],
             ),
           ],

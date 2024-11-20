@@ -8,9 +8,11 @@ import '../api/models/weekly_shift_grouped_model.dart';
 import '../constants/colors.dart';
 import '../constants/dimensions.dart';
 import '../widgets/base_button.dart';
+import '../widgets/base_input.dart';
 import '../widgets/page_title.dart';
 import '../widgets/shift_plan_items_mobile.dart';
 import '../widgets/shift_plan_items_web.dart';
+import '../widgets/shift_plan_items_web_dash.dart';
 import '../widgets/shift_plan_title.dart';
 import 'master_scaffold.dart';
 
@@ -18,7 +20,7 @@ class ShiftPlanPage extends StatelessWidget {
   final ShiftPlanController controller = Get.put(ShiftPlanController());
 
   final SidebarXController sidebarController =
-      SidebarXController(selectedIndex: 9, extended: true);
+      SidebarXController(selectedIndex: 303, extended: true);
 
   ShiftPlanPage({super.key});
 
@@ -86,9 +88,37 @@ class ShiftPlanPage extends StatelessWidget {
                             : SizedBox(
                                 width: width,
                                 child: screenWidth >= 1280
-                                    ? ShiftPlanItemsWeb(controller: controller)
-                                    : ShiftPlanItemsMobile(
-                                        controller: controller),
+                                    ? Column(
+                                        children: [
+                                          SizedBox(
+                                            width: 300,
+                                            height: 30,
+                                            child: BaseInput(
+                                              errorRequired: false,
+                                              isLabel: true,
+                                              label: "Ara...",
+                                              controller:
+                                                  controller.searchController,
+                                              margin: EdgeInsets.zero,
+                                              textInputType: TextInputType.text,
+                                              inputFormatters: const [],
+                                              onChanged: (value) {
+                                                controller
+                                                    .searchWeeklyShift(value);
+                                              },
+                                            ),
+                                          ),
+                                          Expanded(
+                                              child: ShiftPlanItemsWeb(
+                                                  controller: controller)),
+                                        ],
+                                      )
+                                    : Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: AppDimension.kSpacing),
+                                        child: ShiftPlanItemsMobile(
+                                            controller: controller),
+                                      ),
                               ),
                   ),
                 ],

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:sidebarx/sidebarx.dart';
 
 import '../constants/colors.dart';
@@ -13,8 +12,7 @@ import '../controllers/shift_plan_controller.dart';
 import '../widgets/base_button.dart';
 import '../widgets/brief_card.dart';
 import '../widgets/shift_plan_items_mobile.dart';
-import '../widgets/shift_plan_items_web.dart';
-import '../widgets/shift_plan_title.dart';
+import '../widgets/shift_plan_items_web_dash.dart';
 import 'master_scaffold.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -43,434 +41,446 @@ class DashboardPage extends StatelessWidget {
           return Center(
             child: controller.userNameSurname.value.isEmpty
                 ? const CircularProgressIndicator()
-                : SizedBox(
-                    width: width,
-                    height: double.infinity,
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: AppDimension.kSpacing),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                left: AppDimension.kSpacing,
-                                top: AppDimension.kSpacing,
-                              ),
-                              child: SizedBox(
-                                width: width,
-                                child: Text(
-                                  "${controller.userNameSurname} Hoşgeldiniz!",
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
+                : Obx(() {
+                    return SizedBox(
+                      width: width,
+                      height: double.infinity,
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: AppDimension.kSpacing),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: AppDimension.kSpacing,
+                                  top: AppDimension.kSpacing,
+                                ),
+                                child: SizedBox(
+                                  width: width,
+                                  child: Text(
+                                    "${controller.userNameSurname} Hoşgeldiniz!",
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
 
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: AppDimension.kSpacing / 2,
-                                  horizontal: AppDimension.kSpacing),
-                              child: StaggeredGrid.count(
-                                crossAxisCount: screenWidth <= 600
-                                    ? 1
-                                    : (screenWidth > 600 && screenWidth <= 890)
-                                        ? 2
-                                        : 4,
-                                mainAxisSpacing: AppDimension.kSpacing,
-                                crossAxisSpacing: AppDimension.kSpacing,
-                                children: [
-                                  StaggeredGridTile.extent(
-                                    crossAxisCellCount: 1,
-                                    mainAxisExtent: 100,
-                                    child: BriefCard(
-                                      backgroundColor: AppColor.primaryPink,
-                                      title: "Çalışanlar".toUpperCase(),
-                                      value: controller.attendanceSummary.value!
-                                          .present.totalCount
-                                          .toString(),
-                                      icon: const Icon(
-                                        Icons.check,
-                                        color: AppColor.canvasColor,
-                                        size: 30,
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: AppDimension.kSpacing / 2,
+                                    horizontal: AppDimension.kSpacing),
+                                child: StaggeredGrid.count(
+                                  crossAxisCount: screenWidth <= 600
+                                      ? 1
+                                      : (screenWidth > 600 &&
+                                              screenWidth <= 890)
+                                          ? 2
+                                          : 4,
+                                  mainAxisSpacing: AppDimension.kSpacing,
+                                  crossAxisSpacing: AppDimension.kSpacing,
+                                  children: [
+                                    StaggeredGridTile.extent(
+                                      crossAxisCellCount: 1,
+                                      mainAxisExtent: 100,
+                                      child: BriefCard(
+                                        backgroundColor: AppColor.primaryPink,
+                                        title: "Çalışanlar".toUpperCase(),
+                                        value: controller.attendanceSummary
+                                            .value!.present.totalCount
+                                            .toString(),
+                                        icon: const Icon(
+                                          Icons.check,
+                                          color: AppColor.canvasColor,
+                                          size: 30,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  StaggeredGridTile.extent(
-                                    crossAxisCellCount: 1,
-                                    mainAxisExtent: 100,
-                                    child: BriefCard(
-                                      backgroundColor: AppColor.primaryPurple,
-                                      title: "Geç Gelenler".toUpperCase(),
-                                      value: controller.attendanceSummary.value!
-                                          .late.totalCount
-                                          .toString(),
-                                      icon: const Icon(
-                                        Icons.watch_later,
-                                        color: AppColor.canvasColor,
-                                        size: 30,
+                                    StaggeredGridTile.extent(
+                                      crossAxisCellCount: 1,
+                                      mainAxisExtent: 100,
+                                      child: BriefCard(
+                                        backgroundColor: AppColor.primaryPurple,
+                                        title: "Geç Gelenler".toUpperCase(),
+                                        value: controller.attendanceSummary
+                                            .value!.late.totalCount
+                                            .toString(),
+                                        icon: const Icon(
+                                          Icons.watch_later,
+                                          color: AppColor.canvasColor,
+                                          size: 30,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  StaggeredGridTile.extent(
-                                    crossAxisCellCount: 1,
-                                    mainAxisExtent: 100,
-                                    child: BriefCard(
-                                      backgroundColor: AppColor.primaryBlue,
-                                      title: "İzinliler".toUpperCase(),
-                                      value: controller.attendanceSummary.value!
-                                          .onLeave.totalCount
-                                          .toString(),
-                                      icon: const Icon(
-                                        Icons.beach_access_outlined,
-                                        color: AppColor.canvasColor,
-                                        size: 30,
+                                    StaggeredGridTile.extent(
+                                      crossAxisCellCount: 1,
+                                      mainAxisExtent: 100,
+                                      child: BriefCard(
+                                        backgroundColor: AppColor.primaryBlue,
+                                        title: "İzinliler".toUpperCase(),
+                                        value: controller.attendanceSummary
+                                            .value!.onLeave.totalCount
+                                            .toString(),
+                                        icon: const Icon(
+                                          Icons.beach_access_outlined,
+                                          color: AppColor.canvasColor,
+                                          size: 30,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  StaggeredGridTile.extent(
-                                    crossAxisCellCount: 1,
-                                    mainAxisExtent: 100,
-                                    child: BriefCard(
-                                      backgroundColor:
-                                          AppColor.primaryTurquoise,
-                                      title: "Gelmeyenler".toUpperCase(),
-                                      value: controller.attendanceSummary.value!
-                                          .absent.totalCount
-                                          .toString(),
-                                      icon: const Icon(
-                                        Icons.block,
-                                        color: AppColor.canvasColor,
-                                        size: 30,
+                                    StaggeredGridTile.extent(
+                                      crossAxisCellCount: 1,
+                                      mainAxisExtent: 100,
+                                      child: BriefCard(
+                                        backgroundColor:
+                                            AppColor.primaryTurquoise,
+                                        title: "Gelmeyenler".toUpperCase(),
+                                        value: controller.attendanceSummary
+                                            .value!.absent.totalCount
+                                            .toString(),
+                                        icon: const Icon(
+                                          Icons.block,
+                                          color: AppColor.canvasColor,
+                                          size: 30,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
 
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: AppDimension.kSpacing / 2,
-                                  horizontal: AppDimension.kSpacing),
-                              child: StaggeredGrid.count(
-                                crossAxisCount: 12,
-                                mainAxisSpacing: AppDimension.kSpacing,
-                                crossAxisSpacing: AppDimension.kSpacing,
-                                children: [
-                                  StaggeredGridTile.count(
-                                    crossAxisCellCount: 8,
-                                    mainAxisCellCount: 4,
-                                    child: Card(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.0),
-                                      ),
-                                      child: ShiftPlanItemsMobile(
-                                          controller: controllerShiftPlan),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: AppDimension.kSpacing),
+                                child: StaggeredGrid.count(
+                                  crossAxisCount: 12,
+                                  mainAxisSpacing: AppDimension.kSpacing,
+                                  crossAxisSpacing: AppDimension.kSpacing,
+                                  children: [
+                                    StaggeredGridTile.extent(
+                                      crossAxisCellCount:
+                                          screenWidth < 1360 ? 12 : 8,
+                                      mainAxisExtent: 400,
+                                      child: screenWidth < 1200
+                                          ? ShiftPlanItemsMobile(
+                                              controller: controllerShiftPlan)
+                                          : ShiftPlanItemsWebDash(
+                                              controller: controllerShiftPlan),
                                     ),
-                                  ),
-                                  StaggeredGridTile.count(
-                                    crossAxisCellCount: 4,
-                                    mainAxisCellCount: 3,
-                                    child: Card(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.0),
-                                      ),
-                                      child: Obx(
-                                        () => SizedBox(
-                                          width: double.infinity,
-                                          child: SizedBox(
-                                            width: width,
-                                            child: DefaultTabController(
-                                              length: 3,
-                                              child: Column(
-                                                children: [
-                                                  const TabBar(
-                                                    indicatorColor:
-                                                        Colors.transparent,
-                                                    dividerColor:
-                                                        Colors.transparent,
-                                                    indicator:
-                                                        UnderlineTabIndicator(
-                                                      borderSide: BorderSide(
-                                                          color: AppColor
-                                                              .primaryAppColor,
-                                                          width: 4),
-                                                    ),
-                                                    indicatorSize:
-                                                        TabBarIndicatorSize.tab,
-                                                    tabs: [
-                                                      Tab(
-                                                        child: Text(
-                                                          "Giriş/Çıkış Talepleri",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          maxLines: 2,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                        ),
+                                    StaggeredGridTile.extent(
+                                      crossAxisCellCount: screenWidth < 720
+                                          ? 12
+                                          : screenWidth < 1360
+                                              ? 7
+                                              : 4,
+                                      mainAxisExtent: 300,
+                                      child: Card(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5.0),
+                                        ),
+                                        child: Obx(
+                                          () => SizedBox(
+                                            width: double.infinity,
+                                            child: SizedBox(
+                                              width: width,
+                                              child: DefaultTabController(
+                                                length: 3,
+                                                child: Column(
+                                                  children: [
+                                                    const TabBar(
+                                                      indicatorColor:
+                                                          Colors.transparent,
+                                                      dividerColor:
+                                                          Colors.transparent,
+                                                      indicator:
+                                                          UnderlineTabIndicator(
+                                                        borderSide: BorderSide(
+                                                            color: AppColor
+                                                                .primaryAppColor,
+                                                            width: 4),
                                                       ),
-                                                      Tab(
-                                                        child: Text(
-                                                          "İzin Talepleri",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          maxLines: 2,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
+                                                      indicatorSize:
+                                                          TabBarIndicatorSize
+                                                              .tab,
+                                                      tabs: [
+                                                        Tab(
+                                                          child: Text(
+                                                            "Giriş/Çıkış Talepleri",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            maxLines: 2,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ),
                                                         ),
-                                                      ),
-                                                      Tab(
-                                                        child: Text(
-                                                          "Diğer Talepler",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          maxLines: 2,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
+                                                        Tab(
+                                                          child: Text(
+                                                            "İzin Talepleri",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            maxLines: 2,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  const SizedBox(
-                                                      height: AppDimension
-                                                              .kSpacing /
-                                                          2),
-                                                  SizedBox(
-                                                    height: 200,
-                                                    child: TabBarView(
-                                                      children: [
-                                                        Column(
-                                                          children: [
-                                                            const SizedBox(
-                                                              height: AppDimension
-                                                                      .kSpacing /
-                                                                  2,
-                                                            ),
-                                                            SizedBox(
-                                                                width: width,
-                                                                child:
-                                                                    titleEventCardWidget()),
-                                                            Expanded(
-                                                              child: controllerRequest
-                                                                      .leaves
-                                                                      .isEmpty
-                                                                  ? const Center(
-                                                                      child:
-                                                                          CircularProgressIndicator())
-                                                                  : SizedBox(
-                                                                      width:
-                                                                          width,
-                                                                      child:
-                                                                          itemsEntryExitEventExceptionsWidget()),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        Column(
-                                                          children: [
-                                                            const SizedBox(
-                                                              height: AppDimension
-                                                                      .kSpacing /
-                                                                  2,
-                                                            ),
-                                                            SizedBox(
-                                                                width: width,
-                                                                child:
-                                                                    titleCardWidget()),
-                                                            Expanded(
-                                                              child: controllerRequest
-                                                                      .leaves
-                                                                      .isEmpty
-                                                                  ? const Center(
-                                                                      child:
-                                                                          CircularProgressIndicator())
-                                                                  : SizedBox(
-                                                                      width:
-                                                                          width,
-                                                                      child:
-                                                                          itemsLeaveRequestsWidget()),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        Column(
-                                                          children: [
-                                                            const SizedBox(
-                                                              height: AppDimension
-                                                                      .kSpacing /
-                                                                  2,
-                                                            ),
-                                                            SizedBox(
-                                                                width: width,
-                                                                child:
-                                                                    titleEmployeeRequestCardWidget()),
-                                                            Expanded(
-                                                              child: controllerRequest
-                                                                      .leaves
-                                                                      .isEmpty
-                                                                  ? const Center(
-                                                                      child:
-                                                                          CircularProgressIndicator())
-                                                                  : SizedBox(
-                                                                      width:
-                                                                          width,
-                                                                      child:
-                                                                          itemsEmployeeRequestsWidget()),
-                                                            ),
-                                                          ],
+                                                        Tab(
+                                                          child: Text(
+                                                            "Diğer Talepler",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            maxLines: 2,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ),
                                                         ),
                                                       ],
                                                     ),
-                                                  ),
-                                                ],
+                                                    const SizedBox(
+                                                        height: AppDimension
+                                                                .kSpacing /
+                                                            2),
+                                                    SizedBox(
+                                                      height: 200,
+                                                      child: TabBarView(
+                                                        children: [
+                                                          Column(
+                                                            children: [
+                                                              const SizedBox(
+                                                                height: AppDimension
+                                                                        .kSpacing /
+                                                                    2,
+                                                              ),
+                                                              SizedBox(
+                                                                  width: width,
+                                                                  child:
+                                                                      titleEventCardWidget()),
+                                                              Expanded(
+                                                                child: controllerRequest
+                                                                        .leaves
+                                                                        .isEmpty
+                                                                    ? const Center(
+                                                                        child:
+                                                                            CircularProgressIndicator())
+                                                                    : SizedBox(
+                                                                        width:
+                                                                            width,
+                                                                        child:
+                                                                            itemsEntryExitEventExceptionsWidget()),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          Column(
+                                                            children: [
+                                                              const SizedBox(
+                                                                height: AppDimension
+                                                                        .kSpacing /
+                                                                    2,
+                                                              ),
+                                                              SizedBox(
+                                                                  width: width,
+                                                                  child:
+                                                                      titleCardWidget()),
+                                                              Expanded(
+                                                                child: controllerRequest
+                                                                        .leaves
+                                                                        .isEmpty
+                                                                    ? const Center(
+                                                                        child:
+                                                                            CircularProgressIndicator())
+                                                                    : SizedBox(
+                                                                        width:
+                                                                            width,
+                                                                        child:
+                                                                            itemsLeaveRequestsWidget()),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          Column(
+                                                            children: [
+                                                              const SizedBox(
+                                                                height: AppDimension
+                                                                        .kSpacing /
+                                                                    2,
+                                                              ),
+                                                              SizedBox(
+                                                                  width: width,
+                                                                  child:
+                                                                      titleEmployeeRequestCardWidget()),
+                                                              Expanded(
+                                                                child: controllerRequest
+                                                                        .leaves
+                                                                        .isEmpty
+                                                                    ? const Center(
+                                                                        child:
+                                                                            CircularProgressIndicator())
+                                                                    : SizedBox(
+                                                                        width:
+                                                                            width,
+                                                                        child:
+                                                                            itemsEmployeeRequestsWidget()),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  StaggeredGridTile.count(
-                                    crossAxisCellCount: 4,
-                                    mainAxisCellCount: 1,
-                                    child: Card(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.0),
-                                      ),
-                                      child: BaseButton(
-                                        label: "MANUEL GİRİŞ/ÇIKIŞ EKLE",
-                                        icon: const Icon(
-                                          Icons.add,
-                                          color: AppColor.secondaryText,
+                                    StaggeredGridTile.extent(
+                                      crossAxisCellCount: screenWidth < 720
+                                          ? 12
+                                          : screenWidth < 1360
+                                              ? 5
+                                              : 4,
+                                      mainAxisExtent: 80,
+                                      child: Card(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5.0),
                                         ),
-                                        onPressed: () {
-                                          controller.openEditEvent(
-                                              "Giriş/Çıkış Kaydı Oluşturma");
-                                        },
+                                        child: BaseButton(
+                                          label: "MANUEL GİRİŞ/ÇIKIŞ EKLE",
+                                          icon: const Icon(
+                                            Icons.add,
+                                            color: AppColor.secondaryText,
+                                          ),
+                                          onPressed: () {
+                                            controller.openEditEvent(
+                                                "Giriş/Çıkış Kaydı Oluşturma");
+                                          },
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  StaggeredGridTile.count(
-                                    crossAxisCellCount: 4,
-                                    mainAxisCellCount: 3,
-                                    child: Card(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.0),
-                                      ),
-                                    ),
-                                  ),
-                                  StaggeredGridTile.count(
-                                    crossAxisCellCount: 8,
-                                    mainAxisCellCount: 3,
-                                    child: Card(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.0),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                    // StaggeredGridTile.count(
+                                    //   crossAxisCellCount: 4,
+                                    //   mainAxisCellCount: 3,
+                                    //   child: Card(
+                                    //     shape: RoundedRectangleBorder(
+                                    //       borderRadius:
+                                    //           BorderRadius.circular(5.0),
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                    // StaggeredGridTile.count(
+                                    //   crossAxisCellCount: 8,
+                                    //   mainAxisCellCount: 3,
+                                    //   child: Card(
+                                    //     shape: RoundedRectangleBorder(
+                                    //       borderRadius:
+                                    //           BorderRadius.circular(5.0),
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                  ],
+                                ),
                               ),
-                            ),
 
-                            // const SizedBox(
-                            //     height: AppDimension
-                            //         .kSpacing), // Araya boşluk eklemek için
-                            // Obx(
-                            //   () {
-                            //     if (controller.attendanceSummary.value ==
-                            //         null) {
-                            //       return const Center(
-                            //           child: CircularProgressIndicator());
-                            //     }
-                            //     final summary =
-                            //         controller.attendanceSummary.value!;
-                            //     return MasonryGridView.count(
-                            //       shrinkWrap: true,
-                            //       physics: const NeverScrollableScrollPhysics(),
-                            //       padding: const EdgeInsets.all(
-                            //           AppDimension.kSpacing),
-                            //       crossAxisCount: screenWidth <= 600
-                            //           ? 1
-                            //           : (screenWidth > 600 &&
-                            //                   screenWidth <= 1190)
-                            //               ? 2
-                            //               : 4,
-                            //       mainAxisSpacing:
-                            //           AppDimension.dashContentSpacing,
-                            //       crossAxisSpacing:
-                            //           AppDimension.dashContentSpacing,
-                            //       itemCount: 5,
-                            //       itemBuilder: (context, index) {
-                            //         final category = [
-                            //           'present',
-                            //           'late',
-                            //           'absent',
-                            //           'onLeave',
-                            //           'leftEarly'
-                            //         ][index];
-                            //         final categoryData =
-                            //             summary.toJson()[category];
-                            //         final employees =
-                            //             (categoryData['employees'] as List)
-                            //                 .map((e) => e['name'] as String)
-                            //                 .toList();
+                              // const SizedBox(
+                              //     height: AppDimension
+                              //         .kSpacing), // Araya boşluk eklemek için
+                              // Obx(
+                              //   () {
+                              //     if (controller.attendanceSummary.value ==
+                              //         null) {
+                              //       return const Center(
+                              //           child: CircularProgressIndicator());
+                              //     }
+                              //     final summary =
+                              //         controller.attendanceSummary.value!;
+                              //     return MasonryGridView.count(
+                              //       shrinkWrap: true,
+                              //       physics: const NeverScrollableScrollPhysics(),
+                              //       padding: const EdgeInsets.all(
+                              //           AppDimension.kSpacing),
+                              //       crossAxisCount: screenWidth <= 600
+                              //           ? 1
+                              //           : (screenWidth > 600 &&
+                              //                   screenWidth <= 1190)
+                              //               ? 2
+                              //               : 4,
+                              //       mainAxisSpacing:
+                              //           AppDimension.dashContentSpacing,
+                              //       crossAxisSpacing:
+                              //           AppDimension.dashContentSpacing,
+                              //       itemCount: 5,
+                              //       itemBuilder: (context, index) {
+                              //         final category = [
+                              //           'present',
+                              //           'late',
+                              //           'absent',
+                              //           'onLeave',
+                              //           'leftEarly'
+                              //         ][index];
+                              //         final categoryData =
+                              //             summary.toJson()[category];
+                              //         final employees =
+                              //             (categoryData['employees'] as List)
+                              //                 .map((e) => e['name'] as String)
+                              //                 .toList();
 
-                            //         return ArrowBorderedCard(
-                            //           backgroundColor: AppColor.gradientWhite,
-                            //           body: Column(
-                            //             crossAxisAlignment:
-                            //                 CrossAxisAlignment.start,
-                            //             children: [
-                            //               Text(
-                            //                 controller.getTitle(category),
-                            //                 style: const TextStyle(
-                            //                   fontWeight: FontWeight.bold,
-                            //                   fontSize: 16,
-                            //                 ),
-                            //               ),
-                            //               Padding(
-                            //                 padding: const EdgeInsets.all(
-                            //                     AppDimension.kSpacing),
-                            //                 child: Column(
-                            //                   crossAxisAlignment:
-                            //                       CrossAxisAlignment.start,
-                            //                   children: [
-                            //                     ...employees
-                            //                         .map((name) => Column(
-                            //                               crossAxisAlignment:
-                            //                                   CrossAxisAlignment
-                            //                                       .start,
-                            //                               children: [
-                            //                                 Text(name),
-                            //                                 Divider(
-                            //                                   color: AppColor
-                            //                                       .primaryAppColor
-                            //                                       .withOpacity(
-                            //                                           0.25),
-                            //                                 ),
-                            //                               ],
-                            //                             )),
-                            //                   ],
-                            //                 ),
-                            //               ),
-                            //             ],
-                            //           ),
-                            //         );
-                            //       },
-                            //     );
-                            //   },
-                            // ),
-                          ],
+                              //         return ArrowBorderedCard(
+                              //           backgroundColor: AppColor.gradientWhite,
+                              //           body: Column(
+                              //             crossAxisAlignment:
+                              //                 CrossAxisAlignment.start,
+                              //             children: [
+                              //               Text(
+                              //                 controller.getTitle(category),
+                              //                 style: const TextStyle(
+                              //                   fontWeight: FontWeight.bold,
+                              //                   fontSize: 16,
+                              //                 ),
+                              //               ),
+                              //               Padding(
+                              //                 padding: const EdgeInsets.all(
+                              //                     AppDimension.kSpacing),
+                              //                 child: Column(
+                              //                   crossAxisAlignment:
+                              //                       CrossAxisAlignment.start,
+                              //                   children: [
+                              //                     ...employees
+                              //                         .map((name) => Column(
+                              //                               crossAxisAlignment:
+                              //                                   CrossAxisAlignment
+                              //                                       .start,
+                              //                               children: [
+                              //                                 Text(name),
+                              //                                 Divider(
+                              //                                   color: AppColor
+                              //                                       .primaryAppColor
+                              //                                       .withOpacity(
+                              //                                           0.25),
+                              //                                 ),
+                              //                               ],
+                              //                             )),
+                              //                   ],
+                              //                 ),
+                              //               ),
+                              //             ],
+                              //           ),
+                              //         );
+                              //       },
+                              //     );
+                              //   },
+                              // ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ),
+                    );
+                  }),
           );
         },
       ),

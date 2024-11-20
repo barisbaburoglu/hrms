@@ -17,11 +17,14 @@ class ShiftPlanItemsWeb extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: AppColor.cardBackgroundColor,
-      shadowColor: AppColor.cardShadowColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
       margin: const EdgeInsets.symmetric(
           horizontal: AppDimension.kSpacing,
           vertical: AppDimension.kSpacing / 2),
+      color: AppColor.cardBackgroundColor,
+      shadowColor: AppColor.cardShadowColor,
       child: Obx(
         () {
           return ListView.builder(

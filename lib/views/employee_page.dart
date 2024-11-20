@@ -6,13 +6,14 @@ import '../constants/colors.dart';
 import '../constants/dimensions.dart';
 import '../controllers/employee_controller.dart';
 import '../widgets/base_button.dart';
+import '../widgets/base_input.dart';
 import '../widgets/page_title.dart';
 import 'master_scaffold.dart';
 
 class EmployeePage extends StatelessWidget {
   final EmployeeController controller = Get.put(EmployeeController());
   final SidebarXController sidebarController =
-      SidebarXController(selectedIndex: 4, extended: true);
+      SidebarXController(selectedIndex: 104, extended: true);
 
   EmployeePage({super.key});
 
@@ -54,9 +55,31 @@ class EmployeePage extends StatelessWidget {
                     child: titleCardWidget(),
                   ),
                   Expanded(
-                      child: controller.employees.isEmpty
+                      child: controller.filteredEmployees.isEmpty
                           ? const Center(child: CircularProgressIndicator())
-                          : SizedBox(width: width, child: itemsCardWidget())),
+                          : SizedBox(
+                              width: width,
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    width: 300,
+                                    height: 40,
+                                    child: BaseInput(
+                                      errorRequired: false,
+                                      isLabel: true,
+                                      label: "Çalışan Ara",
+                                      controller: controller.searchController,
+                                      margin: EdgeInsets.zero,
+                                      textInputType: TextInputType.text,
+                                      inputFormatters: const [],
+                                      onChanged: (value) {
+                                        controller.searchEmployees(value);
+                                      },
+                                    ),
+                                  ),
+                                  Expanded(child: itemsCardWidget()),
+                                ],
+                              ))),
                 ],
               ),
             ),
@@ -181,9 +204,9 @@ class EmployeePage extends StatelessWidget {
         () {
           return ListView.builder(
             controller: controller.scrollController,
-            itemCount: controller.employees.length,
+            itemCount: controller.filteredEmployees.length,
             itemBuilder: (context, index) {
-              final employee = controller.employees[index];
+              final employee = controller.filteredEmployees[index];
               return Padding(
                 padding: const EdgeInsets.symmetric(
                     horizontal: AppDimension.kSpacing / 2),

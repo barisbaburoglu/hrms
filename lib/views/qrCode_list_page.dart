@@ -12,7 +12,7 @@ import 'master_scaffold.dart';
 class QRCodeListPage extends StatelessWidget {
   final LocationQRController controller = Get.put(LocationQRController());
   final SidebarXController sidebarController =
-      SidebarXController(selectedIndex: 5, extended: true);
+      SidebarXController(selectedIndex: 4, extended: true);
 
   QRCodeListPage({super.key});
 

@@ -12,7 +12,7 @@ import 'master_scaffold.dart';
 class ShiftCalendarPage extends StatelessWidget {
   final ShiftController controller = Get.put(ShiftController());
   final SidebarXController sidebarController =
-      SidebarXController(selectedIndex: 7, extended: true);
+      SidebarXController(selectedIndex: 301, extended: true);
 
   ShiftCalendarPage({super.key});
 

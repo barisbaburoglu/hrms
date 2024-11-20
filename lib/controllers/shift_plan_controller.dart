@@ -13,6 +13,7 @@ import '../api/models/week_model.dart';
 class ShiftPlanController extends GetxController {
   final ScrollController scrollController = ScrollController();
 
+  TextEditingController searchController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController surnameController = TextEditingController();
   TextEditingController employeeNumberController = TextEditingController();
@@ -38,6 +39,8 @@ class ShiftPlanController extends GetxController {
   var weekofDayGroupedList = <ShiftDay>[].obs;
 
   RxList<ShiftDay> shiftDays = RxList<ShiftDay>([]);
+
+  var filteredWeeklyShift = <WeeklyShiftGroupedModel>[].obs;
 
   final Map<int, String> weekShortDays = {
     1: 'Pzt',
@@ -65,7 +68,6 @@ class ShiftPlanController extends GetxController {
 
     fetchShifts();
     fetchWeeks();
-    fetchWeeklyShiftGrouped();
   }
 
   void fetchShifts() async {
@@ -107,11 +109,14 @@ class ShiftPlanController extends GetxController {
 
   void fetchWeeklyShiftGrouped() async {
     isLoading.value = true;
+    filteredWeeklyShift.clear();
     try {
       var modelList = await ApiProvider()
           .shiftService
           .fetchWeeklyShiftGrouped(weekId.value ?? 0);
       weeklyShiftGroupedList.value = modelList;
+
+      filteredWeeklyShift.value = modelList;
     } catch (e) {
       print("Hata: $e");
     }
@@ -196,5 +201,18 @@ class ShiftPlanController extends GetxController {
         .entries
         .map((entry) => entry.value.shiftDuration)
         .fold(0, (previous, current) => previous + current!);
+  }
+
+  void searchWeeklyShift(String query) {
+    searchController.text = query;
+    if (query.isEmpty) {
+      filteredWeeklyShift.value = weeklyShiftGroupedList;
+    } else {
+      filteredWeeklyShift.value = weeklyShiftGroupedList
+          .where((action) =>
+              '${action.employeeName?.toLowerCase()} ${action.employeeNumber?.toString().toLowerCase()}'
+                  .contains(query.toLowerCase()))
+          .toList();
+    }
   }
 }

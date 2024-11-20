@@ -13,7 +13,7 @@ class EventsEntryExitPage extends StatelessWidget {
   final EventsEntryExitController controller =
       Get.put(EventsEntryExitController());
   final SidebarXController sidebarController =
-      SidebarXController(selectedIndex: 6, extended: true);
+      SidebarXController(selectedIndex: 5, extended: true);
 
   EventsEntryExitPage({super.key});
 
@@ -73,7 +73,9 @@ class EventsEntryExitPage extends StatelessWidget {
       shadowColor: AppColor.cardShadowColor,
       margin: EdgeInsets.symmetric(horizontal: AppDimension.kSpacing),
       child: Padding(
-        padding: EdgeInsets.all(AppDimension.kSpacing / 2),
+        padding: EdgeInsets.symmetric(
+            vertical: AppDimension.kSpacing / 2,
+            horizontal: AppDimension.kSpacing),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -147,6 +149,7 @@ class EventsEntryExitPage extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(
+                        horizontal: AppDimension.kSpacing / 2,
                         vertical: AppDimension.kSpacing / 2),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -161,21 +164,27 @@ class EventsEntryExitPage extends StatelessWidget {
                         SizedBox(
                           width: 100,
                           child: Text(
-                            "${events.entry!.eventTime}",
+                            events.entry == null
+                                ? ""
+                                : "${events.entry!.eventTime}",
                             textAlign: TextAlign.center,
                           ),
                         ),
                         SizedBox(
                           width: 100,
                           child: Text(
-                            "${events.exit!.eventTime}",
+                            events.exit == null
+                                ? ""
+                                : "${events.exit!.eventTime}",
                             textAlign: TextAlign.center,
                           ),
                         ),
                         SizedBox(
                           width: 100,
                           child: Text(
-                            "${events.entry!.qrCodeSetting!.name}",
+                            events.entry == null
+                                ? ""
+                                : "${events.entry!.qrCodeSetting!.name}",
                             textAlign: TextAlign.center,
                             overflow: TextOverflow.ellipsis,
                             softWrap: true,

@@ -11,7 +11,7 @@ import 'master_scaffold.dart';
 class ShiftEmployeePage extends StatelessWidget {
   final ShiftEmployeeController controller = Get.put(ShiftEmployeeController());
   final SidebarXController sidebarController =
-      SidebarXController(selectedIndex: 8, extended: true);
+      SidebarXController(selectedIndex: 302, extended: true);
 
   ShiftEmployeePage({super.key});
 

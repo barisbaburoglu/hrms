@@ -11,7 +11,7 @@ import 'master_scaffold.dart';
 class CompanyPage extends StatelessWidget {
   final CompanyController controller = Get.put(CompanyController());
   final SidebarXController sidebarController =
-      SidebarXController(selectedIndex: 1, extended: true);
+      SidebarXController(selectedIndex: 101, extended: true);
 
   CompanyPage({super.key});
 

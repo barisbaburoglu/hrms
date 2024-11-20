@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../api/models/shift_model.dart';
+import '../api/models/week_model.dart';
 import '../api/models/weekly_shift_grouped_model.dart';
 import '../constants/colors.dart';
 import '../constants/dimensions.dart';
 import '../controllers/shift_plan_controller.dart';
 import 'base_button.dart';
+import 'base_input.dart';
+import 'card_title.dart';
 
 class ShiftPlanItemsMobile extends StatelessWidget {
   final ShiftPlanController controller;
@@ -19,136 +22,200 @@ class ShiftPlanItemsMobile extends StatelessWidget {
     return Card(
       color: AppColor.cardBackgroundColor,
       shadowColor: AppColor.cardShadowColor,
-      margin: const EdgeInsets.symmetric(
-          horizontal: AppDimension.kSpacing,
-          vertical: AppDimension.kSpacing / 2),
       child: Obx(
         () {
-          return ListView.builder(
-            controller: controller.scrollController,
-            itemCount: controller.weeklyShiftGroupedList.length,
-            itemBuilder: (context, index) {
-              final employee = controller.weeklyShiftGroupedList[index];
-
-              final totalCount = controller.getTotalDuration(employee.days!);
-
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: AppDimension.kSpacing / 2),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+          String formattedDate = "";
+          if (controller.weeks.isNotEmpty) {
+            WeekModel week = controller.weeks
+                .firstWhere((week) => week.weekId == controller.weekId.value);
+            String startDate = week.startDate!;
+            String endDate = week.endDate!;
+            formattedDate = controller.formatDateRange(startDate, endDate);
+          }
+          return Column(
+            children: [
+              CardTitle(
+                title: "",
+                rightWidgets: Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Center(
+                          child: SizedBox(
+                            height: 30,
+                            child: BaseInput(
+                              errorRequired: false,
+                              isLabel: true,
+                              label: "Ara...",
+                              controller: controller.searchController,
+                              margin: EdgeInsets.zero,
+                              textInputType: TextInputType.text,
+                              inputFormatters: const [],
+                              onChanged: (value) {
+                                controller.searchWeeklyShift(value);
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          SizedBox(
-                            height: 65,
-                            width: 65,
-                            child: Padding(
-                              padding: const EdgeInsets.all(
-                                  AppDimension.kSpacing / 2),
-                              child: ClipOval(
-                                child: Image.asset(
-                                  'assets/images/male.png',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                          Text("${controller.weekId}.Hafta ($formattedDate)"),
+                          TextButton(
+                            child: const Text(
+                              "Tüm Haftalar",
+                              style: TextStyle(fontSize: 12),
                             ),
-                          ),
-                          SizedBox(
-                            width: 40,
-                            child: Text(employee.employeeNumber.toString(),
-                                textAlign: TextAlign.center),
-                          ),
-                          SizedBox(
-                            width: 150,
-                            child: Text(
-                              employee.employeeName.toString().toUpperCase(),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 40,
-                            child: Text(totalCount.toString(),
-                                textAlign: TextAlign.center),
+                            onPressed: () {
+                              Get.toNamed("/shift-plan");
+                            },
                           ),
                         ],
                       ),
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: employee.days!.asMap().entries.map((entry) {
-                          final day = entry.value;
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  controller: controller.scrollController,
+                  itemCount: controller.filteredWeeklyShift.length,
+                  itemBuilder: (context, index) {
+                    final employee = controller.filteredWeeklyShift[index];
 
-                          return Column(
-                            children: [
-                              InkWell(
-                                mouseCursor: SystemMouseCursors.click,
-                                child: Container(
-                                  width: 40,
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                    color: day.shiftDayType == 2
-                                        ? AppColor.primaryRed
-                                        : day.shiftDayType == 3
-                                            ? AppColor.primaryOrange
-                                            : day.shiftDayType == 4
-                                                ? AppColor.primaryGrey
-                                                : AppColor
-                                                    .lightGreen, // Arka plan rengi
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      controller
-                                          .weekShortDays[day.shiftDayOfWeek]
-                                          .toString(),
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12,
+                    final totalCount =
+                        controller.getTotalDuration(employee.days!);
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: AppDimension.kSpacing / 2),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: double.infinity,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 65,
+                                  width: 65,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(
+                                        AppDimension.kSpacing / 2),
+                                    child: ClipOval(
+                                      child: Image.asset(
+                                        'assets/images/male.png',
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
                                   ),
                                 ),
-                                onTap: () {
-                                  showShiftSelectionDialogMobile(
-                                      employee.employeeName, day);
-                                },
-                              ),
-                              SizedBox(
-                                width: 40,
-                                child: Text(
-                                    day.shiftDayType == 2
-                                        ? "Hafta\nTatili"
-                                        : day.shiftDayType == 3
-                                            ? "İzinli"
-                                            : day.shiftDayType == 4
-                                                ? "Resmi\nTatil"
-                                                : "${day.shiftStartTime.toString().substring(0, 5)}\n${day.shiftEndTime.toString().substring(0, 5)}",
-                                    style: const TextStyle(fontSize: 11),
-                                    textAlign: TextAlign.center),
-                              ),
-                            ],
-                          );
-                        }).toList(),
+                                SizedBox(
+                                  width: 40,
+                                  child: Text(
+                                      employee.employeeNumber.toString(),
+                                      textAlign: TextAlign.center),
+                                ),
+                                SizedBox(
+                                  width: 150,
+                                  child: Text(
+                                    employee.employeeName
+                                        .toString()
+                                        .toUpperCase(),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 40,
+                                  child: Text(totalCount.toString(),
+                                      textAlign: TextAlign.center),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: double.infinity,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children:
+                                  employee.days!.asMap().entries.map((entry) {
+                                final day = entry.value;
+
+                                return Column(
+                                  children: [
+                                    InkWell(
+                                      mouseCursor: SystemMouseCursors.click,
+                                      child: Container(
+                                        width: 40,
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                          color: day.shiftDayType == 2
+                                              ? AppColor.primaryRed
+                                              : day.shiftDayType == 3
+                                                  ? AppColor.primaryOrange
+                                                  : day.shiftDayType == 4
+                                                      ? AppColor.primaryGrey
+                                                      : AppColor
+                                                          .lightGreen, // Arka plan rengi
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            controller.weekShortDays[
+                                                    day.shiftDayOfWeek]
+                                                .toString(),
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        showShiftSelectionDialogMobile(
+                                            employee.employeeName, day);
+                                      },
+                                    ),
+                                    SizedBox(
+                                      width: 40,
+                                      child: Text(
+                                          day.shiftDayType == 2
+                                              ? "Hafta\nTatili"
+                                              : day.shiftDayType == 3
+                                                  ? "İzinli"
+                                                  : day.shiftDayType == 4
+                                                      ? "Resmi\nTatil"
+                                                      : "${day.shiftStartTime.toString().substring(0, 5)}\n${day.shiftEndTime.toString().substring(0, 5)}",
+                                          style: const TextStyle(fontSize: 11),
+                                          textAlign: TextAlign.center),
+                                    ),
+                                  ],
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: AppDimension.kSpacing / 2,
+                          ),
+                          Divider(
+                            height: 1,
+                            color: AppColor.primaryAppColor.withOpacity(0.25),
+                          ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(
-                      height: AppDimension.kSpacing / 2,
-                    ),
-                    Divider(
-                      height: 1,
-                      color: AppColor.primaryAppColor.withOpacity(0.25),
-                    ),
-                  ],
+                    );
+                  },
                 ),
-              );
-            },
+              ),
+            ],
           );
         },
       ),
@@ -301,53 +368,54 @@ class ShiftPlanItemsMobile extends StatelessWidget {
                 height: AppDimension.kSpacing / 2,
               ),
               Obx(() {
-                return SizedBox(
-                  height: 500,
-                  width: 350,
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: controller.weekofDayGroupedList.length,
-                    itemBuilder: (context, index) {
-                      final shiftDay = controller.weekofDayGroupedList[index];
+                return Expanded(
+                  child: SizedBox(
+                    width: 350,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: controller.weekofDayGroupedList.length,
+                      itemBuilder: (context, index) {
+                        final shiftDay = controller.weekofDayGroupedList[index];
 
-                      final shift = shifts.firstWhere(
-                        (s) => s.id == shiftDay.shiftId,
-                        orElse: () => Shift(id: -1, name: "Tanımsız"),
-                      );
+                        final shift = shifts.firstWhere(
+                          (s) => s.id == shiftDay.shiftId,
+                          orElse: () => Shift(id: -1, name: "Tanımsız"),
+                        );
 
-                      return Column(
-                        children: [
-                          ListTile(
-                            title: Text(
-                              shift.name.toString().toUpperCase(),
-                              style: const TextStyle(fontSize: 12),
+                        return Column(
+                          children: [
+                            ListTile(
+                              title: Text(
+                                shift.name.toString().toUpperCase(),
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                              subtitle: Text(
+                                "${controller.weekLongDays[shiftDay.dayOfWeek]}: (${shiftDay.startTime.toString().substring(0, 5)} - ${shiftDay.endTime.toString().substring(0, 5)})",
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                              trailing: BaseButton(
+                                backgroundColor: AppColor.primaryGreen,
+                                label: "Uygula",
+                                icon: const Icon(Icons.check),
+                                onPressed: () {
+                                  var filter = {
+                                    "ShiftId": shift.id,
+                                  };
+                                  controller.patchWeeklyEmployeeShift(
+                                    day.weeklyEmployeeShiftId!,
+                                    filter,
+                                  );
+                                },
+                              ),
                             ),
-                            subtitle: Text(
-                              "${controller.weekLongDays[shiftDay.dayOfWeek]}: (${shiftDay.startTime.toString().substring(0, 5)} - ${shiftDay.endTime.toString().substring(0, 5)})",
-                              style: const TextStyle(fontSize: 12),
+                            Divider(
+                              height: 1,
+                              color: AppColor.primaryAppColor.withOpacity(0.25),
                             ),
-                            trailing: BaseButton(
-                              backgroundColor: AppColor.primaryGreen,
-                              label: "Uygula",
-                              icon: const Icon(Icons.check),
-                              onPressed: () {
-                                var filter = {
-                                  "ShiftId": shift.id,
-                                };
-                                controller.patchWeeklyEmployeeShift(
-                                  day.weeklyEmployeeShiftId!,
-                                  filter,
-                                );
-                              },
-                            ),
-                          ),
-                          Divider(
-                            height: 1,
-                            color: AppColor.primaryAppColor.withOpacity(0.25),
-                          ),
-                        ],
-                      );
-                    },
+                          ],
+                        );
+                      },
+                    ),
                   ),
                 );
               }),
