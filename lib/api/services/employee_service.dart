@@ -11,47 +11,59 @@ class EmployeeService {
 
   Future<EmployeeModel> fetchEmployees(Map<String, dynamic>? filter) async {
     final response = await apiService.postRequest(
-        '/EmployeeServices/All', filter ?? {"orders": [], "filters": []});
+        'EmployeeService',
+        'PostAllEmployee',
+        '/EmployeeServices/All',
+        filter ?? {"orders": [], "filters": []});
     return EmployeeModel.fromJson(json.decode(response.body));
   }
 
   Future<Employee> fetchEmployeeById(int id) async {
-    final response = await apiService.getRequest('/EmployeeServices/$id');
+    final response = await apiService.getRequest(
+        'EmployeeService', 'GetEmployee', '/EmployeeServices/$id');
     return Employee.fromJson(json.decode(response.body));
   }
 
   Future<void> createEmployee(Employee employee) async {
-    await apiService.postRequest('/EmployeeServices', employee.toJson());
+    await apiService.postRequest('EmployeeService', 'AddEmployee',
+        '/EmployeeServices', employee.toJson());
   }
 
   Future<void> updateEmployee(Employee employee) async {
-    await apiService.putRequest('/EmployeeServices', employee.toJson());
+    await apiService.putRequest('EmployeeService', 'UpdateEmployee',
+        '/EmployeeServices', employee.toJson());
   }
 
   Future<void> deleteEmployee(Employee employee) async {
-    await apiService.deleteRequest(
+    await apiService.deleteRequest('EmployeeService', 'DeleteEmployee',
         '/EmployeeServices?Id=${employee.id}&CompanyId=${employee.companyId}&EmployeeTypeId=${employee.employeeTypeId}&DepartmentId=${employee.departmentId}&EmployeeNumber=${employee.employeeNumber}&Name =${employee.name}&Surname=${employee.surname}&EmploymentDate=${employee.employmentDate}&Email=${employee.email}&Phone=${employee.phone}');
   }
 
   Future<EmployeeRequestModel> fetchEmployeeRequests(
       Map<String, dynamic>? filter) async {
     final response = await apiService.postRequest(
+        'EmployeeRequestService',
+        'PostAllEmployeeRequest',
         '/EmployeeRequestServices/All',
         filter ?? {"orders": [], "filters": []});
     return EmployeeRequestModel.fromJson(json.decode(response.body));
   }
 
   Future<void> createEmployeeRequest(EmployeeRequest employeeRequest) async {
-    await apiService.postRequest(
+    await apiService.postRequest('EmployeeRequestService', 'AddEmployeeRequest',
         '/EmployeeRequestServices', employeeRequest.toJson());
   }
 
   Future<void> updateEmployeeRequest(EmployeeRequest employeeRequest) async {
     await apiService.putRequest(
-        '/EmployeeRequestServices', employeeRequest.toJson());
+        'EmployeeRequestService',
+        'UpdateEmployeeRequest',
+        '/EmployeeRequestServices',
+        employeeRequest.toJson());
   }
 
   Future<void> deleteEmployeeRequest(int id) async {
-    await apiService.deleteRequest('/EmployeeRequestServices?Id=$id');
+    await apiService.deleteRequest('EmployeeRequestService',
+        'DeleteEmployeeRequest', '/EmployeeRequestServices?Id=$id');
   }
 }

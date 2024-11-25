@@ -47,8 +47,9 @@ class BaseInput extends StatelessWidget {
               if (onChanged != null) {
                 onChanged!(value);
               }
-              // Hata durumunu güncelleyin (örneğin, giriş geçerlilik kontrolü)
-              errorRequiredRx.value = value.isEmpty; // Örnek hata kontrolü
+              if (errorRequired!) {
+                errorRequiredRx.value = value.isEmpty;
+              }
             },
             inputFormatters: inputFormatters,
             keyboardType: textInputType,

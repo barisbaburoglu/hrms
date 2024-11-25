@@ -51,35 +51,35 @@ class EmployeePage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    width: width,
-                    child: titleCardWidget(),
+                    width: 300,
+                    height: 40,
+                    child: BaseInput(
+                      errorRequired: false,
+                      isLabel: true,
+                      label: "Çalışan Ara",
+                      controller: controller.searchController,
+                      margin: EdgeInsets.zero,
+                      textInputType: TextInputType.text,
+                      inputFormatters: const [],
+                      onChanged: (value) {
+                        controller.searchEmployees(value);
+                      },
+                    ),
                   ),
                   Expanded(
-                      child: controller.filteredEmployees.isEmpty
-                          ? const Center(child: CircularProgressIndicator())
-                          : SizedBox(
-                              width: width,
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    width: 300,
-                                    height: 40,
-                                    child: BaseInput(
-                                      errorRequired: false,
-                                      isLabel: true,
-                                      label: "Çalışan Ara",
-                                      controller: controller.searchController,
-                                      margin: EdgeInsets.zero,
-                                      textInputType: TextInputType.text,
-                                      inputFormatters: const [],
-                                      onChanged: (value) {
-                                        controller.searchEmployees(value);
-                                      },
-                                    ),
-                                  ),
-                                  Expanded(child: itemsCardWidget()),
-                                ],
-                              ))),
+                      child: SizedBox(
+                          width: width,
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                width: width,
+                                child: titleCardWidget(),
+                              ),
+                              controller.filteredEmployees.isEmpty
+                                  ? const SizedBox.shrink()
+                                  : Expanded(child: itemsCardWidget()),
+                            ],
+                          ))),
                 ],
               ),
             ),
@@ -96,6 +96,9 @@ class EmployeePage extends StatelessWidget {
       margin: const EdgeInsets.symmetric(
           horizontal: AppDimension.kSpacing,
           vertical: AppDimension.kSpacing / 2),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(AppDimension.kSpacing / 2),
         child: Row(
@@ -200,6 +203,9 @@ class EmployeePage extends StatelessWidget {
       margin: const EdgeInsets.symmetric(
           horizontal: AppDimension.kSpacing,
           vertical: AppDimension.kSpacing / 2),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
       child: Obx(
         () {
           return ListView.builder(

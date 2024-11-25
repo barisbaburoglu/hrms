@@ -19,6 +19,9 @@ class ShiftPlanTitle extends StatelessWidget {
       margin: const EdgeInsets.symmetric(
           horizontal: AppDimension.kSpacing,
           vertical: AppDimension.kSpacing / 2),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(AppDimension.kSpacing / 2),
         child: Wrap(

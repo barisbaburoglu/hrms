@@ -68,6 +68,9 @@ class DepartmentPage extends StatelessWidget {
       color: AppColor.cardBackgroundColor,
       shadowColor: AppColor.cardShadowColor,
       margin: const EdgeInsets.symmetric(horizontal: AppDimension.kSpacing),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(AppDimension.kSpacing),
         child: Row(
@@ -133,6 +136,9 @@ class DepartmentPage extends StatelessWidget {
       margin: const EdgeInsets.symmetric(
           horizontal: AppDimension.kSpacing,
           vertical: AppDimension.kSpacing / 2),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(AppDimension.kSpacing),
         child: ListView.builder(

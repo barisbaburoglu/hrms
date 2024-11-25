@@ -2,8 +2,9 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:hrms/api/models/dash_record_model.dart';
 
-import '../api/models/attendance_summary_model.dart';
+import '../api/api_provider.dart';
 import '../constants/colors.dart';
 import '../widgets/edit_event_entry_exit.dart';
 
@@ -13,12 +14,18 @@ class DashboardController extends GetxController {
 
   Rx<String> userNameSurname = "".obs;
 
-  var attendanceSummary = Rxn<AttendanceSummary>();
+  var dashRecords = Rxn<DashRecordModel>();
 
   @override
   void onInit() {
     super.onInit();
-    fetchAttendanceSummary();
+    dashRecords.value = DashRecordModel(
+      absentEmployees: [],
+      employeesOnLeave: [],
+      lateEmployees: [],
+      presentEmployees: [],
+    );
+    fetchDashRecords();
     // Gerekirse burada API'den veya herhangi bir kaynaktan verileri alabilirsiniz.
   }
 
@@ -39,64 +46,17 @@ class DashboardController extends GetxController {
     }
   }
 
-  void fetchAttendanceSummary() async {
+  void fetchDashRecords() async {
     String userName = storageBox.read('name') ?? "";
     String userSurName = storageBox.read('surname') ?? "";
 
     userNameSurname.value = "$userName $userSurName";
-    // Örnek veri, burada verileri API'den alabilirsiniz
-    var jsonResponse = {
-      "present": {
-        "totalCount": 5,
-        "employees": [
-          {"id": 1, "name": "John Doe", "department": "Sales"},
-          {"id": 2, "name": "Jane Smith", "department": "Marketing"},
-          {"id": 3, "name": "Tom Brown", "department": "Development"},
-          {"id": 4, "name": "Emily Davis", "department": "Support"},
-          {"id": 5, "name": "Michael Johnson", "department": "HR"}
-        ]
-      },
-      "late": {
-        "totalCount": 2,
-        "employees": [
-          {"id": 6, "name": "Alice Green", "department": "Development"},
-          {"id": 7, "name": "Bob White", "department": "Finance"}
-        ]
-      },
-      "absent": {
-        "totalCount": 1,
-        "employees": [
-          {"id": 8, "name": "Chris Black", "department": "Operations"}
-        ]
-      },
-      "onLeave": {
-        "totalCount": 3,
-        "employees": [
-          {"id": 9, "name": "Sophia Lee", "department": "Sales"},
-          {"id": 10, "name": "James King", "department": "Support"},
-          {"id": 11, "name": "Isabella Young", "department": "HR"}
-        ]
-      },
-      "leftEarly": {
-        "totalCount": 2,
-        "employees": [
-          {"id": 12, "name": "George Miller", "department": "Operations"},
-          {"id": 13, "name": "Emma Brown", "department": "Development"}
-        ]
-      },
-      "weeklyWorkCount": [
-        {"date": "2024-09-10", "numberOfEmployees": 10},
-        {"date": "2024-09-11", "numberOfEmployees": 12},
-        {"date": "2024-09-12", "numberOfEmployees": 9},
-        {"date": "2024-09-13", "numberOfEmployees": 11},
-        {"date": "2024-09-14", "numberOfEmployees": 13},
-        {"date": "2024-09-15", "numberOfEmployees": 8},
-        {"date": "2024-09-16", "numberOfEmployees": 10}
-      ],
-      "totalEmployees": {"totalMen": 50, "totalWomen": 40}
-    };
-
-    attendanceSummary.value = AttendanceSummary.fromJson(jsonResponse);
+    try {
+      dashRecords.value = await ApiProvider().dashService.fetchDashRecords();
+      update();
+    } catch (e) {
+      print("Hata: $e");
+    }
   }
 
   void openEditEvent(String title) {
@@ -113,63 +73,63 @@ class DashboardController extends GetxController {
     );
   }
 
-  List<PieChartSectionData> showingSections() {
-    final totalEmployees = attendanceSummary.value?.totalEmployees;
-    if (totalEmployees == null) {
-      return [];
-    }
+  // List<PieChartSectionData> showingSections() {
+  //   final totalEmployees = dashRecords.value?.totalEmployees;
+  //   if (totalEmployees == null) {
+  //     return [];
+  //   }
 
-    return List.generate(2, (i) {
-      final isTouched = i == touchedIndex.value;
-      final fontSize = isTouched ? 14.0 : 12.0;
-      final radius = isTouched ? 70.0 : 65.0;
-      final widgetSize = isTouched ? 55.0 : 40.0;
-      const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
+  //   return List.generate(2, (i) {
+  //     final isTouched = i == touchedIndex.value;
+  //     final fontSize = isTouched ? 14.0 : 12.0;
+  //     final radius = isTouched ? 70.0 : 65.0;
+  //     final widgetSize = isTouched ? 55.0 : 40.0;
+  //     const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
 
-      switch (i) {
-        case 0:
-          return PieChartSectionData(
-            color: AppColor.primaryBlue,
-            value: totalEmployees.totalMen.toDouble(),
-            title: '${totalEmployees.totalMen}%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: const Color(0xffffffff),
-              shadows: shadows,
-            ),
-            badgeWidget: _Badge(
-              'male.png',
-              size: widgetSize,
-              borderColor: AppColor.primaryGreen,
-            ),
-            badgePositionPercentageOffset: 1.25,
-          );
-        case 1:
-          return PieChartSectionData(
-            color: AppColor.primaryRed,
-            value: totalEmployees.totalWomen.toDouble(),
-            title: '${totalEmployees.totalWomen}%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: const Color(0xffffffff),
-              shadows: shadows,
-            ),
-            badgeWidget: _Badge(
-              'female.png',
-              size: widgetSize,
-              borderColor: AppColor.primaryGreen,
-            ),
-            badgePositionPercentageOffset: 1.25,
-          );
-        default:
-          throw Exception('Oh no');
-      }
-    });
-  }
+  //     switch (i) {
+  //       case 0:
+  //         return PieChartSectionData(
+  //           color: AppColor.primaryBlue,
+  //           value: totalEmployees.totalMen.toDouble(),
+  //           title: '${totalEmployees.totalMen}%',
+  //           radius: radius,
+  //           titleStyle: TextStyle(
+  //             fontSize: fontSize,
+  //             fontWeight: FontWeight.bold,
+  //             color: const Color(0xffffffff),
+  //             shadows: shadows,
+  //           ),
+  //           badgeWidget: _Badge(
+  //             'male.png',
+  //             size: widgetSize,
+  //             borderColor: AppColor.primaryGreen,
+  //           ),
+  //           badgePositionPercentageOffset: 1.25,
+  //         );
+  //       case 1:
+  //         return PieChartSectionData(
+  //           color: AppColor.primaryRed,
+  //           value: totalEmployees.totalWomen.toDouble(),
+  //           title: '${totalEmployees.totalWomen}%',
+  //           radius: radius,
+  //           titleStyle: TextStyle(
+  //             fontSize: fontSize,
+  //             fontWeight: FontWeight.bold,
+  //             color: const Color(0xffffffff),
+  //             shadows: shadows,
+  //           ),
+  //           badgeWidget: _Badge(
+  //             'female.png',
+  //             size: widgetSize,
+  //             borderColor: AppColor.primaryGreen,
+  //           ),
+  //           badgePositionPercentageOffset: 1.25,
+  //         );
+  //       default:
+  //         throw Exception('Oh no');
+  //     }
+  //   });
+  // }
 }
 
 class _Badge extends StatelessWidget {

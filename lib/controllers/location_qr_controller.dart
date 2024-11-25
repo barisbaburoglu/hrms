@@ -28,7 +28,7 @@ class LocationQRController extends GetxController {
   var places = <Place>[].obs;
   var isLoading = false.obs;
 
-  final ApiService apiService = ApiService("", []);
+  final ApiService apiService = ApiService("");
 
   RxBool isOutOfLoc = false.obs;
 

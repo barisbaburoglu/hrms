@@ -106,6 +106,9 @@ class CompanySettingsDetailsPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppDimension.kSpacing),
       child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.0),
+        ),
         child: TabBar(
           indicatorColor: Colors.transparent,
           dividerColor: Colors.transparent,
@@ -150,6 +153,9 @@ class CompanySettingsDetailsPage extends StatelessWidget {
           margin: const EdgeInsets.symmetric(
               horizontal: AppDimension.kSpacing,
               vertical: AppDimension.kSpacing / 2),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(AppDimension.kSpacing),
@@ -272,6 +278,9 @@ class CompanySettingsDetailsPage extends StatelessWidget {
           color: AppColor.cardBackgroundColor,
           shadowColor: AppColor.cardShadowColor,
           margin: const EdgeInsets.all(AppDimension.kSpacing),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(AppDimension.kSpacing),

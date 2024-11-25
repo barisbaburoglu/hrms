@@ -9,26 +9,32 @@ class CompanyService {
   CompanyService(this.apiService);
 
   Future<CompanyModel> fetchCompanies() async {
-    final response = await apiService
-        .postRequest('/CompanyServices/All', {"orders": [], "filters": []});
+    final response = await apiService.postRequest(
+        'CompanyService',
+        'PostAllCompany',
+        '/CompanyServices/All',
+        {"orders": [], "filters": []});
     return CompanyModel.fromJson(json.decode(response.body));
   }
 
   Future<Company> fetchCompanyById(int id) async {
-    final response = await apiService.getRequest('/CompanyServices/$id');
+    final response = await apiService.getRequest(
+        'CompanyService', 'GetCompany', '/CompanyServices/$id');
     return Company.fromJson(json.decode(response.body));
   }
 
   Future<void> createCompany(Company company) async {
-    await apiService.postRequest('/CompanyServices', company.toJson());
+    await apiService.postRequest(
+        'CompanyService', 'AddCompany', '/CompanyServices', company.toJson());
   }
 
   Future<void> updateCompany(Company company) async {
-    await apiService.putRequest('/CompanyServices', company.toJson());
+    await apiService.putRequest('CompanyService', 'UpdateCompany',
+        '/CompanyServices', company.toJson());
   }
 
   Future<void> deleteCompany(Company company) async {
     await apiService.deleteRequest(
-        '/CompanyServices?Id=${company.id}&Name=${company.name}&ManagerName=${company.managerName}&ManagerEmail=${company.managerEmail}&ManagerPhone=${company.managerPhone}');
+        'CompanyService', 'DeleteCompany', '/CompanyServices?Id=${company.id}');
   }
 }

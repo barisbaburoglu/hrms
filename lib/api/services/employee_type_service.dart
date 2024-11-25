@@ -10,26 +10,31 @@ class EmployeeTypeService {
 
   Future<EmployeeTypeModel> fetchEmployeeTypes() async {
     final response = await apiService.postRequest(
-        '/EmployeeTypeServices/All', {"orders": [], "filters": []});
+        'EmployeeTypeService',
+        'PostAllEmployeeType',
+        '/EmployeeTypeServices/All',
+        {"orders": [], "filters": []});
     return EmployeeTypeModel.fromJson(json.decode(response.body));
   }
 
   Future<EmployeeType> fetchEmployeeTypeById(int id) async {
-    final response = await apiService.getRequest('/EmployeeTypeServices/$id');
+    final response = await apiService.getRequest(
+        'EmployeeTypeService', 'GetEmployeeType', '/EmployeeTypeServices/$id');
     return EmployeeType.fromJson(json.decode(response.body));
   }
 
   Future<void> createEmployeeType(EmployeeType employeeType) async {
-    await apiService.postRequest(
+    await apiService.postRequest('EmployeeTypeService', 'AddEmployeeType',
         '/EmployeeTypeServices', employeeType.toJson());
   }
 
   Future<void> updateEmployeeType(EmployeeType employeeType) async {
-    await apiService.putRequest('/EmployeeTypeServices', employeeType.toJson());
+    await apiService.putRequest('EmployeeTypeService', 'UpdateEmployeeType',
+        '/EmployeeTypeServices', employeeType.toJson());
   }
 
   Future<void> deleteEmployeeType(EmployeeType employeeType) async {
-    await apiService.deleteRequest(
-        '/EmployeeTypeServices?Id=${employeeType.id}&Name=${employeeType.name}&ManagerName=${employeeType.description}');
+    await apiService.deleteRequest('EmployeeTypeService', 'FeleteEmployeeType',
+        '/EmployeeTypeServices?Id=${employeeType.id}');
   }
 }

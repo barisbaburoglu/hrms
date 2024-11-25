@@ -21,13 +21,16 @@ class ColorfulQrCode extends StatelessWidget {
     Color color =
         eventTypeId == 1 ? AppColor.primaryGreen : AppColor.primaryRed;
     return data == null
-        ? const SizedBox(
+        ? SizedBox(
             width: 250,
             height: 250,
             child: Card(
               color: AppColor.cardBackgroundColor,
               shadowColor: AppColor.cardShadowColor,
-              child: Padding(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+              child: const Padding(
                 padding: EdgeInsets.all(AppDimension.kSpacing),
                 child: Center(
                   child: Text(

@@ -45,11 +45,14 @@ class LeavePage extends StatelessWidget {
                       length: 3,
                       child: Column(
                         children: [
-                          const Padding(
-                            padding: EdgeInsets.symmetric(
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: AppDimension.kSpacing),
                             child: Card(
-                              child: TabBar(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: const TabBar(
                                 indicatorColor: Colors.transparent,
                                 dividerColor: Colors.transparent,
                                 indicator: UnderlineTabIndicator(
@@ -251,6 +254,9 @@ class LeavePage extends StatelessWidget {
       color: AppColor.cardBackgroundColor,
       shadowColor: AppColor.cardShadowColor,
       margin: const EdgeInsets.symmetric(horizontal: AppDimension.kSpacing),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(AppDimension.kSpacing / 2),
         child: Row(
@@ -344,6 +350,9 @@ class LeavePage extends StatelessWidget {
       margin: const EdgeInsets.symmetric(
           horizontal: AppDimension.kSpacing,
           vertical: AppDimension.kSpacing / 2),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(AppDimension.kSpacing / 2),
         child: Obx(() {
@@ -468,6 +477,9 @@ class LeavePage extends StatelessWidget {
       color: AppColor.cardBackgroundColor,
       shadowColor: AppColor.cardShadowColor,
       margin: const EdgeInsets.symmetric(horizontal: AppDimension.kSpacing),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(AppDimension.kSpacing / 2),
         child: Row(
@@ -547,6 +559,9 @@ class LeavePage extends StatelessWidget {
       margin: const EdgeInsets.symmetric(
           horizontal: AppDimension.kSpacing,
           vertical: AppDimension.kSpacing / 2),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(AppDimension.kSpacing / 2),
         child: Obx(() {
@@ -667,6 +682,9 @@ class LeavePage extends StatelessWidget {
       color: AppColor.cardBackgroundColor,
       shadowColor: AppColor.cardShadowColor,
       margin: const EdgeInsets.symmetric(horizontal: AppDimension.kSpacing),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(AppDimension.kSpacing / 2),
         child: Row(
@@ -732,6 +750,9 @@ class LeavePage extends StatelessWidget {
       margin: const EdgeInsets.symmetric(
           horizontal: AppDimension.kSpacing,
           vertical: AppDimension.kSpacing / 2),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(AppDimension.kSpacing / 2),
         child: Obx(() {

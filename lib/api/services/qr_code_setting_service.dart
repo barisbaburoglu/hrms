@@ -10,27 +10,31 @@ class QRCodeSettingService {
 
   Future<QRCodeSettingModel> fetchQRCodeSettings() async {
     final response = await apiService.postRequest(
-        '/QRCodeSettingServices/All', {"orders": [], "filters": []});
+        'QRCodeSettingService',
+        'PostAllQRCodeSetting',
+        '/QRCodeSettingServices/All',
+        {"orders": [], "filters": []});
     return QRCodeSettingModel.fromJson(json.decode(response.body));
   }
 
   Future<QRCodeSettingModel> fetchQRCodeSettingById(int id) async {
-    final response = await apiService.getRequest('/QRCodeSettingServices/$id');
+    final response = await apiService.getRequest('QRCodeSettingService',
+        'GetQRCodeSetting', '/QRCodeSettingServices/$id');
     return QRCodeSettingModel.fromJson(json.decode(response.body));
   }
 
   Future<void> createQRCodeSetting(QRCodeSetting qrCodeSetting) async {
-    await apiService.postRequest(
+    await apiService.postRequest('QRCodeSettingService', 'AddQRCodeSetting',
         '/QRCodeSettingServices', qrCodeSetting.toJson());
   }
 
   Future<void> updateEmployeeType(QRCodeSetting qrCodeSetting) async {
-    await apiService.putRequest(
+    await apiService.putRequest('QRCodeSettingService', 'UpdateQRCodeSetting',
         '/QRCodeSettingServices', qrCodeSetting.toJson());
   }
 
   Future<void> deleteQRCodeSetting(QRCodeSetting qrCodeSetting) async {
-    await apiService
-        .deleteRequest('/QRCodeSettingServices?Id=${qrCodeSetting.id}');
+    await apiService.deleteRequest('QRCodeSettingService',
+        'DeleteQRCodeSetting', '/QRCodeSettingServices?Id=${qrCodeSetting.id}');
   }
 }

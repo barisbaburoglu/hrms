@@ -10,36 +10,32 @@ class RoleService {
   RoleService(this.apiService);
 
   Future<RoleModel> fetchRoles() async {
-    final response = await apiService
-        .postRequest('/UserRoleServices/All', {"orders": [], "filters": []});
+    final response = await apiService.postRequest('UserRoleService', 'PostAll',
+        '/UserRoleServices/All', {"orders": [], "filters": []});
     return RoleModel.fromJson(json.decode(response.body));
   }
 
   Future<RoleModel> fetchUserRoleById(int id) async {
-    final response = await apiService.getRequest('/UserRoleServices/$id');
+    final response = await apiService.getRequest(
+        'UserRoleService', 'Get', '/UserRoleServices/$id');
     return RoleModel.fromJson(json.decode(response.body));
   }
 
   Future<void> createUserRole(Role role) async {
-    await apiService.postRequest('/UserRoleServices', role.toJson());
-  }
-
-  Future<bool> addUserRole(int employeeId, List<int> roleList) async {
-    final response = await apiService.putRequest(
-      '/UserServices/RolesOfEmployee',
-      {"roleIds": roleList, "employeeId": employeeId},
-    );
-
-    return bool.parse(response.body.toString());
+    await apiService.postRequest(
+        'UserRoleService', 'Add', '/UserRoleServices', role.toJson());
   }
 
   Future<void> deleteUserRole(Role role) async {
-    await apiService.deleteRequest('/UserRoleServices?Id=${role.id}');
+    await apiService.deleteRequest(
+        'UserRoleService', 'Delete', '/UserRoleServices?Id=${role.id}');
   }
 
   Future<List<RoleActionModel>> fetchRoleActions(int roleId) async {
-    final response = await apiService
-        .getRequest('/UserRoleActionServices/RoleActions?roleId=$roleId');
+    final response = await apiService.getRequest(
+        'UserRoleActionService',
+        'GetUserRoleAction',
+        '/UserRoleActionServices/RoleActions?roleId=$roleId');
 
     List<dynamic> data = json.decode(response.body);
 
@@ -48,6 +44,8 @@ class RoleService {
 
   Future<RoleActionModel> addUserRoleAction(RoleActionModel roleAction) async {
     final response = await apiService.postRequest(
+      'UserRoleActionService',
+      'AddUserRoleAction',
       '/UserRoleActionServices',
       {
         "roleId": roleAction.roleId,
@@ -60,9 +58,20 @@ class RoleService {
   }
 
   Future<int> deleteUserRoleAction(RoleActionModel roleAction) async {
-    final response = await apiService
-        .deleteRequest('/UserRoleActionServices?Id=${roleAction.id}');
+    final response = await apiService.deleteRequest('UserRoleActionService',
+        'DeleteUserRoleAction', '/UserRoleActionServices?Id=${roleAction.id}');
 
     return int.parse(response.body.toString());
+  }
+
+  Future<bool> assignEmployeeRole(int employeeId, List<int> roleList) async {
+    final response = await apiService.putRequest(
+      'UserService',
+      'UpdateRolesOfEmployee',
+      '/UserServices/RolesOfEmployee',
+      {"roleIds": roleList, "employeeId": employeeId},
+    );
+
+    return bool.parse(response.body.toString());
   }
 }

@@ -68,11 +68,14 @@ class EventsEntryExitPage extends StatelessWidget {
   }
 
   Widget titleCardWidget() {
-    return const Card(
+    return Card(
       color: AppColor.cardBackgroundColor,
       shadowColor: AppColor.cardShadowColor,
-      margin: EdgeInsets.symmetric(horizontal: AppDimension.kSpacing),
-      child: Padding(
+      margin: const EdgeInsets.symmetric(horizontal: AppDimension.kSpacing),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
+      child: const Padding(
         padding: EdgeInsets.symmetric(
             vertical: AppDimension.kSpacing / 2,
             horizontal: AppDimension.kSpacing),
@@ -136,6 +139,9 @@ class EventsEntryExitPage extends StatelessWidget {
       margin: const EdgeInsets.symmetric(
           horizontal: AppDimension.kSpacing,
           vertical: AppDimension.kSpacing / 2),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(AppDimension.kSpacing / 2),
         child: Obx(() {

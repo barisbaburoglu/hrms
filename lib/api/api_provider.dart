@@ -2,10 +2,12 @@ import 'services/api_service.dart';
 import 'services/auth_service.dart';
 import 'services/billing_information_service.dart';
 import 'services/company_service.dart';
+import 'services/dash_Service.dart';
 import 'services/department_service.dart';
 import 'services/employee_service.dart';
 import 'services/employee_type_service.dart';
 import 'services/leave_service.dart';
+import 'services/notifications_service.dart';
 import 'services/qr_code_setting_service.dart';
 import 'services/role_service.dart';
 import 'services/shift_service.dart';
@@ -46,15 +48,19 @@ class ApiProvider {
 
   late BillingInformationService _billingInformationService;
 
-  ApiProvider._internal() {
-    _dashApiService = ApiService(
-        'https://devinsofthrmsystemdashapi.azurewebsites.net/api', []);
+  late NotificationService _notificationService;
 
-    _mobilApiService = ApiService(
-        'https://devinsofthrmsystemdashapi.azurewebsites.net/api', []);
+  late DashService _dashService;
+
+  ApiProvider._internal() {
+    _dashApiService =
+        ApiService('https://devinsofthrmsystemdashapi.azurewebsites.net/api');
+
+    _mobilApiService =
+        ApiService('https://devinsofthrmsystemdashapi.azurewebsites.net/api');
 
     _authApiService =
-        ApiService('https://devinsofthrmsystemdashapi.azurewebsites.net', []);
+        ApiService('https://devinsofthrmsystemdashapi.azurewebsites.net');
 
     _authService = AuthService(_authApiService);
 
@@ -79,6 +85,10 @@ class ApiProvider {
     _leaveService = LeaveService(_dashApiService);
 
     _billingInformationService = BillingInformationService(_dashApiService);
+
+    _notificationService = NotificationService(_dashApiService);
+
+    _dashService = DashService(_dashApiService);
   }
 
   AuthService get authService => _authService;
@@ -107,4 +117,8 @@ class ApiProvider {
 
   BillingInformationService get billingInformationService =>
       _billingInformationService;
+
+  NotificationService get notificationService => _notificationService;
+
+  DashService get dashService => _dashService;
 }

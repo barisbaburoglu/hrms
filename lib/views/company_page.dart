@@ -6,6 +6,7 @@ import 'package:sidebarx/sidebarx.dart';
 import '../constants/colors.dart';
 import '../constants/dimensions.dart';
 import '../controllers/company_controller.dart';
+import '../widgets/base_input.dart';
 import 'master_scaffold.dart';
 
 class CompanyPage extends StatelessWidget {
@@ -47,12 +48,37 @@ class CompanyPage extends StatelessWidget {
                           },
                         ),
                       )),
-                  SizedBox(width: width, child: titleCardWidget()),
-                  Expanded(
-                    child: controller.companies.isEmpty
-                        ? const Center(child: CircularProgressIndicator())
-                        : SizedBox(width: width, child: itemsCardWidget()),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(bottom: AppDimension.kSpacing),
+                    child: SizedBox(
+                      width: 300,
+                      height: 40,
+                      child: BaseInput(
+                        errorRequired: false,
+                        isLabel: true,
+                        label: "Şirket Ara",
+                        controller: controller.searchController,
+                        margin: EdgeInsets.zero,
+                        textInputType: TextInputType.text,
+                        inputFormatters: const [],
+                        onChanged: (value) {
+                          controller.searchCompanies(value);
+                        },
+                      ),
+                    ),
                   ),
+                  Expanded(
+                      child: SizedBox(
+                          width: width,
+                          child: Column(
+                            children: [
+                              SizedBox(width: width, child: titleCardWidget()),
+                              controller.filteredCompanies.isEmpty
+                                  ? const SizedBox.shrink()
+                                  : Expanded(child: itemsCardWidget()),
+                            ],
+                          ))),
                 ],
               ),
             ),
@@ -67,6 +93,9 @@ class CompanyPage extends StatelessWidget {
       color: AppColor.cardBackgroundColor,
       shadowColor: AppColor.cardShadowColor,
       margin: const EdgeInsets.symmetric(horizontal: AppDimension.kSpacing),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(AppDimension.kSpacing / 2),
         child: Row(
@@ -160,14 +189,17 @@ class CompanyPage extends StatelessWidget {
       margin: const EdgeInsets.symmetric(
           horizontal: AppDimension.kSpacing,
           vertical: AppDimension.kSpacing / 2),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(AppDimension.kSpacing / 2),
         child: Obx(() {
           return ListView.builder(
             controller: controller.scrollController,
-            itemCount: controller.companies.length,
+            itemCount: controller.filteredCompanies.length,
             itemBuilder: (context, index) {
-              final company = controller.companies[index];
+              final company = controller.filteredCompanies[index];
               return Column(
                 children: [
                   Padding(

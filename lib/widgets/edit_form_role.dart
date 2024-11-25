@@ -40,6 +40,9 @@ class EditFormRole extends StatelessWidget {
         color: AppColor.cardBackgroundColor,
         shadowColor: AppColor.cardShadowColor,
         margin: const EdgeInsets.all(AppDimension.kSpacing),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.0),
+        ),
         child: Padding(
           padding: const EdgeInsets.all(AppDimension.kSpacing),
           child: Column(
@@ -74,27 +77,61 @@ class EditFormRole extends StatelessWidget {
                   ),
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 200,
-                    height: 30,
-                    child: BaseInput(
-                      errorRequired: false,
-                      isLabel: true,
-                      label: "Yetki Ara",
-                      controller: TextEditingController(),
-                      margin: EdgeInsets.zero,
-                      textInputType: TextInputType.text,
-                      inputFormatters: const [],
-                      onChanged: (value) {
-                        controller.searchAction(value);
+              Padding(
+                padding: const EdgeInsets.only(top: AppDimension.kSpacing / 2),
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  runSpacing: AppDimension.kSpacing,
+                  spacing: AppDimension.kSpacing,
+                  children: [
+                    BaseButton(
+                      width: screenWidth < 360 ? double.infinity : 125,
+                      backgroundColor: AppColor.primaryRed,
+                      label: "Vazgeç",
+                      onPressed: () {
+                        Get.back();
                       },
+                      icon: const Icon(
+                        Icons.close,
+                        color: AppColor.secondaryText,
+                      ),
                     ),
-                  ),
-                ],
+                    BaseButton(
+                      width: screenWidth < 360 ? double.infinity : 125,
+                      label: "Kaydet",
+                      onPressed: () {
+                        controller.saveRole(role: role);
+                      },
+                      icon: const Icon(
+                        Icons.save,
+                        color: AppColor.secondaryText,
+                      ),
+                    ),
+                  ],
+                ),
               ),
+              if (role != null)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 200,
+                      height: 30,
+                      child: BaseInput(
+                        errorRequired: false,
+                        isLabel: true,
+                        label: "Yetki Ara",
+                        controller: TextEditingController(),
+                        margin: EdgeInsets.zero,
+                        textInputType: TextInputType.text,
+                        inputFormatters: const [],
+                        onChanged: (value) {
+                          controller.searchAction(value);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               Obx(
                 () => SizedBox(
                   width: double.infinity,
@@ -153,39 +190,6 @@ class EditFormRole extends StatelessWidget {
                       ),
                     ),
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: AppDimension.kSpacing / 2),
-                child: Wrap(
-                  alignment: WrapAlignment.center,
-                  runSpacing: AppDimension.kSpacing,
-                  spacing: AppDimension.kSpacing,
-                  children: [
-                    BaseButton(
-                      width: screenWidth < 360 ? double.infinity : 125,
-                      backgroundColor: AppColor.primaryRed,
-                      label: "Vazgeç",
-                      onPressed: () {
-                        Get.back();
-                      },
-                      icon: const Icon(
-                        Icons.close,
-                        color: AppColor.secondaryText,
-                      ),
-                    ),
-                    BaseButton(
-                      width: screenWidth < 360 ? double.infinity : 125,
-                      label: "Kaydet",
-                      onPressed: () {
-                        controller.saveRole(role: role);
-                      },
-                      icon: const Icon(
-                        Icons.save,
-                        color: AppColor.secondaryText,
-                      ),
-                    ),
-                  ],
                 ),
               ),
             ],

@@ -38,6 +38,9 @@ class EditFormQRCodeSetting extends StatelessWidget {
           color: AppColor.cardBackgroundColor,
           shadowColor: AppColor.cardShadowColor,
           margin: const EdgeInsets.all(AppDimension.kSpacing),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
           child: Padding(
             padding: const EdgeInsets.all(AppDimension.kSpacing),
             child: Column(
@@ -132,6 +135,9 @@ class EditFormQRCodeSetting extends StatelessWidget {
             color: AppColor.cardBackgroundColor,
             shadowColor: AppColor.cardShadowColor,
             margin: const EdgeInsets.all(AppDimension.kSpacing),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5.0),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(AppDimension.kSpacing),
               child: Obx(() => GoogleMap(
@@ -162,6 +168,9 @@ class EditFormQRCodeSetting extends StatelessWidget {
             color: AppColor.cardBackgroundColor,
             shadowColor: AppColor.cardShadowColor,
             margin: const EdgeInsets.all(AppDimension.kSpacing),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5.0),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(AppDimension.kSpacing),
               child: SingleChildScrollView(
@@ -315,6 +324,9 @@ class EditFormQRCodeSetting extends StatelessWidget {
         Card(
           color: AppColor.cardBackgroundColor,
           margin: const EdgeInsets.all(AppDimension.kSpacing),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
           child: SizedBox(
             height: 150,
             child: Obx(() => GoogleMap(

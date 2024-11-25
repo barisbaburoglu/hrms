@@ -133,7 +133,9 @@ class RoleController extends GetxController {
     if (selectedEmployees.isNotEmpty && selectedRoles.isNotEmpty) {
       // Burada API'ye seçili çalışan ve rol id'leri gönderilebilir
       for (var employee in selectedEmployees) {
-        await ApiProvider().roleService.addUserRole(employee, selectedRoles);
+        await ApiProvider()
+            .roleService
+            .assignEmployeeRole(employee, selectedRoles);
       }
       Get.showSnackbar(
         CustomGetBar(
@@ -210,17 +212,17 @@ class RoleController extends GetxController {
                 actionName: roleAction.actionName,
               ));
 
-      Get.showSnackbar(
-        CustomGetBar(
-          textColor: AppColor.secondaryText,
-          message: "${roleAction.actionName} Yetkisi Eklendi!",
-          duration: const Duration(seconds: 3),
-          iconData: Icons.check,
-          backgroundColor: AppColor.primaryGreen,
-        ),
-      );
+      // Get.showSnackbar(
+      //   CustomGetBar(
+      //     textColor: AppColor.secondaryText,
+      //     message: "${roleAction.actionName} Yetkisi Eklendi!",
+      //     duration: const Duration(seconds: 3),
+      //     iconData: Icons.check,
+      //     backgroundColor: AppColor.primaryGreen,
+      //   ),
+      // );
 
-      fetchRoleActions(roleAction.roleId!);
+      //fetchRoleActions(roleAction.roleId!);
     } catch (e) {
       Get.showSnackbar(
         CustomGetBar(
@@ -242,17 +244,17 @@ class RoleController extends GetxController {
       result =
           await ApiProvider().roleService.deleteUserRoleAction(roleAction!);
 
-      Get.showSnackbar(
-        CustomGetBar(
-          textColor: AppColor.secondaryText,
-          message: "${roleAction.actionName} Yetkisi Kaldırıldı!",
-          duration: const Duration(seconds: 3),
-          iconData: Icons.check,
-          backgroundColor: AppColor.primaryGreen,
-        ),
-      );
+      // Get.showSnackbar(
+      //   CustomGetBar(
+      //     textColor: AppColor.secondaryText,
+      //     message: "${roleAction.actionName} Yetkisi Kaldırıldı!",
+      //     duration: const Duration(seconds: 3),
+      //     iconData: Icons.check,
+      //     backgroundColor: AppColor.primaryGreen,
+      //   ),
+      // );
 
-      fetchRoleActions(roleAction.roleId!);
+      // fetchRoleActions(roleAction.roleId!);
     } catch (e) {
       Get.showSnackbar(
         CustomGetBar(

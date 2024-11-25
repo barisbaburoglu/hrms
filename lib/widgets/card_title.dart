@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
-import '../constants/dimensions.dart';
 
 class CardTitle extends StatelessWidget {
-  final String title;
+  final String? title;
+  final Widget? leftWidgets;
   final Widget? rightWidgets;
 
   const CardTitle({
     super.key,
-    required this.title,
+    this.title,
+    this.leftWidgets,
     this.rightWidgets,
   });
 
@@ -17,16 +18,23 @@ class CardTitle extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: AppDimension.kSpacing),
+          padding: const EdgeInsets.only(left: 5),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                title,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              rightWidgets ?? const SizedBox.shrink(),
+              if (leftWidgets != null) leftWidgets!,
+              if (title != null)
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: Text(
+                      title!,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              if (rightWidgets != null) rightWidgets!,
             ],
           ),
         ),

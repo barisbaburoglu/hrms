@@ -8,12 +8,14 @@ import '../api/models/company_model.dart';
 class CompanyController extends GetxController {
   final ScrollController scrollController = ScrollController();
 
+  TextEditingController searchController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController managerNameController = TextEditingController();
   TextEditingController managerEmailController = TextEditingController();
   TextEditingController managerPhoneController = TextEditingController();
 
   var companies = <Company>[].obs;
+  var filteredCompanies = <Company>[].obs;
 
   @override
   void onInit() {
@@ -25,6 +27,7 @@ class CompanyController extends GetxController {
     try {
       var companyModel = await ApiProvider().companyService.fetchCompanies();
       companies.value = companyModel.companies ?? [];
+      filteredCompanies.value = companyModel.companies ?? [];
     } catch (e) {
       print("Hata: $e");
     }
@@ -92,5 +95,18 @@ class CompanyController extends GetxController {
         ),
       ),
     );
+  }
+
+  void searchCompanies(String query) {
+    searchController.text = query;
+    if (query.isEmpty) {
+      filteredCompanies.value = companies;
+    } else {
+      filteredCompanies.value = companies
+          .where((company) =>
+              '${company.name?.toLowerCase()} ${company.name?.toLowerCase()} ${company.managerName}}'
+                  .contains(query.toLowerCase()))
+          .toList();
+    }
   }
 }

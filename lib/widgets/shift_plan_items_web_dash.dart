@@ -42,44 +42,38 @@ class ShiftPlanItemsWebDash extends StatelessWidget {
             children: [
               CardTitle(
                 title: "Vardiya Planı",
-                rightWidgets: Expanded(
+                rightWidgets: Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
-                        child: Center(
-                          child: SizedBox(
-                            width: 200,
-                            height: 30,
-                            child: BaseInput(
-                              errorRequired: false,
-                              isLabel: true,
-                              label: "Ara...",
-                              controller: controller.searchController,
-                              margin: EdgeInsets.zero,
-                              textInputType: TextInputType.text,
-                              inputFormatters: const [],
-                              onChanged: (value) {
-                                controller.searchWeeklyShift(value);
-                              },
-                            ),
+                      Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: SizedBox(
+                          width: 300,
+                          height: 30,
+                          child: BaseInput(
+                            errorRequired: false,
+                            isLabel: true,
+                            label: "Ara...",
+                            controller: controller.searchController,
+                            margin: EdgeInsets.zero,
+                            textInputType: TextInputType.text,
+                            inputFormatters: const [],
+                            onChanged: (value) {
+                              controller.searchWeeklyShift(value);
+                            },
                           ),
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text("${controller.weekId}.Hafta ($formattedDate)"),
-                          TextButton(
-                            child: const Text(
-                              "Tüm Haftalar",
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            onPressed: () {
-                              Get.toNamed("/shift-plan");
-                            },
-                          ),
-                        ],
+                      Text("${controller.weekId}.Hafta ($formattedDate)"),
+                      TextButton(
+                        child: const Text(
+                          "Tüm Haftalar",
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        onPressed: () {
+                          Get.toNamed("/shift-plan");
+                        },
                       ),
                     ],
                   ),

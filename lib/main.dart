@@ -21,6 +21,7 @@ import 'views/employee_role_page.dart';
 import 'views/employee_type_page.dart';
 import 'views/events_entry_exit_page.dart';
 import 'views/home_page.dart';
+import 'views/notification_page.dart';
 import 'views/profile_page.dart';
 import 'views/qrCode_list_page.dart';
 import 'views/request_page.dart';
@@ -125,6 +126,17 @@ class MyApp extends StatelessWidget {
         if (kIsWeb)
           GetPage(name: '/index', page: () => loadPage(DashboardPage())),
         GetPage(name: '/', page: () => SignInPage()),
+        GetPage(
+          name: '/notifications',
+          page: () => loadPage(NotificationPage()),
+          // middlewares: [
+          //   AuthMiddleware(
+          //     requiredGrups: [
+          //       'NotificationService',
+          //     ],
+          //   ),
+          // ],
+        ),
         GetPage(
           name: '/employee-types',
           page: () => loadPage(EmployeeTypePage()),

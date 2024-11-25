@@ -98,7 +98,7 @@ class ShiftPlanController extends GetxController {
     try {
       var modelList = await ApiProvider()
           .shiftService
-          .fetchShiftsDaysByDayOfWeek(shiftId ?? 0, dayOfWeek ?? 0);
+          .fetchShiftsDaysByDayOfWeek(dayOfWeek ?? 0);
       weekofDayGroupedList.value = modelList;
     } catch (e) {
       print("Hata: $e");

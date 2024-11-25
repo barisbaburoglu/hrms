@@ -12,15 +12,18 @@ class UsersEntryExitEventService {
   Future<UsersEntryExitEventsModel> getLastEntryExitEvents(
       Map<String, dynamic> body) async {
     final response = await apiService.postRequest(
-        '/WorkEntryExitEventServices/UsersEntryExitEvents', body);
+        'WorkEntryExitEventService',
+        'PostUsersEntryExitEvents',
+        '/WorkEntryExitEventServices/UsersEntryExitEvents',
+        body);
     var data = json.decode(response.body);
     return UsersEntryExitEventsModel.fromJson(data);
   }
 
   Future<WorkEntryExitEventExceptionModel> getWorkEntryExitEventExceptions(
       Map<String, dynamic> body) async {
-    final response = await apiService.postRequest(
-        '/WorkEntryExitEventExceptionServices/All', body);
+    final response = await apiService.postRequest('WorkEntryExitEventService',
+        'PostEntryExit', '/WorkEntryExitEventExceptionServices/All', body);
     var data = json.decode(response.body);
     return WorkEntryExitEventExceptionModel.fromJson(data);
   }
@@ -28,6 +31,8 @@ class UsersEntryExitEventService {
   Future<WorkEntryExitEventException> createWorkEntryExitEventException(
       WorkEntryExitEventException workEntryExitEventException) async {
     final response = await apiService.postRequest(
+        'WorkEntryExitEventExceptionService',
+        'AddWorkEntryExitEventException',
         '/WorkEntryExitEventExceptionServices',
         workEntryExitEventException.toJson());
     var data = json.decode(response.body);
@@ -37,6 +42,8 @@ class UsersEntryExitEventService {
   Future<WorkEntryExitEventException> updateWorkEntryExitEventException(
       WorkEntryExitEventException workEntryExitEventException) async {
     final response = await apiService.putRequest(
+        'WorkEntryExitEventExceptionService',
+        'UpdateWorkEntryExitEventException',
         '/WorkEntryExitEventExceptionServices',
         workEntryExitEventException.toJson());
     var data = json.decode(response.body);

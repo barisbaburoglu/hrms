@@ -22,6 +22,9 @@ class ShiftPlanItemsMobile extends StatelessWidget {
     return Card(
       color: AppColor.cardBackgroundColor,
       shadowColor: AppColor.cardShadowColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
       child: Obx(
         () {
           String formattedDate = "";
@@ -35,7 +38,6 @@ class ShiftPlanItemsMobile extends StatelessWidget {
           return Column(
             children: [
               CardTitle(
-                title: "",
                 rightWidgets: Expanded(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

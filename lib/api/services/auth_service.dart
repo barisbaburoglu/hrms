@@ -14,25 +14,26 @@ class AuthService {
   AuthService(this.apiService);
 
   Future<LoginResponseModel> login(LogInModel logInModel) async {
-    final response = await apiService.postRequest(
+    final response = await apiService.postRequest(null, null,
         '/login?useCookies=false&useSessionCookies=false', logInModel.toJson());
     return LoginResponseModel.fromJson(json.decode(response.body));
   }
 
   Future<LoginResponseModel> refreshToken(String refreshToken) async {
     final response = await apiService
-        .postRequest('/refresh', {'refreshToken': refreshToken});
+        .postRequest(null, null, '/refresh', {'refreshToken': refreshToken});
     return LoginResponseModel.fromJson(json.decode(response.body));
   }
 
   Future<UserInfo> fetchUserInfo() async {
-    final response = await apiService.getRequest('/api/USerServices/UserInfo');
+    final response =
+        await apiService.getRequest(null, null, '/api/USerServices/UserInfo');
     return UserInfo.fromJson(json.decode(response.body));
   }
 
   Future<List<UserRoleActionsModel>> fetchUserRoleActions() async {
-    final response = await apiService
-        .getRequest('/api/UserRoleActionServices/UserRoleActions');
+    final response = await apiService.getRequest(
+        null, null, '/api/UserRoleActionServices/UserRoleActions');
 
     List<dynamic> data = json.decode(response.body);
 

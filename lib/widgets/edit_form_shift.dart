@@ -39,6 +39,9 @@ class EditFormShift extends StatelessWidget {
         color: AppColor.cardBackgroundColor,
         shadowColor: AppColor.cardShadowColor,
         margin: const EdgeInsets.all(AppDimension.kSpacing),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.0),
+        ),
         child: Padding(
           padding: const EdgeInsets.all(AppDimension.kSpacing / 2),
           child: Column(

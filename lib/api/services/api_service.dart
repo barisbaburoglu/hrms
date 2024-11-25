@@ -7,12 +7,11 @@ import '../models/place_google.dart';
 import '../models/user_role_actions_model.dart';
 
 class ApiService {
-  final List<UserRoleActionsModel> userRoleActions;
   final String baseUrl;
   final String apiKey = "AIzaSyCjuykcjzh76LDRr4uj80215JsyayYyUxM";
   final box = GetStorage();
 
-  ApiService(this.baseUrl, this.userRoleActions);
+  ApiService(this.baseUrl);
 
   // 401 hatası
   void _handleUnauthorized() {
@@ -20,119 +19,89 @@ class ApiService {
     Get.offAllNamed('/sign-in');
   }
 
-  bool _hasPermission(String grup, String action) {
-    if (userRoleActions.isEmpty) return false;
+  List<UserRoleActionsModel>? userRoleActions;
 
-    final userGroup = userRoleActions.firstWhere(
+  List<UserRoleActionsModel> getUserRoleActionsFromStorage() {
+    final box = GetStorage();
+    List<dynamic>? jsonList = box.read('userRoleActions');
+    if (jsonList != null) {
+      return jsonList
+          .map((item) => UserRoleActionsModel.fromJson(item))
+          .toList();
+    }
+    return [];
+  }
+
+  bool _hasPermission(String grup, String action) {
+    userRoleActions = getUserRoleActionsFromStorage();
+    if (userRoleActions!.isEmpty) return false;
+
+    final userGroup = userRoleActions!.firstWhere(
       (element) => element.grup == grup,
       orElse: () => UserRoleActionsModel(grup: null, actions: []),
     );
     return userGroup.actions?.contains(action) ?? false;
   }
 
-  Future<http.Response> getRequestWithAuth(
-      String grup, String action, String endpoint) async {
-    if (!_hasPermission(grup, action)) {
-      throw Exception('Unauthorized access to $grup.$action');
+  Future<http.Response> _performRequest(
+      String method, String endpoint, String? grup, String? action,
+      {Map<String, dynamic>? body}) async {
+    if (grup != null && action != null) {
+      if (!_hasPermission(grup, action)) {
+        throw Exception('UAA:Unauthorized access to $grup $action');
+      }
     }
-    return await getRequest(endpoint);
-  }
 
-  Future<http.Response> getRequest(String endpoint) async {
     final url = Uri.parse('$baseUrl$endpoint');
-    final response = await http.get(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${box.read('accessToken')}'
-      },
-    );
+    final headers = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${box.read('accessToken')}'
+    };
+
+    final response = await (method == 'GET'
+        ? http.get(url, headers: headers)
+        : method == 'POST'
+            ? http.post(url, headers: headers, body: json.encode(body))
+            : method == 'PUT'
+                ? http.put(url, headers: headers, body: json.encode(body))
+                : method == 'PATCH'
+                    ? http.patch(url, headers: headers, body: json.encode(body))
+                    : method == 'DELETE'
+                        ? http.delete(url, headers: headers)
+                        : throw Exception('Invalid HTTP method'));
+
     if (response.statusCode == 401) {
       _handleUnauthorized();
-    } else if (response.statusCode != 200) {
-      throw Exception('Failed to load data');
+    } else if (response.statusCode >= 400) {
+      throw Exception('Failed request: ${response.statusCode}');
     }
+
     return response;
   }
 
-  Future<http.Response> postRequest(
-    String endpoint,
-    Map<String, dynamic>? data,
-  ) async {
-    final url = Uri.parse('$baseUrl$endpoint');
-
-    var body = json.encode(data);
-    final response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${box.read('accessToken')}'
-      },
-      body: body,
-    );
-    if (response.statusCode == 401) {
-      _handleUnauthorized();
-    } else if (response.statusCode != 200) {
-      throw Exception(response.statusCode);
-    }
-    return response;
+  Future<http.Response> getRequest(
+      String? grup, String? action, String endpoint) {
+    return _performRequest('GET', endpoint, grup, action);
   }
 
-  Future<http.Response> putRequest(
-      String endpoint, Map<String, dynamic> data) async {
-    final url = Uri.parse('$baseUrl$endpoint');
-    var body = json.encode(data);
-    final response = await http.put(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${box.read('accessToken')}'
-      },
-      body: body,
-    );
-    if (response.statusCode == 401) {
-      _handleUnauthorized();
-    } else if (response.statusCode != 200) {
-      throw Exception('Failed to update data');
-    }
-    return response;
+  Future<http.Response> postRequest(String? grup, String? action,
+      String endpoint, Map<String, dynamic> body) {
+    return _performRequest('POST', endpoint, grup, action, body: body);
   }
 
-  Future<http.Response> patchRequest(
-      String endpoint, Map<String, dynamic> data) async {
-    final url = Uri.parse('$baseUrl$endpoint');
-    var body = json.encode(data);
-    final response = await http.patch(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${box.read('accessToken')}'
-      },
-      body: body,
-    );
-    if (response.statusCode == 401) {
-      _handleUnauthorized();
-    } else if (response.statusCode != 200) {
-      throw Exception('Failed to update data');
-    }
-    return response;
+  Future<http.Response> putRequest(String? grup, String? action,
+      String endpoint, Map<String, dynamic> body) {
+    return _performRequest('PUT', endpoint, grup, action, body: body);
   }
 
-  Future<http.Response> deleteRequest(String endpoint) async {
-    final url = Uri.parse('$baseUrl$endpoint');
-    final response = await http.delete(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${box.read('accessToken')}'
-      },
-    );
-    if (response.statusCode == 401) {
-      _handleUnauthorized();
-    } else if (response.statusCode != 200) {
-      throw Exception('Failed to delete data');
-    }
-    return response;
+  Future<http.Response> patchRequest(String? grup, String? action,
+      String endpoint, Map<String, dynamic> body) {
+    return _performRequest('PATCH', endpoint, grup, action, body: body);
+  }
+
+  Future<http.Response> deleteRequest(
+      String? grup, String? action, String endpoint) {
+    return _performRequest('DELETE', endpoint, grup, action);
   }
 
   Future<List<Place>> fetchPlaces(String input) async {

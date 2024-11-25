@@ -7,6 +7,8 @@ import '../api/models/company_model.dart';
 import '../api/models/department_model.dart';
 import '../api/models/employee_model.dart';
 import '../api/models/employee_type_model.dart';
+import '../constants/colors.dart';
+import '../widgets/custom_snack_bar.dart';
 import '../widgets/edit_form_employee.dart';
 
 class EmployeeController extends GetxController {
@@ -99,7 +101,19 @@ class EmployeeController extends GetxController {
       employees.value = employeeTypeModel.employees ?? [];
       filteredEmployees.value = employees;
     } catch (e) {
-      print("Hata: $e");
+      if (e.toString().contains('UAA:')) {
+        Get.showSnackbar(
+          CustomGetBar(
+            textColor: AppColor.secondaryText,
+            message: e.toString().replaceAll('UAA:', ''),
+            duration: const Duration(seconds: 3),
+            iconData: Icons.block,
+            backgroundColor: AppColor.primaryOrange,
+          ),
+        );
+      } else {
+        Get.snackbar('Hata', e.toString());
+      }
     }
   }
 
@@ -140,7 +154,7 @@ class EmployeeController extends GetxController {
     } else {
       filteredEmployees.value = employees
           .where((employee) =>
-              '${employee.name?.toLowerCase()} ${employee.surname?.toLowerCase()} ${employee.employeeNumber}'
+              '${employee.name?.toLowerCase()} ${employee.surname?.toLowerCase()} ${employee.employeeNumber} ${employee.phone?.toLowerCase()}'
                   .contains(query.toLowerCase()))
           .toList();
     }
