@@ -29,6 +29,12 @@ class SignInPage extends StatelessWidget {
           return Obx(
             () => Stack(
               children: [
+                Positioned.fill(
+                  child: Image.asset(
+                    'assets/images/loginbg.jpeg',
+                    fit: BoxFit.cover, // Tüm alanı kaplamak için
+                  ),
+                ),
                 Center(
                   child: SizedBox(
                     width: width,
