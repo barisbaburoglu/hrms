@@ -13,7 +13,7 @@ class EventsEntryExitPage extends StatelessWidget {
   final EventsEntryExitController controller =
       Get.put(EventsEntryExitController());
   final SidebarXController sidebarController =
-      SidebarXController(selectedIndex: 5, extended: true);
+      SidebarXController(selectedIndex: 500, extended: true);
 
   EventsEntryExitPage({super.key});
 

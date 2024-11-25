@@ -2,10 +2,9 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:hrms/api/models/dash_record_model.dart';
 
 import '../api/api_provider.dart';
-import '../constants/colors.dart';
+import '../api/models/dash_record_model.dart';
 import '../widgets/edit_event_entry_exit.dart';
 
 class DashboardController extends GetxController {

@@ -557,27 +557,155 @@ class LeftSidebarX extends StatelessWidget {
           ),
         if (sidebarController.hasPermission('QRCodeSettingService'))
           SidebarXItem(
-            icon: Icons.location_pin,
-            label: 'Lokasyon ve QR',
-            onTap: () {
-              sidebarController.navigateTo('/qrcode-list', 4);
-            },
+            iconBuilder: (context, selected) => MouseRegion(
+              onEnter: (_) {
+                sidebarController.setGroupHover(true, 'location');
+              },
+              onExit: (_) {
+                sidebarController.setGroupHover(false, 'location');
+              },
+              child: SizedBox(
+                width: !_controller.extended ? 60 : 170,
+                child: ListTile(
+                  minTileHeight: 20,
+                  minVerticalPadding: 5,
+                  contentPadding: EdgeInsets.zero,
+                  leading: Icon(Icons.location_on,
+                      size: !_controller.extended ? 17 : 20,
+                      color: (sidebarController.isGroupHovered("location") ||
+                              (_controller.selectedIndex == 400))
+                          ? Colors.black
+                          : AppColor.primaryAppColor),
+                  title: Text(
+                    !_controller.extended ? ' ' : 'Lokasyon ve QR',
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: (sidebarController.isGroupHovered("location") ||
+                                (_controller.selectedIndex == 400))
+                            ? Colors.black
+                            : AppColor.primaryAppColor),
+                  ),
+                  onTap: () {
+                    sidebarController.navigateTo('/qrcode-list', 400);
+                  },
+                ),
+              ),
+            ),
           ),
         if (sidebarController.hasPermission('WorkEntryExitEventService'))
           SidebarXItem(
-            icon: Icons.door_sliding_outlined,
-            label: 'Giriş Çıkışlar',
-            onTap: () {
-              sidebarController.navigateTo('/events', 5);
-            },
+            iconBuilder: (context, selected) => MouseRegion(
+              onEnter: (_) {
+                sidebarController.setGroupHover(true, 'event');
+              },
+              onExit: (_) {
+                sidebarController.setGroupHover(false, 'event');
+              },
+              child: SizedBox(
+                width: !_controller.extended ? 60 : 170,
+                child: ListTile(
+                  minTileHeight: 20,
+                  minVerticalPadding: 5,
+                  contentPadding: EdgeInsets.zero,
+                  leading: Icon(Icons.door_sliding_outlined,
+                      size: !_controller.extended ? 17 : 20,
+                      color: (sidebarController.isGroupHovered("event") ||
+                              (_controller.selectedIndex == 500))
+                          ? Colors.black
+                          : AppColor.primaryAppColor),
+                  title: Text(
+                    !_controller.extended ? ' ' : 'Girişler ve Çıkışlar',
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: (sidebarController.isGroupHovered("event") ||
+                                (_controller.selectedIndex == 500))
+                            ? Colors.black
+                            : AppColor.primaryAppColor),
+                  ),
+                  onTap: () {
+                    sidebarController.navigateTo('/events', 500);
+                  },
+                ),
+              ),
+            ),
           ),
         if (sidebarController.hasPermission('LeaveRequestService'))
           SidebarXItem(
-            icon: Icons.request_page,
-            label: 'Talep Oluştur',
-            onTap: () {
-              sidebarController.navigateTo('/leave', 6);
-            },
+            iconBuilder: (context, selected) => MouseRegion(
+              onEnter: (_) {
+                sidebarController.setGroupHover(true, 'request');
+              },
+              onExit: (_) {
+                sidebarController.setGroupHover(false, 'request');
+              },
+              child: SizedBox(
+                width: !_controller.extended ? 60 : 170,
+                child: ListTile(
+                  minTileHeight: 20,
+                  minVerticalPadding: 5,
+                  contentPadding: EdgeInsets.zero,
+                  leading: Icon(Icons.note_alt,
+                      size: !_controller.extended ? 17 : 20,
+                      color: (sidebarController.isGroupHovered("request") ||
+                              (_controller.selectedIndex == 600))
+                          ? Colors.black
+                          : AppColor.primaryAppColor),
+                  title: Text(
+                    !_controller.extended ? ' ' : 'Talep Oluştur',
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: (sidebarController.isGroupHovered("request") ||
+                                (_controller.selectedIndex == 600))
+                            ? Colors.black
+                            : AppColor.primaryAppColor),
+                  ),
+                  onTap: () {
+                    sidebarController.navigateTo('/leave', 600);
+                  },
+                ),
+              ),
+            ),
+          ),
+        if (sidebarController.hasPermission('NotificationService'))
+          SidebarXItem(
+            iconBuilder: (context, selected) => MouseRegion(
+              onEnter: (_) {
+                sidebarController.setGroupHover(true, 'notif');
+              },
+              onExit: (_) {
+                sidebarController.setGroupHover(false, 'notif');
+              },
+              child: SizedBox(
+                width: !_controller.extended ? 60 : 170,
+                child: ListTile(
+                  minTileHeight: 20,
+                  minVerticalPadding: 5,
+                  contentPadding: EdgeInsets.zero,
+                  leading: Icon(Icons.note_alt,
+                      size: !_controller.extended ? 17 : 20,
+                      color: (sidebarController.isGroupHovered("notif") ||
+                              (_controller.selectedIndex == 600))
+                          ? Colors.black
+                          : AppColor.primaryAppColor),
+                  title: Text(
+                    !_controller.extended ? ' ' : 'Bildirim Oluştur',
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: (sidebarController.isGroupHovered("notif") ||
+                                (_controller.selectedIndex == 600))
+                            ? Colors.black
+                            : AppColor.primaryAppColor),
+                  ),
+                  onTap: () {
+                    sidebarController.navigateTo('/notifications', 600);
+                  },
+                ),
+              ),
+            ),
           ),
       ],
     );

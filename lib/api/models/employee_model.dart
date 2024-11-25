@@ -137,9 +137,9 @@ class Employee {
           employeeShiftDayOffs!.map((v) => v.toJson()).toList();
     }
 
-    if (this.identityUserRoles != null) {
+    if (identityUserRoles != null) {
       data['identityUserRoles'] =
-          this.identityUserRoles!.map((v) => v.toJson()).toList();
+          identityUserRoles!.map((v) => v.toJson()).toList();
     }
     if (createdAt != null) {
       data['createdAt'] = createdAt;
@@ -158,7 +158,7 @@ class Employee {
 }
 
 class IdentityUserRoles {
-  Null? companyId;
+  int? companyId;
   int? userId;
   int? roleId;
 
@@ -171,10 +171,10 @@ class IdentityUserRoles {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['companyId'] = this.companyId;
-    data['userId'] = this.userId;
-    data['roleId'] = this.roleId;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['companyId'] = companyId;
+    data['userId'] = userId;
+    data['roleId'] = roleId;
     return data;
   }
 }

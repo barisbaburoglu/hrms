@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hrms/controllers/shift_plan_controller.dart';
 import 'package:sidebarx/sidebarx.dart';
 
-import '../api/models/shift_model.dart';
-import '../api/models/weekly_shift_grouped_model.dart';
 import '../constants/colors.dart';
 import '../constants/dimensions.dart';
+import '../controllers/shift_plan_controller.dart';
 import '../widgets/base_button.dart';
 import '../widgets/base_input.dart';
 import '../widgets/page_title.dart';
 import '../widgets/shift_plan_items_mobile.dart';
 import '../widgets/shift_plan_items_web.dart';
-import '../widgets/shift_plan_items_web_dash.dart';
 import '../widgets/shift_plan_title.dart';
 import 'master_scaffold.dart';
 

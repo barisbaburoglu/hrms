@@ -10,14 +10,12 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: AppColor.appBarColor,
       centerTitle: true,
       toolbarHeight: 50,
-      title: const Text(
-        "LOGO",
-        style: TextStyle(
-          color: AppColor.primaryAppColor,
-          fontWeight: FontWeight.bold,
-        ),
+      title: Image.asset(
+        'assets/images/logolight.png',
+        fit: BoxFit.cover,
+        width: 150,
       ),
-      elevation: 0, // AppBar'ın altındaki gölgeyi kaldırmak için
+      scrolledUnderElevation: 0,
     );
   }
 

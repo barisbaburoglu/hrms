@@ -6,7 +6,6 @@ import '../api/models/employee_model.dart';
 import '../api/models/shift_day_model.dart';
 import '../api/models/shift_model.dart';
 import '../api/models/shift_off_day_model.dart';
-import '../api/models/week_model.dart';
 
 class ShiftEmployeeController extends GetxController {
   final ScrollController scrollController = ScrollController();

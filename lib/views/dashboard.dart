@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
-import 'package:hrms/widgets/card_title.dart';
 import 'package:sidebarx/sidebarx.dart';
 
 import '../api/models/dash_record_model.dart';
@@ -11,9 +10,9 @@ import '../controllers/auth_controller.dart';
 import '../controllers/dashboard_controller.dart';
 import '../controllers/request_controller.dart';
 import '../controllers/shift_plan_controller.dart';
-import '../widgets/arrow_bordered_card.dart';
 import '../widgets/base_button.dart';
 import '../widgets/brief_card.dart';
+import '../widgets/card_title.dart';
 import '../widgets/shift_plan_items_mobile.dart';
 import '../widgets/shift_plan_items_web_dash.dart';
 import 'master_scaffold.dart';
@@ -37,7 +36,6 @@ class DashboardPage extends StatelessWidget {
       sidebarController: sidebarController,
       body: LayoutBuilder(
         builder: (context, constraints) {
-          // Ekran genişliği kontrolü
           double screenWidth = constraints.maxWidth;
           double width = screenWidth < 1400 ? double.infinity : 1400;
 

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -9,6 +7,7 @@ import 'package:hrms/widgets/base_input.dart';
 
 import '../constants/colors.dart';
 import '../widgets/base_button.dart';
+import '../widgets/custom_snack_bar.dart';
 
 class SignInPage extends StatelessWidget {
   final AuthController controller = Get.put(AuthController());
@@ -19,131 +18,200 @@ class SignInPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.canvasColor,
-      body: Obx(
-        () => Stack(
-          children: [
-            Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 600,
-                    width: 350,
-                    color: AppColor.canvasColor,
-                    // decoration: const BoxDecoration(
-                    //   image: DecorationImage(
-                    //       image: AssetImage('assets/images/bg.jpeg'), fit: BoxFit.fill),
-                    // ),
-                    alignment: Alignment.center,
-                    child: Container(
-                      height: 400,
-                      width: double.infinity,
-                      margin: const EdgeInsets.symmetric(horizontal: 30),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white),
-                        borderRadius: BorderRadius.circular(15),
-                        color: AppColor.primaryAppColor.withOpacity(0.25),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          // Ekran genişliği kontrolü
+          double screenWidth = constraints.maxWidth;
+          double width = screenWidth > 860 ? 745 : 390;
+          double height = 390;
+          double sizeSplitPart = 350;
+
+          return Obx(
+            () => Stack(
+              children: [
+                Center(
+                  child: SizedBox(
+                    width: width,
+                    height: height,
+                    child: Card(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
                       ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: BackdropFilter(
-                            filter: ImageFilter.blur(sigmaY: 5, sigmaX: 5),
-                            child: Padding(
-                              padding: const EdgeInsets.all(25),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Spacer(),
-                                  const Center(
-                                      child: Text(
-                                    "GİRİŞ",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColor.primaryAppColor,
-                                      letterSpacing: 1.5,
+                      shadowColor: Colors.black,
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Row(
+                            mainAxisAlignment: screenWidth > 860
+                                ? MainAxisAlignment.spaceBetween
+                                : MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              if (screenWidth > 860)
+                                SizedBox(
+                                  width: sizeSplitPart,
+                                  height: sizeSplitPart,
+                                  child: Card(
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(5)),
                                     ),
-                                  )),
-                                  const Spacer(),
-                                  SizedBox(
-                                    width: 310,
-                                    height: 60,
-                                    child: BaseInput(
+                                    shadowColor: Colors.black,
+                                    child: Image.asset(
+                                      'assets/images/loginai.png',
+                                      fit: BoxFit.cover,
+                                      width: 390,
+                                      height: 390,
+                                    ),
+                                  ),
+                                ),
+                              SizedBox(
+                                width: sizeSplitPart,
+                                height: sizeSplitPart,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/logolight.png',
+                                      fit: BoxFit.cover,
+                                      width: 200,
+                                    ),
+                                    const SizedBox(height: 15),
+                                    const Text(
+                                      'Giriş',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColor.primaryAppColor,
+                                        letterSpacing: 1.5,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(height: 15),
+                                    SizedBox(
+                                      width: 310,
+                                      height: 60,
+                                      child: BaseInput(
                                         isLabel: true,
                                         label: "Kullanıcı Adı",
                                         controller: controller.userName,
                                         margin: EdgeInsets.zero,
                                         textInputType: TextInputType.text,
-                                        inputFormatters: []),
-                                  ),
-                                  const Spacer(),
-                                  SizedBox(
-                                    width: 310,
-                                    height: 60,
-                                    child: BaseInput(
+                                        inputFormatters: [],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 15),
+                                    SizedBox(
+                                      width: 310,
+                                      height: 60,
+                                      child: BaseInput(
                                         isLabel: true,
                                         label: "Şifre",
                                         controller: controller.password,
                                         margin: EdgeInsets.zero,
                                         textInputType:
                                             TextInputType.visiblePassword,
-                                        inputFormatters: []),
-                                  ),
-                                  const Spacer(),
-                                  SizedBox(
-                                    width: 310,
-                                    child: BaseButton(
-                                      label: "Giriş Yap",
-                                      icon: const Icon(
-                                        Icons.login,
-                                        color: AppColor.secondaryText,
+                                        inputFormatters: [],
                                       ),
-                                      onPressed: () {
-                                        LogInModel loginModel = LogInModel();
-                                        loginModel.email =
-                                            controller.userName.text;
-                                        loginModel.password =
-                                            controller.password.text;
+                                    ),
+                                    const SizedBox(height: 15),
+                                    SizedBox(
+                                      width: 310,
+                                      child: BaseButton(
+                                        label: "Giriş Yap",
+                                        icon: const Icon(
+                                          Icons.login,
+                                          color: AppColor.secondaryText,
+                                        ),
+                                        onPressed: () {
+                                          LogInModel loginModel = LogInModel();
+                                          loginModel.email =
+                                              controller.userName.text;
+                                          loginModel.password =
+                                              controller.password.text;
 
-                                        controller.onPressedLogin(loginModel);
-                                      },
+                                          controller.onPressedLogin(loginModel);
+                                        },
+                                      ),
                                     ),
-                                  ),
-                                  const Spacer(),
-                                  const Center(
-                                      child: InkWell(
-                                    mouseCursor: SystemMouseCursors.click,
-                                    child: Text(
-                                      "Henüz kayıt olmadıysan KAYIT OL",
+                                    const SizedBox(height: 15),
+                                    Center(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Text(
+                                            "Henüz Kayıt olmadınız mı?",
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                          ),
+                                          TextButton(
+                                            child: const Text(
+                                              "Kayıt Ol",
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                                height: 2,
+                                                decoration:
+                                                    TextDecoration.underline,
+                                                decorationColor:
+                                                    AppColor.primaryAppColor,
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              Get.showSnackbar(
+                                                CustomGetBar(
+                                                  textColor:
+                                                      AppColor.secondaryText,
+                                                  message:
+                                                      "Çok Yakında Hizmetinizdeyiz!",
+                                                  duration: const Duration(
+                                                      seconds: 3),
+                                                  iconData: Icons
+                                                      .notification_important_outlined,
+                                                  backgroundColor:
+                                                      AppColor.primaryOrange,
+                                                ),
+                                              );
+                                            },
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  )),
-                                  const Spacer(),
-                                ],
+                                  ],
+                                ),
                               ),
-                            )),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ],
-              ),
-            ),
-            Visibility(
-              visible: controller.loader.value,
-              child: SizedBox.expand(
-                child: Container(
-                  color: Colors.black.withOpacity(0.25),
-                  child: Center(
-                      child: SizedBox(
+                ),
+                Visibility(
+                  visible: controller.loader.value,
+                  child: SizedBox.expand(
+                    child: Container(
+                      color: Colors.black.withOpacity(0.25),
+                      child: const Center(
+                        child: SizedBox(
                           width: 20,
                           height: 20,
                           child: CircularProgressIndicator(
                             strokeWidth: 5,
-                          ))),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            )
-          ],
-        ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

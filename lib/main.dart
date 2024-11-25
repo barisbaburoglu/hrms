@@ -129,13 +129,13 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/notifications',
           page: () => loadPage(NotificationPage()),
-          // middlewares: [
-          //   AuthMiddleware(
-          //     requiredGrups: [
-          //       'NotificationService',
-          //     ],
-          //   ),
-          // ],
+          middlewares: [
+            AuthMiddleware(
+              requiredGrups: [
+                'NotificationService',
+              ],
+            ),
+          ],
         ),
         GetPage(
           name: '/employee-types',
