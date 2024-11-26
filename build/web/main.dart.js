@@ -101532,7 +101532,7 @@ r.push(A.h2(m,m,m,B.bu,B.bv,B.a_,m,!1,m,!0,A.a([new A.fZ(A.a(["EmployeeService",
 r.push(A.h2(m,m,m,B.bu,B.bv,B.a_,m,!1,m,!0,A.a([new A.fZ(A.a(["UserRoleService"],p),A.cy(l))],o),"/profile",!0,new A.aoM(n),m,m,m,!0,!0,m,m,m,m,q))
 r.push(A.h2(m,m,m,B.bu,B.bv,B.a_,m,!1,m,!0,A.a([new A.fZ(A.a(["LeaveRequestService"],p),A.cy(l))],o),"/leave",!0,new A.aoN(n),m,m,m,!0,!0,m,m,m,m,q))
 r.push(A.h2(m,m,m,B.bu,B.bv,B.a_,m,!1,m,!0,A.a([new A.fZ(A.a(["CompanyService"],p),A.cy(l))],o),"/company-settigs-details",!0,new A.aoO(n),m,m,m,!0,!0,m,m,m,m,q))
-return new A.CY(s,"HRMS",j,!1,r,m)}}
+return new A.CY(s,"Work24",j,!1,r,m)}}
 A.aoG.prototype={
 $0(){var s,r=null,q="GetStorage",p=$.X(),o=t.T
 o=new A.BZ(A.cy(q),A.FC(0),A.iK(""),A.h9(t.Qu),A.a([],t.C),A.dc(r,r,r,t.X,t.O),new A.cr(o),new A.cr(o),!1,!1)

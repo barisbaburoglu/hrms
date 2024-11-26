@@ -104,7 +104,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'HRMS',
+      title: 'Work24',
       theme: ThemeData(
         primarySwatch: AppColor.createMaterialColor(AppColor.primaryAppColor),
         checkboxTheme: customCheckboxTheme,
